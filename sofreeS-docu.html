@@ -1,0 +1,2744 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<style type="text/css">
+<!--
+  html, body
+  {
+    line-height:      120%;
+    color:            black;
+    background:       white;
+    font-weight:      normal;
+    font-family:      "Bitstream Vera Sans", sans-serif;
+    font-style:       normal;
+    text-decoration:  none;
+    margin:           0.5em;
+    padding:          0.5em;
+    border:           0.5em;
+  }
+
+
+  code
+  {
+    color:            blue;
+  }
+
+
+  dl.command dt
+  {
+    margin-top:       1em;
+    font-weight:      bold;
+  }
+
+  dl.command_info
+  { }
+
+  dl.command_arguments dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+    font-style:       italic;
+  }
+
+  dl.command_example dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+  }
+
+
+
+  dl.cvar dt
+  {
+    margin-top:       1em;
+    font-weight:      bold;
+  }
+
+  dl.cvar_info
+  { }
+
+  dl.cvar_values dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+    font-style:       italic;
+  }
+
+  dl.cvar_example dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+  }
+
+
+
+  dl.client_command dt
+  {
+    margin-top:       1em;
+    font-weight:      bold;
+  }
+
+  dl.client_command_info
+  { }
+
+  dl.client_command_arguments dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+    font-style:       italic;
+  }
+
+  dl.client_command_example dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+  }
+
+
+
+  dl.function dt
+  {
+    margin-top:       1em;
+    font-weight:      bold;
+  }
+
+  dl.function_info
+  { }
+
+  dl.function_arguments dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+    font-style:       italic;
+  }
+
+  dl.function_example dt
+  {
+    margin-top:       0.5em;
+    font-weight:      normal;
+  }
+
+
+
+  .color_green
+  {
+    color:            green;
+  }
+
+  .color_red
+  {
+    color:            red;
+  }
+
+
+
+  .arg
+  {
+    color:            red;
+    /*background-color: #dfdfdf;*/
+    /*text-decoration:  underline;*/
+    border-style:     dotted;
+    border-width:     1px;
+  }
+
+
+
+  a.link_command:link, a.link_command:visited
+  {
+    color:            blue;
+    background-color: #dfdfdf;
+    font-family:      "Courier New", Courier, monospace;
+    font-size:        0.8em;
+    text-decoration:  none;
+  }
+
+  a.link_command:hover
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+  a.link_command:active
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+
+
+  a.link_cvar:link, a.link_cvar:visited
+  {
+    color:            blue;
+    background-color: #dfdfdf;
+    font-family:      "Courier New", Courier, monospace;
+    font-size:        0.8em;
+    text-decoration:  none;
+  }
+
+  a.link_cvar:hover
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+  a.link_cvar:active
+  {
+    color:            red;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+
+
+  a.link_client_command:link, a.link_client_command:visited
+  {
+    color:            blue;
+    background-color: #dfdfdf;
+    font-family:      "Courier New", Courier, monospace;
+    font-size:        0.8em;
+    text-decoration:  none;
+  }
+
+  a.link_client_command:hover
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+  a.link_client_command:active
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+
+
+  a.link_section:link, a.link_section:visited
+  {
+    color:            blue;
+    background-color: #dfdfdf;
+    font-family:      "Courier New", Courier, monospace;
+    font-size:        0.8em;
+    text-decoration:  none;
+  }
+
+  a.link_section:hover
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+  a.link_section:active
+  {
+    color:            blue;
+    background-color: #ffffc0;
+    text-decoration:  none;
+  }
+
+-->
+</style>
+
+<title>SoFreeS 20190303.266 - Server</title>
+
+</head>
+
+<body>
+
+
+<h1>SoFreeS 20190303.266 - Server</h1>
+
+<ul>
+	<li><a href="#sf_sv" class="link_section">Commands (server)</a></li>
+	<li><a href="#_sf_sv" class="link_section">Cvars (server)</a></li>
+	<li><a href="#_sf_misc" class="link_section">Other (server)</a></li>
+</ul>
+
+
+
+
+<h2 id="sf_sv">Commands (server)</h2>
+
+<ul>
+  <li><a href="#sf_sv_check_reso" class="link_command">sf_sv_check_reso</a></li>
+  <li><a href="#sf_sv_configstring_set" class="link_command">sf_sv_configstring_set</a></li>
+  <li><a href="#sf_sv_draw_altstring" class="link_command">sf_sv_draw_altstring</a></li>
+  <li><a href="#sf_sv_draw_clear" class="link_command">sf_sv_draw_clear</a></li>
+  <li><a href="#sf_sv_draw_string" class="link_command">sf_sv_draw_string</a></li>
+  <li><a href="#sf_sv_draw_string2" class="link_command">sf_sv_draw_string2</a></li>
+  <li><a href="#sf_sv_effect_endpos" class="link_command">sf_sv_effect_endpos</a></li>
+  <li><a href="#sf_sv_effect_list" class="link_command">sf_sv_effect_list</a></li>
+  <li><a href="#sf_sv_effect_register" class="link_command">sf_sv_effect_register</a></li>
+  <li><a href="#sf_sv_effect_start" class="link_command">sf_sv_effect_start</a></li>
+  <li><a href="#sf_sv_ent_anim" class="link_command">sf_sv_ent_anim</a></li>
+  <li><a href="#sf_sv_ent_callback" class="link_command">sf_sv_ent_callback</a></li>
+  <li><a href="#sf_sv_ent_create" class="link_command">sf_sv_ent_create</a></li>
+  <li><a href="#sf_sv_ent_field_get" class="link_command">sf_sv_ent_field_get</a></li>
+  <li><a href="#sf_sv_ent_field_set" class="link_command">sf_sv_ent_field_set</a></li>
+  <li><a href="#sf_sv_ent_find" class="link_command">sf_sv_ent_find</a></li>
+  <li><a href="#sf_sv_ent_paint" class="link_command">sf_sv_ent_paint</a></li>
+  <li><a href="#sf_sv_ent_relink" class="link_command">sf_sv_ent_relink</a></li>
+  <li><a href="#sf_sv_ent_remove" class="link_command">sf_sv_ent_remove</a></li>
+  <li><a href="#sf_sv_ent_spawn" class="link_command">sf_sv_ent_spawn</a></li>
+  <li><a href="#sf_sv_ent_use" class="link_command">sf_sv_ent_use</a></li>
+  <li><a href="#sf_sv_ent_vects" class="link_command">sf_sv_ent_vects</a></li>
+  <li><a href="#sf_sv_ghoul_list" class="link_command">sf_sv_ghoul_list</a></li>
+  <li><a href="#sf_sv_ghoul_register" class="link_command">sf_sv_ghoul_register</a></li>
+  <li><a href="#sf_sv_hook_at" class="link_command">sf_sv_hook_at</a></li>
+  <li><a href="#sf_sv_image_list" class="link_command">sf_sv_image_list</a></li>
+  <li><a href="#sf_sv_image_register" class="link_command">sf_sv_image_register</a></li>
+  <li><a href="#sf_sv_int_add" class="link_command">sf_sv_int_add</a></li>
+  <li><a href="#sf_sv_jmp_at" class="link_command">sf_sv_jmp_at</a></li>
+  <li><a href="#sf_sv_math_acos" class="link_command">sf_sv_math_acos</a></li>
+  <li><a href="#sf_sv_math_asin" class="link_command">sf_sv_math_asin</a></li>
+  <li><a href="#sf_sv_math_atan" class="link_command">sf_sv_math_atan</a></li>
+  <li><a href="#sf_sv_math_cos" class="link_command">sf_sv_math_cos</a></li>
+  <li><a href="#sf_sv_math_sin" class="link_command">sf_sv_math_sin</a></li>
+  <li><a href="#sf_sv_math_tan" class="link_command">sf_sv_math_tan</a></li>
+  <li><a href="#sf_sv_mem_read_char" class="link_command">sf_sv_mem_read_char</a></li>
+  <li><a href="#sf_sv_mem_read_float" class="link_command">sf_sv_mem_read_float</a></li>
+  <li><a href="#sf_sv_mem_read_int" class="link_command">sf_sv_mem_read_int</a></li>
+  <li><a href="#sf_sv_mem_read_short" class="link_command">sf_sv_mem_read_short</a></li>
+  <li><a href="#sf_sv_mem_read_string" class="link_command">sf_sv_mem_read_string</a></li>
+  <li><a href="#sf_sv_mem_write_char" class="link_command">sf_sv_mem_write_char</a></li>
+  <li><a href="#sf_sv_mem_write_float" class="link_command">sf_sv_mem_write_float</a></li>
+  <li><a href="#sf_sv_mem_write_int" class="link_command">sf_sv_mem_write_int</a></li>
+  <li><a href="#sf_sv_mem_write_short" class="link_command">sf_sv_mem_write_short</a></li>
+  <li><a href="#sf_sv_mem_write_string" class="link_command">sf_sv_mem_write_string</a></li>
+  <li><a href="#sf_sv_player_allow_altattack" class="link_command">sf_sv_player_allow_altattack</a></li>
+  <li><a href="#sf_sv_player_allow_attack" class="link_command">sf_sv_player_allow_attack</a></li>
+  <li><a href="#sf_sv_player_allow_walk" class="link_command">sf_sv_player_allow_walk</a></li>
+  <li><a href="#sf_sv_player_anim" class="link_command">sf_sv_player_anim</a></li>
+  <li><a href="#sf_sv_player_collision" class="link_command">sf_sv_player_collision</a></li>
+  <li><a href="#sf_sv_player_effect" class="link_command">sf_sv_player_effect</a></li>
+  <li><a href="#sf_sv_player_ent" class="link_command">sf_sv_player_ent</a></li>
+  <li><a href="#sf_sv_player_move" class="link_command">sf_sv_player_move</a></li>
+  <li><a href="#sf_sv_player_paint" class="link_command">sf_sv_player_paint</a></li>
+  <li><a href="#sf_sv_player_pos" class="link_command">sf_sv_player_pos</a></li>
+  <li><a href="#sf_sv_player_weap_current" class="link_command">sf_sv_player_weap_current</a></li>
+  <li><a href="#sf_sv_player_weap_lock" class="link_command">sf_sv_player_weap_lock</a></li>
+  <li><a href="#sf_sv_player_weap_paint" class="link_command">sf_sv_player_weap_paint</a></li>
+  <li><a href="#sf_sv_player_weap_switch" class="link_command">sf_sv_player_weap_switch</a></li>
+  <li><a href="#sf_sv_print_bprintf" class="link_command">sf_sv_print_bprintf</a></li>
+  <li><a href="#sf_sv_print_centerprint" class="link_command">sf_sv_print_centerprint</a></li>
+  <li><a href="#sf_sv_print_cinprintf" class="link_command">sf_sv_print_cinprintf</a></li>
+  <li><a href="#sf_sv_print_cprintf" class="link_command">sf_sv_print_cprintf</a></li>
+  <li><a href="#sf_sv_print_welcomeprint" class="link_command">sf_sv_print_welcomeprint</a></li>
+  <li><a href="#sf_sv_save_reso" class="link_command">sf_sv_save_reso</a></li>
+  <li><a href="#sf_sv_script_load" class="link_command">sf_sv_script_load</a></li>
+  <li><a href="#sf_sv_script_run" class="link_command">sf_sv_script_run</a></li>
+  <li><a href="#sf_sv_script_unload" class="link_command">sf_sv_script_unload</a></li>
+  <li><a href="#sf_sv_sofree_help" class="link_command">sf_sv_sofree_help</a></li>
+  <li><a href="#sf_sv_sound_list" class="link_command">sf_sv_sound_list</a></li>
+  <li><a href="#sf_sv_sound_override" class="link_command">sf_sv_sound_override</a></li>
+  <li><a href="#sf_sv_sound_play_ent" class="link_command">sf_sv_sound_play_ent</a></li>
+  <li><a href="#sf_sv_sound_play_origin" class="link_command">sf_sv_sound_play_origin</a></li>
+  <li><a href="#sf_sv_sound_register" class="link_command">sf_sv_sound_register</a></li>
+  <li><a href="#sf_sv_sound_remove" class="link_command">sf_sv_sound_remove</a></li>
+  <li><a href="#sf_sv_spackage_print_id" class="link_command">sf_sv_spackage_print_id</a></li>
+  <li><a href="#sf_sv_spackage_print_obit" class="link_command">sf_sv_spackage_print_obit</a></li>
+  <li><a href="#sf_sv_spackage_print_string" class="link_command">sf_sv_spackage_print_string</a></li>
+  <li><a href="#sf_sv_spackage_register" class="link_command">sf_sv_spackage_register</a></li>
+  <li><a href="#sf_sv_vector_copy" class="link_command">sf_sv_vector_copy</a></li>
+  <li><a href="#sf_sv_vector_grow" class="link_command">sf_sv_vector_grow</a></li>
+  <li><a href="#sf_sv_vector_set" class="link_command">sf_sv_vector_set</a></li>
+</ul>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_check_reso">sf_sv_check_reso</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_check_reso</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_configstring_set">sf_sv_configstring_set</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_configstring_set</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_draw_altstring">sf_sv_draw_altstring</dt>
+    <dd>Draw a grey string at offset X Y with message.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_draw_altstring <span class="arg">X</span> <span class="arg">Y</span> <span class="arg">MESSAGE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>X</dt>
+                <dd>Offset X</dd>
+            </dl>
+          </dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>Y</dt>
+                <dd>Offset Y</dd>
+            </dl>
+          </dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>MESSAGE</dt>
+                <dd>Offset message</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_draw_clear">sf_sv_draw_clear</dt>
+    <dd>Clear all interface text on screen.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_draw_clear</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_draw_clear</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_draw_string">sf_sv_draw_string</dt>
+    <dd>Draw a string at offset X Y with message.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_draw_altstring <span class="arg">X</span> <span class="arg">Y</span> <span class="arg">MESSAGE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>X</dt>
+                <dd>Offset X</dd>
+            </dl>
+          </dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>Y</dt>
+                <dd>Offset Y</dd>
+            </dl>
+          </dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>MESSAGE</dt>
+                <dd>Offset message</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_draw_string</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_draw_string2">sf_sv_draw_string2</dt>
+    <dd>Draw a string at offset X Y with message.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_draw_altstring <span class="arg">X</span> <span class="arg">Y</span> <span class="arg">MESSAGE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>X</dt>
+                <dd>Offset X</dd>
+            </dl>
+          </dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>Y</dt>
+                <dd>Offset Y</dd>
+            </dl>
+          </dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>MESSAGE</dt>
+                <dd>Offset message</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_draw_string2</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_effect_endpos">sf_sv_effect_endpos</dt>
+    <dd>Call this just before you spawn or exec. Set a end position for a line effect environ_effect entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_effect_endpos <span class="arg">#~entval</span> <span class="arg">~org</span></code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_effect_endpos #~entval ~org</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_effect_list">sf_sv_effect_list</dt>
+    <dd>List all registered effects and put it in the <code>_sf_sv_effect_list_*</code> variables</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_effect_list</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_effect_list</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_effect_register">sf_sv_effect_register</dt>
+    <dd>Registers a new effect file.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_effect_register <span class="arg">NAME</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Name of effect</dd>
+            </dl>
+          </dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_effect_register gore/shotgun</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_effect_start">sf_sv_effect_start</dt>
+    <dd>Run an effect at pos.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_effect_start</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_anim">sf_sv_ent_anim</dt>
+    <dd>Play an animation for an entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_anim <span class="arg">SLOT|*</span> <span class="arg">NAME</span> <span class="arg">START</span> <span class="arg">INTERRUPT</span> <span class="arg">LOOP</span> <span class="arg">MATCH</span> <span class="arg">REVERSE</span></code></dd>
+           <dd>
+
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Animation name</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>START</dt>
+                <dd>Start position in float value</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>INTERRUPT</dt>
+                <dd>Interrupt current in integer value</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>LOOP</dt>
+                <dd>Should it loop</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>MATCH</dt>
+                <dd>No idea</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>REVERSE</dt>
+                <dd>Play in reverse</dd>
+            </dl>
+
+          </dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_ent_anim 0 ghoul/enemy/female/std_xdance_n_n_n.ghl 2.500 0 1 0 1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_callback">sf_sv_ent_callback</dt>
+    <dd>Attach a SoF function to a touch event of an entity.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_callback <span class="arg">ENTITY</span> <span class="arg">TYPE</span> <span class="arg">FUNCTION</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>ENTITY</dt>
+                <dd>Entity handle</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>TYPE</dt>
+                <dd><code>think</code></dd>
+                <dd><code>touch</code></dd>
+                <dd><code>use</code></dd>
+                <dd><code>pluse</code></dd>
+                <dd><code>pain</code></dd>
+                <dd><code>die</code></dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>FUNCTION</dt>
+                <dd>Sofplus function name</dd>
+            </dl>           
+          </dd>
+         <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_create">sf_sv_ent_create</dt>
+    <dd>Creates an entity from a classname but doesn't spawn it into the world.</dd>
+    <dd>
+      <dl class="command_info">
+         <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_create <span class="arg">NAME</span></code></dd>
+           <dd>
+             <dl class="command_arguments">
+              <dt>NAME</dt>
+              <dd>Cvar name to store the entity handle</dd>
+             </dl>
+          </dd>
+         <dt>Example:</dt>
+          <dd><code>]sf_sv_ent_create info_player_start</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_field_get">sf_sv_ent_field_get</dt>
+    <dd>Set a specific field for a specified entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_field_get</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_field_set">sf_sv_ent_field_set</dt>
+    <dd>Set a specific field for a specified entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_field_set</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_find">sf_sv_ent_find</dt>
+    <dd>Finds entities based on single criteria.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_find <span class="arg">CVAR</span> <span class="arg">OFFSET</span> <span class="arg">VALUE</span></code></dd>
+           <dd>
+             <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar name prefix for resulting cvar</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Interger offset for which ent field to compare</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>VALUE</dt>
+              <dd>Value for which it much match</dd>
+             </dl>
+          </dd>
+         <dt>Example:</dt>
+          <dd><code>]sf_sv_ent_find ~answer 436 m_x_bull</code></dd>
+             <dd>
+             <dl class="command_arguments">
+              <dd><code>Is equivalent to sf_sv_ent_find ~answer $EDICT_CLASSNAME m_x_bull for those who have define data</code></dd>
+             </dl>
+          </dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_paint">sf_sv_ent_paint</dt>
+    <dd>Color an entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_paint <span class="arg">ENTITY</span> <span class="arg">RED</span> <span class="arg">GREEN</span> <span class="arg">BLUE</span> <span class="arg">ALPHA</span></code></dd>
+           <dd>
+             <dl class="command_arguments">
+              <dt>ENTITY</dt>
+              <dd>Entity handle</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>RED</dt>
+              <dd>Red float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>GREEN</dt>
+              <dd>Green float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>BLUE</dt>
+              <dd>Blue float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>ALPHA</dt>
+              <dd>Alpha float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_relink">sf_sv_ent_relink</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_relink</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_remove">sf_sv_ent_remove</dt>
+    <dd>Delete an edict. Use this on ANY previously created entity, spawned or unspawned.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_remove <span class="arg">ENTITY</span></code></dd>
+             <dd>
+             <dl class="command_arguments">
+              <dt>ENTITY</dt>
+              <dd>Immidiate value of entity handle</dd>
+             </dl>
+          </dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_spawn">sf_sv_ent_spawn</dt>
+    <dd>Place an already created entity into the world.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_spawn <span class="arg">ENTITY</span></code></dd>
+             <dd>
+             <dl class="command_arguments">
+              <dt>ENTITY</dt>
+              <dd>Immidiate value of entity handle</dd>
+             </dl>
+		     </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_use">sf_sv_ent_use</dt>
+    <dd>Execute the 'use' callback of an entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_use <span class="arg">ENTITY</span></code></dd>
+           <dd>
+              <dl class="command_arguments">
+              <dt>ENTITY</dt>
+              <dd>Entity handle</dd>
+             </dl>
+		   </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ent_vects">sf_sv_ent_vects</dt>
+    <dd>Grab forward right up vectors of ent.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ent_vects <span class="arg">CVAR</span> <span class="arg">ENTITY</span></code></dd>
+            <dd>
+              <dl class="command_arguments">
+                <dt>CVAR</dt>
+                <dd>Cvar name prefix for resulting cvar</dd>
+              </dl>
+              <dl class="command_arguments">
+                <dt>ENTITY</dt>
+                <dd>Entity handle</dd>
+              </dl>
+			</dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ghoul_list">sf_sv_ghoul_list</dt>
+    <dd>List all registered ghoul files and put it in the <code>_sf_sv_ghoul_list_*</code> variables.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ghoul_list</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_ghoul_list</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_ghoul_register">sf_sv_ghoul_register</dt>
+    <dd>Register a new ghoul file.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_ghoul_register <span class="arg">NAME</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Name of ghoul</dd>
+            </dl>
+          </dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_ghoul_register GHOUL/ITEM/PICK-UPS/ARMOR/ARMOR.GHB</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_hook_at">sf_sv_hook_at</dt>
+    <dd>This doesn't work. Do not use this!</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>...</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>...</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_image_list">sf_sv_image_list</dt>
+    <dd>List all registered image files and put it in the <code>_sf_sv_image_list_*</code> variables.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_image_list</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_image_list</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_image_register">sf_sv_image_register</dt>
+    <dd>Register a new image file.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_image_register <span class="arg">NAME</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Name of image</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_image_register pics/scope/arrows128_1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_int_add">sf_sv_int_add</dt>
+    <dd>A simple math addition function, strictly for integers.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_int_add <span class="arg">CVAR</span> <span class="arg">VALUE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+                <dd>Variable to perform calculation on</dd>
+              <dt>VALUE</dt>
+                <dd>Value to add</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]set test 1<br />
+                    ]sf_sv_int_add test 2<br />
+                    ]echo #test<br />
+                    3</code></dd>
+      </dl>
+    </dd>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_jmp_at">sf_sv_jmp_at</dt>
+    <dd>Write a jump instruction to memory at offset. You have to do the relative math to make this work. (to - from) - 5;</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_jmp_at <span class="arg">OFFSET</span> <span class="arg">JUMP</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to write to, location of 0xe9</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>JUMP</dt>
+              <dd>Jump destination</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_math_acos">sf_sv_math_acos</dt>
+    <dd>Your average math inverse cosinus function.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_math_acos <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar in out initially number, will inverse cosinus the number and store</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_math_asin">sf_sv_math_asin</dt>
+    <dd>Your average math inverse sinus function.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_math_asin <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar in out initially number, will inverse sinus the number and store</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_math_atan">sf_sv_math_atan</dt>
+    <dd>Your average math inverse tangente function.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_math_atan <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar in out initially number, will inverse tangente the number and store</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_math_cos">sf_sv_math_cos</dt>
+    <dd>Your average math cosinus function.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_math_cos <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar in out initially angle, will cosinus the angle and store</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_math_sin">sf_sv_math_sin</dt>
+    <dd>Your average math sinus function.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_math_sin <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar in out initially angle, will sinus the angle and store</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_math_tan">sf_sv_math_tan</dt>
+    <dd>Your average math tangente function.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_math_tan <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Cvar in out initially angle, will tangente the angle and store</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_read_char">sf_sv_mem_read_char</dt>
+    <dd>Read a byte in memory at offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_read_char <span class="arg">CVAR</span> <span class="arg">OFFSET</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Out cvar to store the byte</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to read from</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_read_float">sf_sv_mem_read_float</dt>
+    <dd>Read a float at memory offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_read_float <span class="arg">CVAR</span> <span class="arg">OFFSET</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Out cvar to store the float</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to read from</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_read_int">sf_sv_mem_read_int</dt>
+    <dd>Read an interger in memory at offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_read_int <span class="arg">CVAR</span> <span class="arg">OFFSET</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Out cvar to store the interger</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to read from</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_read_short">sf_sv_mem_read_short</dt>
+    <dd>Read a short interger in memory at offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_read_short <span class="arg">CVAR</span> <span class="arg">OFFSET</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Out cvar to store the short interger</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to read from</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_read_string">sf_sv_mem_read_string</dt>
+    <dd>Read a string in memory at offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_read_string <span class="arg">CVAR</span> <span class="arg">OFFSET</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Out cvar to store the string</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to read from</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_write_char">sf_sv_mem_write_char</dt>
+    <dd>Write a byte to memory at offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_write_char <span class="arg">OFFSET</span> <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to write to</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Byte to write</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_write_float">sf_sv_mem_write_float</dt>
+    <dd>Write a float to memory at offset.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_write_float <span class="arg">OFFSET</span> <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to write to</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Float to write</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_write_int">sf_sv_mem_write_int</dt>
+    <dd>Write an interger to memory at offset</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_write_int <span class="arg">OFFSET</span> <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to write to</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Interger to write</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_write_short">sf_sv_mem_write_short</dt>
+    <dd>Write a short integer to memory at offset</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_write_short <span class="arg">OFFSET</span> <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to write to</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>Short interger to write</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_mem_write_string">sf_sv_mem_write_string</dt>
+    <dd>Write a string to memory at offset</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_mem_write_string <span class="arg">OFFSET</span> <span class="arg">CVAR</span></code></dd>
+           <dd>
+            <dl class="command_arguments">
+              <dt>OFFSET</dt>
+              <dd>Memory offset to write to</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+              <dd>String to write</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_allow_altattack">sf_sv_player_allow_altattack</dt>
+    <dd>Force player to allow/disallow alternate attack.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_allow_altattack <span class="arg">SLOT|*</span> <span class="arg">VALUE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+               <dl class="cvar_info">
+		        <dt>Values:</dt>
+ 		         <dd>
+ 		          <dl class="cvar_values">
+ 		           <dt>1</dt>
+ 		            <dd>Allow</dd>
+ 		           <dt>0</dt>
+ 		            <dd>Disallow</dd>
+		           </dl>
+ 		         </dd>
+		     </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_allow_altattack 7 0</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_allow_attack">sf_sv_player_allow_attack</dt>
+    <dd>Force player to allow/disallow primary attack.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_allow_attack <span class="arg">SLOT|*</span> <span class="arg">VALUE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+               <dl class="cvar_info">
+		        <dt>Values:</dt>
+ 		         <dd>
+ 		          <dl class="cvar_values">
+ 		           <dt>1</dt>
+ 		            <dd>Allow</dd>
+ 		           <dt>0</dt>
+ 		            <dd>Disallow</dd>
+		           </dl>
+ 		         </dd>
+		     </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_allow_altattack 7 0</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_allow_walk">sf_sv_player_allow_walk</dt>
+    <dd>Force player to allow/disallow walking.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_allow_walk <span class="arg">SLOT|*</span> <span class="arg">VALUE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+               <dl class="cvar_info">
+		        <dt>Values:</dt>
+ 		         <dd>
+ 		          <dl class="cvar_values">
+ 		           <dt>1</dt>
+ 		            <dd>Allow</dd>
+ 		           <dt>0</dt>
+ 		            <dd>Disallow</dd>
+		           </dl>
+ 		         </dd>
+		     </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_allow_walk 7 0</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_anim">sf_sv_player_anim</dt>
+    <dd>Play an animation for an entity.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_anim <span class="arg">SLOT|*</span> <span class="arg">NAME</span> <span class="arg">START</span> <span class="arg">INTERRUPT</span> <span class="arg">LOOP</span> <span class="arg">MATCH</span> <span class="arg">REVERSE</span></code></dd>
+           <dd>
+
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Animation name</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>START</dt>
+                <dd>Start position in float value</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>INTERRUPT</dt>
+                <dd>Interrupt current in integer value</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>LOOP</dt>
+                <dd>Should it loop</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>MATCH</dt>
+                <dd>No idea</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>REVERSE</dt>
+                <dd>Play in reverse</dd>
+            </dl>
+
+          </dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_anim 0 ghoul/enemy/female/std_xdance_n_n_n.ghl 2.500 0 1 0 1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_collision">sf_sv_player_collision</dt>
+    <dd>Makes it so this player can be passed through by all other players.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_collision <span class="arg">SLOT|*</span> <span class="arg">VALUE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+               <dl class="cvar_info">
+		        <dt>Values:</dt>
+ 		         <dd>
+ 		          <dl class="cvar_values">
+ 		           <dt>1</dt>
+ 		            <dd>Allow</dd>
+ 		           <dt>0</dt>
+ 		            <dd>Disallow</dd>
+		           </dl>
+ 		         </dd>
+		     </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_collision 0 0</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_effect">sf_sv_player_effect</dt>
+    <dd>???</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>???</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_ent">sf_sv_player_ent</dt>
+    <dd>Returns an entity from a player slot number.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_ent <span class="arg">CVAR</span> <span class="arg">SLOT|*</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+                <dd>Cvar name for resulting cvar.</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players.</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_move">sf_sv_player_move</dt>
+    <dd>Teleports a player to specified co-ordinate.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_move <span class="arg">SLOT|*</span> <span class="arg">CVAR</span></code></dd>
+          <dd>
+          	<dl class="command_arguments">
+              <dt>SLOT|*</dt>
+               <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players.</dd>
+            </dl>
+              <dl class="command_arguments">
+               <dt>CVAR</dt>
+                <dd>Cvar prefix for input vector _1 _2 _3</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_paint">sf_sv_player_paint</dt>
+    <dd>Applies a colored tint on a specific player.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_paint <span class="arg">ENTITY</span> <span class="arg">RED</span> <span class="arg">GREEN</span> <span class="arg">BLUE</span> <span class="arg">ALPHA</span></code></dd>
+           <dd>
+             <dl class="command_arguments">
+              <dt>ENTITY</dt>
+              <dd>Entity handle</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>RED</dt>
+              <dd>Red float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>GREEN</dt>
+              <dd>Green float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>BLUE</dt>
+              <dd>Blue float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>ALPHA</dt>
+              <dd>Alpha float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_paint 0 1 1 0 0.5</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_pos">sf_sv_player_pos</dt>
+    <dd>Get the co-ordinates of the player and stores them in cvars. Three cvars will be created based on the prefix you supply.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_pos <span class="arg">CVAR</span> <span class="arg">SLOT|*</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+               <dd>Cvar name you want to use for storing <code><span class="arg">CVAR</span>_1</code> <code><span class="arg">CVAR</span>_2</code> <code><span class="arg">CVAR</span>_3</code> advisable to parse ~local variable</dd>
+            </dl>
+          	<dl class="command_arguments">
+              <dt>SLOT|*</dt>
+               <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players.</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_pos ~org 5</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_weap_current">sf_sv_player_weap_current</dt>
+    <dd>Get currently held weapon of client.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_weap_current <span class="arg">CVAR</span> <span class="arg">SLOT|*</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+               <dd>Out cvar to store the weapon number</dd>
+            </dl>
+          	<dl class="command_arguments">
+              <dt>SLOT|*</dt>
+               <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players.</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_weap_lock">sf_sv_player_weap_lock</dt>
+    <dd>Prevent a player from changing his weapon.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_weap_lock <span class="arg">SLOT|*</span> <span class="arg">CVAR</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SLOT|*</dt>
+                <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players</dd>
+            </dl>
+               <dl class="cvar_info">
+		        <dt>Values:</dt>
+ 		         <dd>
+ 		          <dl class="cvar_values">
+ 		           <dt>1</dt>
+ 		            <dd>Disallow</dd>
+ 		           <dt>0</dt>
+ 		            <dd>Allow</dd>
+		           </dl>
+ 		         </dd>
+		     </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_weap_lock 0 1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_weap_paint">sf_sv_player_weap_paint</dt>
+    <dd>Applies a colored tint on a specific player's weapon.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_weap_paint <span class="arg">SLOT|*</span> <span class="arg">RED</span> <span class="arg">GREEN</span> <span class="arg">BLUE</span> <span class="arg">ALPHA</span></code></dd>
+           <dd>
+             <dl class="command_arguments">
+              <dt>ENTITY</dt>
+              <dd>Entity handle</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>RED</dt>
+              <dd>Red float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>GREEN</dt>
+              <dd>Green float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>BLUE</dt>
+              <dd>Blue float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+              <dl class="command_arguments">
+              <dt>ALPHA</dt>
+              <dd>Alpha float (<code>0.0</code> .. <code>1.0</code>)</dd>
+             </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_weap_paint 0 1 0 0 1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_player_weap_switch">sf_sv_player_weap_switch</dt>
+    <dd>Switch a player's weapon to this one.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_player_weap_switch <span class="arg">SLOT|*</span> <span class="arg">VALUE</span></code></dd>
+          <dd>
+          	<dl class="command_arguments">
+              <dt>SLOT|*</dt>
+               <dd>Slot number of the player (<code>0</code> .. <code>31</code>) or a <code>*</code> for all players.</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>CVAR</dt>
+               <dd>Out cvar to store the weapon number</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_player_weap_switch 0 1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_print_bprintf">sf_sv_print_bprintf</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_print_bprintf</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_print_centerprint">sf_sv_print_centerprint</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_print_centerprint</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_print_cinprintf">sf_sv_print_cinprintf</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_print_cinprintf</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_print_cprintf">sf_sv_print_cprintf</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_print_cprintf</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_print_welcomeprint">sf_sv_print_welcomeprint</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_print_welcomeprint</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_save_reso">sf_sv_save_reso</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_save_reso</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_script_load">sf_sv_script_load</dt>
+    <dd>Load a DesignerScript file (.os) located in your ../user/ds/ directory.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_script_load <span class="arg">CVAR</span> <span class="arg">SCRIPT</span> <span class="arg">OPTIONAL</span></code></dd>
+          <dd>
+          	<dl class="command_arguments">
+              <dt>CVAR</dt>
+               <dd>Cvar name to store handle</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>SCRIPT</dt>
+               <dd>Name of script</dd>
+            </dl>
+            <dl class="command_arguments">
+              <dt>OPTIONAL</dt>
+               <dd>Optional parameters to pass (in which can be more than one)</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_script_run">sf_sv_script_run</dt>
+    <dd>Execute a DesignerScript file (.os) located in your ../user/ds/ directory.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_script_run <span class="arg">SCRIPT</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SCRIPT</dt>
+               <dd>Name of script</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_script_run elevator</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_script_unload">sf_sv_script_unload</dt>
+    <dd>Stop execution to a previously loaded script file and unload the script file.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_script_unload <span class="arg">SCRIPT</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SCRIPT</dt>
+               <dd>Script is the cvar storing the handle to loaded script</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_script_unload $my_script</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sofree_help">sf_sv_sofree_help</dt>
+    <dd>To display information about how to display information to a command.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sofree_help</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_sofree_help</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sound_list">sf_sv_sound_list</dt>
+    <dd>List all registered sounds and put it in the <code>_sf_sv_sound_*</code> variables.</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sound_list</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_sound_list</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sound_override">sf_sv_sound_override</dt>
+    <dd>Play a specific sound in a place of a previous one.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sound_override <span class="arg">SCR SOUND</span> <span class="arg">DST SOUND</span> <span class="arg">STRING</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SRC SOUND</dt>
+                <dd>The known original sound. Can end with a <code>*</code> to target many sounds</dd>
+              <dt>DST SOUND</dt>
+                <dd>Your new sound. Can be empty to play no sound</dd>
+              <dt>STRING</dt>
+                <dd>Altered attenuation value. Empty string does not alter</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sound_play_ent">sf_sv_sound_play_ent</dt>
+    <dd>Play a sound file that has already been registered.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sound_play_ent <span class="arg">NAME</span> <span class="arg">ATTACH</span> <span class="arg">VOLUME</span> <span class="arg">ATTENUATION</span> <span class="arg">CLIENT_ONLY</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Name of sound file</dd>
+              <dt>ATTACH</dt>
+                <dd>Ent to attach the sound to</dd>
+              <dt>VOLUME</dt>
+                <dd>[<code>0.0</code> .. <code>1.0</code>]</dd>
+     		   <dt>ATTENUATION</dt>
+     		     <dd>
+ 		           <dl class="cvar_values">
+        		      <dt>-1</dt>
+             		   <dd>None, send to whole level</dd>
+             		 <dt>1</dt>
+   		             <dd>Normal fighting sound</dd>
+   		           <dt>2</dt>
+   		             <dd>Idle sound level</dd>
+    		          <dt>3</dt>
+    		            <dd>Ambient sound level</dd>
+    		        </dl>
+    		      </dd>
+              <dt>CLIENT_ONLY</dt>
+                <dd>Client_only bool</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sound_play_origin">sf_sv_sound_play_origin</dt>
+    <dd>Play a sound file that has already been registered.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sound_play_origin <span class="arg">NAME</span> <span class="arg">CVAR</span> <span class="arg">VOLUME</span> <span class="arg">ATTENUATION</span> <span class="arg">CLIENT_ONLY</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>NAME</dt>
+                <dd>Name of sound file</dd>
+              <dt>CVAR</dt>
+                <dd>Name of cvar that holds origin vector</dd>
+              <dt>VOLUME</dt>
+                <dd>[<code>0.0</code> .. <code>1.0</code>]</dd>
+     		   <dt>ATTENUATION</dt>
+     		     <dd>
+ 		           <dl class="cvar_values">
+        		      <dt>-1</dt>
+             		   <dd>None, send to whole level</dd>
+             		 <dt>1</dt>
+   		             <dd>Normal fighting sound</dd>
+   		           <dt>2</dt>
+   		             <dd>Idle sound level</dd>
+    		          <dt>3</dt>
+    		            <dd>Ambient sound level</dd>
+    		        </dl>
+    		      </dd>
+              <dt>CLIENT_ONLY</dt>
+                <dd>Client_only bool</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sound_register">sf_sv_sound_register</dt>
+    <dd>Registers a new sound file. Sound files live in your ../user/sound/ directory.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sound_register <span class="arg">SOUND</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SOUND</dt>
+               <dd>Name of sound file</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_sound_register misc/talk.wav</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_sound_remove">sf_sv_sound_remove</dt>
+    <dd>Unregister a sound file that is already registered.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_sound_remove <span class="arg">SOUND</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>SOUND</dt>
+               <dd>Name of sound file</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>sf_sv_sound_remove misc/talk.wav</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_spackage_print_id">sf_sv_spackage_print_id</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_spackage_print_id</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_spackage_print_obit">sf_sv_spackage_print_obit</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_spackage_print_obit</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_spackage_print_string">sf_sv_spackage_print_string</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_spackage_print_string</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_spackage_register">sf_sv_spackage_register</dt>
+    <dd>Registers a new string package from a file.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_spackage_register <span class="arg">FILE</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>FILE</dt>
+                <dd>File name used for the string package. Do not use the .sp extention at the end</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>]sf_sv_spackage_register singleplr</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_vector_copy">sf_sv_vector_copy</dt>
+    <dd>Copy a vector.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_vector_copy <span class="arg">DST CVAR</span> <span class="arg">SCR CVAR</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>DST CVAR</dt>
+                <dd>The prefix destination variable where the command result will be stored</dd>
+              <dt>SRC CVAR...</dt>
+                <dd>Source variable for the vector to copy</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_vector_grow">sf_sv_vector_grow</dt>
+    <dd>Scales a vector.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_vector_grow <span class="arg">DST CVAR</span> <span class="arg">VECTOR A</span> <span class="arg">MULTIPLIER</span> <span class="arg">VECTOR B</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>DST CVAR</dt>
+                <dd>The prefix destination variable where the command result will be stored</dd>
+              <dt>VECTOR A</dt>
+                <dd>???</dd>
+              <dt>MULTIPLIER</dt>
+                <dd>???</dd>
+              <dt>VECTOR B</dt>
+                <dd>???</dd>
+            </dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="command">
+  <dt class="command" id="sf_sv_vector_set">sf_sv_vector_set</dt>
+    <dd>Create a vector.</dd>
+    <dd>
+      <dl class="command_info">
+        <dt>Synopsis:</dt>
+          <dd><code>sf_sv_vector_grow <span class="arg">DST CVAR</span> <span class="arg">VECTOR A</span> <span class="arg">VECTOR B</span> <span class="arg">VECTOR C</span></code></dd>
+          <dd>
+            <dl class="command_arguments">
+              <dt>DST CVAR</dt>
+                <dd>The prefix destination variable where the command result will be stored</dd>
+              <dt>VECTOR A</dt>
+                <dd>Define the 'X' axis</dd>
+              <dt>VECTOR B</dt>
+                <dd>Define the 'Y' axis</dd>
+              <dt>VECTOR C</dt>
+                <dd>Define the 'Z' axis</dd>
+            </dl>
+          </dd>
+       	 <dt>Example:</dt>
+          <dd><code>]sf_sv_vector_grow test 10 10 10<br />
+             ]echo #test_1<br />
+             10.000000<br />
+             ]echo #test_2<br />
+             10.000000<br />
+             ]echo #test_3<br />
+             10.000000</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+
+
+<h2 id="_sf_sv">Cvars (server)</h2>
+
+<ul>
+  <li><a href="#_sf_sv_bot_focus" class="link_cvar">_sf_sv_bot_focus</a></li>
+  <li><a href="#_sf_sv_debug_sounds" class="link_cvar">_sf_sv_debug_sounds</a></li>
+  <li><a href="#_sf_sv_debug_triggers" class="link_cvar">_sf_sv_debug_triggers</a></li>
+  <li><a href="#_sf_sv_force_sky" class="link_cvar">_sf_sv_force_sky</a></li>
+  <li><a href="#_sf_sv_fx_blood_amount" class="link_cvar">_sf_sv_fx_blood_amount</a></li>
+  <li><a href="#_sf_sv_fx_blood_speed" class="link_cvar">_sf_sv_fx_blood_speed/a></li>
+  <li><a href="#_sf_sv_fx_mode" class="link_cvar">_sf_sv_fx_mode</a></li>
+  <li><a href="#_sf_sv_ghl_tint_a" class="link_cvar">_sf_sv_ghl_tint_a</a></li>
+  <li><a href="#_sf_sv_ghl_tint_b" class="link_cvar">_sf_sv_ghl_tint_b</a></li>
+  <li><a href="#_sf_sv_ghl_tint_g" class="link_cvar">_sf_sv_ghl_tint_g</a></li>
+  <li><a href="#_sf_sv_ghl_tint_r" class="link_cvar">_sf_sv_ghl_tint_r</a></li>
+  <li><a href="#_sf_sv_ghoul_info_slot" class="link_cvar">_sf_sv_ghoul_info_slot</a></li>
+  <li><a href="#_sf_sv_image_info_slot" class="link_cvar">_sf_sv_image_info_slot</a></li>
+  <li><a href="#_sf_sv_on_attack_press" class="link_cvar">_sf_sv_on_attack_press</a></li>
+  <li><a href="#_sf_sv_on_attack_release" class="link_cvar">_sf_sv_on_attack_release</a></li>
+  <li><a href="#_sf_sv_on_client_damage" class="link_cvar">_sf_sv_on_client_damage</a></li>
+  <li><a href="#_sf_sv_on_flag_take" class="link_cvar">_sf_sv_on_flag_take</a></li>
+  <li><a href="#_sf_sv_on_left_press" class="link_cvar">_sf_sv_on_left_press</a></li>
+  <li><a href="#_sf_sv_on_left_release" class="link_cvar">_sf_sv_on_left_release</a></li>
+  <li><a href="#_sf_sv_on_right_press" class="link_cvar">_sf_sv_on_right_press</a></li>
+  <li><a href="#_sf_sv_on_right_release" class="link_cvar">_sf_sv_on_right_release</a></li>
+  <li><a href="#_sf_sv_on_use_press" class="link_cvar">_sf_sv_on_use_press</a></li>
+  <li><a href="#_sf_sv_on_use_release" class="link_cvar">_sf_sv_on_use_release</a></li>
+  <li><a href="#_sf_sv_sofree_deathmatch" class="link_cvar">_sf_sv_sofree_deathmatch</a></li>
+  <li><a href="#_sf_sv_sofree_debug" class="link_cvar">_sf_sv_sofree_debug</a></li>
+  <li><a href="#_sf_sv_sound_info_slot" class="link_cvar">_sf_sv_sound_info_slot</a></li>
+ </ul>
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_bot_focus">_sf_sv_bot_focus</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_bot_focus</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_debug_sounds">_sf_sv_debug_sounds</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_debug_sounds</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_debug_triggers">_sf_sv_debug_triggers</dt>
+    <dd>Server sends extra packets to create a box (based on waypoints boxes) around entities.</dd>
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_debug_triggers <span class="arg">VALUE</span></code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]_sf_sv_debug_triggers 1</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_force_sky">_sf_sv_force_sky</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_force_sky</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_fx_blood_amount">_sf_sv_fx_blood_amount</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_fx_blood_amount</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_fx_blood_speed">_sf_sv_fx_blood_speed</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_fx_blood_speed</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_ghl_tint_a">_sf_sv_ghl_tint_a</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_ghl_tint_a</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_ghl_tint_b">_sf_sv_ghl_tint_b</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_ghl_tint_b</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_ghl_tint_g">_sf_sv_ghl_tint_g</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_ghl_tint_g</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_ghl_tint_r">_sf_sv_ghl_tint_r</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_ghl_tint_r</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_ghoul_info_slot">_sf_sv_ghoul_info_slot</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_ghoul_info_slot</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_image_info_slot">_sf_sv_image_info_slot</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_image_info_slot</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_attack_press">_sf_sv_on_attack_press</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player press the attack button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_attack_release">_sf_sv_on_attack_release</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player release the attack button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_client_damage">_sf_sv_on_client_damage</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player receive damage(s).</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_flag_take">_sf_sv_on_flag_take</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player take a flag.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_left_press">_sf_sv_on_left_press</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player press the left strafing button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_left_release">_sf_sv_on_left_release</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player release the left strafing button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_right_press">_sf_sv_on_right_press</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player press the right strafing button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_right_release">_sf_sv_on_right_release</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player release the right strafing button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_use_press">_sf_sv_on_use_press</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player press the use button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_on_use_release">_sf_sv_on_use_release</dt>
+    <dd>Contains a comma separated list of function names to be executed when a player release the use button.</dd>
+    <dd>
+      <dl class="function_info">
+        <dt>Function arguments:</dt>
+          <dd>
+            <dl class="function_arguments">
+              <dt>...</dt>
+                <dd>...</dd>
+            </dl>
+          </dd>
+      </dl>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_sofree_deathmatch">_sf_sv_sofree_deathmatch</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_sofree_deathmatch</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_sofree_debug">_sf_sv_sofree_debug</dt>
+    <dd>???</dd>
+
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_sofree_debug</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+<dl class="cvar">
+  <dt class="cvar" id="_sf_sv_sound_info_slot">_sf_sv_sound_info_slot</dt>
+    <dd>See how many sounds slots you have free.</dd>
+    <dd>
+      <dl class="cvar_info">
+        <dt>Synopsis:</dt>
+          <dd><code>_sf_sv_sound_info_slot</code></dd>
+
+        <dt>Example:</dt>
+          <dd><code>]_sf_sv_sound_info_slot</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+
+
+<h2 id="_sf_misc">Other (server)</h2>
+
+<ul>
+  <li><a href="#Cmd_sf_GetStringText" class="link_cvar">Cmd_sf_GetStringText</a></li>
+</ul>
+
+<dl class="misc">
+  <dt class="misc" id="Cmd_sf_GetStringText">Cmd_sf_GetStringText</dt>
+    <dd>???</dd>
+    <dd>
+      <dl class="misc_info">
+        <dt>Synopsis:</dt>
+          <dd><code>Cmd_sf_GetStringText</code></dd>
+          <dd>
+            <dl class="misc_arguments"></dl>
+          </dd>
+        <dt>Example:</dt>
+          <dd><code>???</code></dd>
+      </dl>
+    </dd>
+</dl>
+
+
+
+
+
+</body>
+
+</html>

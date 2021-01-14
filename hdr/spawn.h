@@ -1,0 +1,1 @@
+extern void SP_pacman(edict_t *self);
