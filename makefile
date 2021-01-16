@@ -29,7 +29,7 @@ SDIR = \
 INC = \
 	-Ihdr
 CFLAGS = \
-	-std=c++11 -fpermissive -w 
+	-std=c++11 -fpermissive -w -DSOFREE_DEBUG
 OFLAGS = \
 	-lpthread -shared -Wl,--enable-stdcall-fixup -static-libgcc -static-libstdc++ -Wno-write-strings
 _OBJS = \

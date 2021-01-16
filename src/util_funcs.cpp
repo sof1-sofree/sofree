@@ -1122,3 +1122,54 @@ void intersect(edict_t * fromPlayer)
 		}
 	}
 }
+
+/*
+table name is often passed from lua so.
+access from lua stack
+*/
+void luaReadTableAsVector(int tableStackPos, float* vecOut) {
+	lua_pushstring(L,"x");
+	lua_gettable(L,tableStackPos);
+	// top of stack is value after gettable called.
+	vecOut[0]=lua_tonumber(L,-1);
+	lua_pop(L,1);
+	
+	lua_pushstring(L,"z");
+	lua_gettable(L,tableStackPos);
+	vecOut[1]=lua_tonumber(L,-1);
+	lua_pop(L,1);
+
+	lua_pushstring(L,"y");
+	lua_gettable(L,tableStackPos);
+	vecOut[2]=lua_tonumber(L,-1);
+	lua_pop(L,1);
+
+	// vecOut now stores table values.
+}
+
+
+
+void luaPushVectorAsTable(vec3_t inVec) {
+	lua_newtable(L);
+
+	lua_pushstring(L,"x");
+	lua_pushnumber(L,inVec[0]);
+	lua_settable(L,-3); //attach to table
+	
+	lua_pushstring(L,"y");
+	lua_pushnumber(L,inVec[2]);
+	lua_settable(L,-3);
+	
+	lua_pushstring(L,"z");
+	lua_pushnumber(L,inVec[1]);
+	lua_settable(L,-3);
+
+	//table is still on stack
+}
+
+/*
+
+int args = lua_gettop(L);
+assert(args == 1 && "invalid arg count");
+
+*/

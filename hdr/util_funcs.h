@@ -28,3 +28,7 @@ extern void drawBoxesOnEnts(int round, int mode);
 extern void intersect(edict_t * fromPlayer);
 extern void *my_realloc(void * buffer,int size);
 extern int changesize(FILE *fp, __int64 size);
+
+
+void luaPushVectorAsTable(vec3_t inVec);
+void luaReadTableAsVector(int tableStackPos, float* vecOut);

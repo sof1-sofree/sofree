@@ -10,11 +10,11 @@ void sf_sv_lua_func_exec(void);
 extern "C" int sf_sv_console_write(lua_State *L);
 extern "C" int sf_sv_cmd_list(lua_State * L);
 extern "C" int sf_sv_check_reso(lua_State * L); // in:Int(slotid) in:Int(challenge) in:String(cvar) 
-extern "C" int sf_sv_save_reso(lua_State * L); // in:Int(slotid) out:Int(X) out:Int(Y)
+extern "C" int sf_sv_save_reso(lua_State * L); // in:Int(slotid) in:Int(X) in:Int(Y)
 
 extern "C" int sf_sv_vector_grow(lua_State * L); //in:Vector(a) in:Float(scale) in:Vector(b) out:Vector(c)
 extern "C" int sf_sv_vector_copy(lua_State * L); //out:DstVectorVar in:SrcVectorVar
-extern "C" int sf_sv_vector_set(lua_State * L); //in:floatX in:floatY in:floatZ out:DstVectorVar
+extern "C" int sf_sv_vector_create(lua_State * L); //in:floatX in:floatY in:floatZ out:DstVectorVar
 extern "C" int sf_sv_vector_add(lua_State * L); //in:vectorA in:vectorB out:vectorOut
 extern "C" int sf_sv_vector_subtract(lua_State * L); //in:vectorA in:vectorB out:VectorOut
 extern "C" int sf_sv_vector_scale(lua_State * L); //in:vectorA in:float(scale) out:Vector

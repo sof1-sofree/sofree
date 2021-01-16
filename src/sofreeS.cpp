@@ -179,6 +179,13 @@ int sys_WSAStartup(WORD wVersionRequested,LPWSADATA lpWSAData)
 {
 
 	if ( once_wsa == true ) {
+		#ifdef SOFREE_DEBUG
+		freopen("sofreeS.err", "w", stderr);
+		setvbuf(stderr, NULL, _IONBF, 0);
+
+		freopen("sofreeS.log", "w", stdout);
+		setvbuf(stdout, NULL, _IONBF, 0);
+		#endif
 		onServerInitiation();
 		once_wsa = false;
 	}
