@@ -351,8 +351,11 @@ void myCheck_f(void) {
 	char * val = orig_Cmd_Argv(3);
 
 	char checkString[128];
-	sprintf(checkString,"sp_sc_func_exec ,check %i %i %s %s\n",pnum,id,cvar,val);
-	orig_Cbuf_AddText(checkString);
+	// sprintf(checkString,"sp_sc_func_exec ,check %i %i %s %s\n",pnum,id,cvar,val);
+	// orig_Cbuf_AddText(checkString);
+	
+	cvar_t * c = findCvar(cvar);
+	orig_Com_Printf("cvar name %s : val : %s\n",cvar,c->string);
 }
 
 /*

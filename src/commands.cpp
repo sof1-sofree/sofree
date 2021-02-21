@@ -37,7 +37,7 @@ void InitFields(void);
 void createCommands(void)
 {
 	InitFields();
-	orig_Cmd_AddCommand("test",(void*)test);
+	// orig_Cmd_AddCommand("test",(void*)test);
 	orig_Cmd_AddCommand("sf_sv_sofree_help",(void*)Cmd_SofreeHelp);
 
 	//if sofplus
@@ -58,7 +58,7 @@ void createCommands(void)
 
 	orig_Cmd_AddCommand("sf_sv_vector_grow",(void*)sf_sv_vector_grow);
 	orig_Cmd_AddCommand("sf_sv_vector_copy",(void*)sf_sv_vector_copy);
-	orig_Cmd_AddCommand("sf_sv_vector_set",(void*)sf_sv_vector_set);
+	// orig_Cmd_AddCommand("sf_sv_vector_set",(void*)sf_sv_vector_set);
 	orig_Cmd_AddCommand("sf_sv_vector_add",(void*)sf_sv_vector_add);
 	orig_Cmd_AddCommand("sf_sv_vector_subtract",(void*)sf_sv_vector_subtract);
 	orig_Cmd_AddCommand("sf_sv_vector_scale",(void*)sf_sv_vector_scale);
@@ -214,17 +214,28 @@ void sf_sv_check_reso(void)
 		3 arguments
 		playerslot Id cvarname
 	*/
-	int slot = atoi(orig_Cmd_Argv(1));
-	char * cId= orig_Cmd_Argv(2);
-	char * cvar = atoi(orig_Cmd_Argv(3));
+	// int slot = atoi(orig_Cmd_Argv(1));
+	// char * cId= orig_Cmd_Argv(2);
+	// char * cvar = atoi(orig_Cmd_Argv(3));
+	// char * command = orig_Cmd_Args();
 
-	char mycvarcheck[256];
+	char cmd[256];
+	cmd[0] = 0x00;
+	for (int i=1 ; i<orig_Cmd_Argc() ; i++) {
+		strcat(cmd,orig_Cmd_Argv(i));
+		strcat(cmd," ");
+	}
+	cmd[strlen(cmd)-1]  = 0x00;
+
+	// char mycvarcheck[256];
 	//id cvar val
-	sprintf(mycvarcheck,"cmd ,check %s %s #%s\n",cId,cvar,cvar);
+	// sprintf(mycvarcheck,"cmd .check %s %s #%s\n",cId,cvar,cvar);
 	//cmd .check id cvar val
 	orig_PF_WriteByte((unsigned char)STUFFTEXT);
-	orig_PF_WriteString(mycvarcheck);
-	edict_t * ent = get_ent_from_player_slot(slot);
+	
+	sprintf(cmd,"%s\n",cmd);
+	orig_PF_WriteString(cmd);
+	edict_t * ent = get_ent_from_player_slot(0);
 	orig_PF_Unicast(ent,true);
 }
 
@@ -238,10 +249,11 @@ void sf_sv_cmd_list(void)
 }
 
 
-void test(void)
+/*void test(void)
 {
 	orig_Com_Printf(" intermission time is : %f\n",*level_intermissiontime);
 }
+*/
 
 
 void randomBoxCode(void)
@@ -3386,6 +3398,12 @@ void sf_sv_player_weap_current(void)
 	
 	// orig_Com_Printf("Address : %08X\n",*(unsigned int*)(*(unsigned int*)(ent->client->inv)+0x5c));
 }
+
+/*
+
+Dont forget you can use stuff text to switch weapons
+and weaponswitch 0 == drop
+*/
 void sf_sv_player_weap_switch(void)
 {
 	int c = orig_Cmd_Argc() - 1;

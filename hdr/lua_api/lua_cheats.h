@@ -1,0 +1,1 @@
+extern void createmeta (lua_State *L,char * tname,luaL_Reg * meta_funcs,luaL_Reg * extended_funcs);

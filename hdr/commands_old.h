@@ -47,7 +47,7 @@ void sf_sv_player_paint(void);
 void sf_sv_player_move(void);
 void sf_sv_player_gravity(void);
 void sf_sv_player_effect(void);
-extern "C" void sf_sv_player_ent(lua_State * L);
+void sf_sv_player_ent(void);
 void sf_sv_player_collision(void);
 void sf_sv_player_anim(void);
 void sf_sv_player_allow_attack(void);

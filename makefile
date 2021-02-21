@@ -43,7 +43,7 @@ _OBJS = \
 	var_addrs.o \
 	ghoul.o \
 	hooks.o \
-	commands_lua.o \
+	commands.o \
 	util_funcs.o \
 	sp_detours.o \
 	server_begin.o \
