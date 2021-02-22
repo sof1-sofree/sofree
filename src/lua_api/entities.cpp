@@ -1,47 +1,39 @@
 #include <windows.h>
 #include "sofheader.h"
+#include "lua_api/generic.h"
+// #include <stdlib.h>
+// #include <string.h>
 
-#include <stdlib.h>
-#include <string.h>
+// // StrStrI
+// #include <shlwapi.h>
 
-// StrStrI
-#include <shlwapi.h>
+// #include <list>
 
-#include <list>
+#include "lua_api/entity_instance.h"
 
-
-
-
-
-/*
-I want format:
-  local fish = Ents('classname')
+void entities_init(void);
+int lua_entities_find(lua_State *L);
 
 
-So there must be a constructor, and it must return a Userdata.
+luaL_Reg entities_funcs[] = {
+  {"find", lua_entities_find},
+  {"birth", lua_ent_birth},
+  {NULL, NULL}
+};
 
-I'm still not sure why I want to use Userdata
-
-He has a struct.. which are just pointers...
-then he fills the pointers...
-
-with actual data...
-
-then ... when the __gc hits, he can just free the pointers or close them....
-Do i have something that i want to 'close' ???
-
-on __gc??? Else use table???-
-*/
 
 /*
-This is Ran on Server startup?? I guess. Store metatables(if any) in registry.
-And. Prepare all tables for serving the API.
+Create a table... :) Thats all.
 */
 void entities_init(void) {
-	// create metatable here
+	// pushes new table to stack
+	luaL_newlibtable(L,entities_funcs);
 
+	// set our funcs
+	luaL_setfuncs(L,entities_funcs,0);
 
-
+	// pops value from stack and sets as new global
+	lua_setglobal(L,"Entities");
 }
 int lua_entities_find(lua_State *L) {
 	char * cvarprefix = lua_tostring(L,1);
@@ -64,15 +56,7 @@ int lua_entities_find(lua_State *L) {
 
 
 
-luaL_Reg entities_funcs[] = {
-  {"find", lua_entities_find},
-  {"spawn", NULL},
-  {"remove", NULL},
-  {NULL, NULL}
-};
-
-
-
+/*
 Account = {balance = 0}
     
 function Account:new (o)
@@ -90,3 +74,5 @@ function Account:withdraw (v)
   if v > self.balance then error"insufficient funds" end
   self.balance = self.balance - v
 end
+
+*/

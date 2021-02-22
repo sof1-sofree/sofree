@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "lua_api/generic.h"
 
 /*
 This function has to return a 'list/array' of filenames

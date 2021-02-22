@@ -1,0 +1,1 @@
+extern void players_init(void);

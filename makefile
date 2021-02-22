@@ -43,7 +43,6 @@ _OBJS = \
 	var_addrs.o \
 	ghoul.o \
 	hooks.o \
-	commands.o \
 	util_funcs.o \
 	sp_detours.o \
 	server_begin.o \
@@ -60,7 +59,11 @@ _OBJS = \
 	minecraft.o \
 	spawn.o \
 	sofree_strip.o \
-	matrix4.o
+	matrix4.o \
+	lua_api/entities.o \
+	lua_api/entity_instance.o \
+	lua_api/generic.o \
+	commands.o
 OBJS = \
 	$(patsubst %,$(ODIR)/%,$(_OBJS)) # insert ODIR in front of each whitespace seperated word
 
@@ -83,4 +86,4 @@ $(ODIR)/matrix4.o: $(SDIR)/Game/ghoul/matrix4.cpp
 
 .PHONY: clean
 clean:
-	rm -f $(ODIR)/*.o $(ODIR)/Game/gamecpp/*.o $(ODIR)/DetourXS/*.o $(OUT)
+	rm -f $(ODIR)/*.o $(ODIR)/Game/gamecpp/*.o $(ODIR)/DetourXS/*.o $(ODIR)/lua_api/*.o $(OUT)

@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include "DetourXS/detourxs.h"
 
+#include "lua_api/generic.h"
+
 
 
 void detourSysShutDown(void);
@@ -17,8 +19,6 @@ int sofreebuild_len;
 char sofreebuildstring[128];
 float newrampslide = 180.0f;
 double groundDist = 0.375;
-
-lua_State * L;
 
 /*
 Called by WSA_Startup WSOCK init.
@@ -80,6 +80,7 @@ void onServerInitiation(void)
 
 	createCvars();
 	createCommands();
+	LuaInitalize();
 
 	sprintf(sofreebuildstring,"SoFree build %hu%02hhu%02hhu.%hu ",(unsigned int)&_BUILD_YEAR,(unsigned int)((&_BUILD_MONTH)-16) & 0xF,(unsigned int)(&_BUILD_DAY)-64,(unsigned int)&_BUILD_NUMBER);
 	sofreebuild_len = strlen(sofreebuildstring);

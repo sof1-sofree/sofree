@@ -169,7 +169,7 @@ extern void AngleVectors (vec3_t angles, vec3_t forward, vec3_t right, vec3_t up
 #include "var_addrs.h"
 
 #include "cvars.h"
-#include "commands_old.h"
+#include "commands.h"
 #include "func_defs.h"
 #include "sp_detours.h"
 #include "util_funcs.h"

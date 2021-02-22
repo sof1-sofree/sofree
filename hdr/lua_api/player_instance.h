@@ -1,0 +1,1 @@
+extern "C" int lua_player_grab(lua_State * L);
