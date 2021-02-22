@@ -12,6 +12,13 @@
 #include "lua_api/entity_instance.h"
 
 /*
+It is a good practice to add all needed metamethods to a table before setting
+ it as a metatable of some object. In particular, the __gc metamethod works only when
+  this order is followed (see §2.5.3). It is also a good practice to set the metatable
+   of an object right after its creation.
+*/
+
+/*
 
 e.soundname
 e.next_think
@@ -45,6 +52,41 @@ e.origin
 ???
 */
 
+typedef struct eInst_fields {
+  const char *name;
+  lua_CFunction func;
+} eInst_fields;
+
+eInst_fields ent_inst_fields[] = {
+	{"airresistance",},
+	{"angles",},
+	{"bouyancy",},
+	{"classname",},
+	{"clipmask",},
+	{"enemy",},
+	{"flags",},
+	{"friction",},
+	{"ghoulinst",},
+	{"gravity",},
+	{"health",},
+	{"health_max",},
+	{"inuse",},
+	{"mass",},
+	{"maxs",},
+	{"mins",},
+	{"model",},
+	{"movetype",},
+	{"next_think",},
+	{"origin",},
+	{"script",},
+	{"skinnum",},
+	{"solid",},
+	{"soundname",},
+	{"target",},
+	{"targetname",},
+	{"velocity",}
+}
+
 luaL_Reg ent_inst_funcs[] = {
   {"anim", lua_ent_anim},
   {"model",lua_ent_model},
@@ -60,24 +102,59 @@ luaL_Reg ent_inst_funcs[] = {
   {NULL, NULL}
 };
 
+// entity instance table
+// metatable ^
+// __index override table
+
+//Using __index and __setindex for direct memory reading and writing
+void ent_instance_startup(void) {
+
+}
+
+//table, key, value
+int ent_handle_write(lua_State * L) {
+
+	return 0;
+}
+
+/*
+prepare the table
+explicitly pushes the table onto the stack
+
+_metatable __newindex
+If it is a function, it is called with table, key, and value as arguments.
+*/
+void ent_instance_prepare(edict_t * ent) {
+
+	luaL_newmetatable(L, "ent_instance");
+
+	lua_pushcfunction(L,ent_handle_write);
+
+	luaL_newlibtable(L,ent_inst_funcs); //calls lua_createtable thus we have table on the stack.
+	luaL_setfuncs(L,ent_inst_funcs,0);
+
+	lua_pushinteger(L,ent); // value
+	lua_setfield(L,-2, "handle");
+
+}
+
 // Use lua_topointer to do extra stuff to tables?
 
 // local fish = Ent('misc_generic_fish')
 //Constructor for new instance, actually belongs to the 'Entities' table.
 int lua_ent_birth(lua_State * L) {
 
-	// we need a silly metatable for __call
-	// set his meta-table here
-	luaL_newlibtable(L,ent_inst_funcs); //calls lua_createtable thus we have table on the stack.
-	luaL_setfuncs(L,ent_inst_funcs,0);
+	char * classname = lua_tostring(L,1);
+	
 
 	//we don't want to just return handle.
 	// we return entire ent api
 	edict_t * ent = orig_G_Spawn();
-	
-	lua_pushstring(L,"handle"); // key
-	lua_pushinteger(L,ent); // value
-	lua_settable(L,-3); //attach to table
+
+	ent_instance_prepare(ent);
+
+	lua_pushstring(L,classname);
+	lua_setfield(L,-1,"classname");
 
 	//returns the new 'table' aka ent
 	return 1;

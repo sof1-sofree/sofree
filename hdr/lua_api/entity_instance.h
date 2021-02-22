@@ -1,3 +1,5 @@
+void ent_instance_prepare(edict_t * ent);
+
 extern "C" int lua_ent_birth(lua_State * L);
 
 

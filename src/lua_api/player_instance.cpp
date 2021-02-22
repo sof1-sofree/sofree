@@ -37,22 +37,19 @@ int lua_player_grab(lua_State * L) {
   
   // Store anything inside the table?
   lua_pushinteger(L,slot); // value
-  lua_setfield(L,-1,"slot");
+  lua_setfield(L,-2,"slot");
 
   //returns the new 'table' aka ent
   return 1;
 }
 
 int lua_player_grab_ent(lua_State * L) {
-  int args = lua_gettop(L);
-  assert(args==1);
-  int slot = lua_tonumber(L,1);
+  lua_getfield(L,1,"slot");
+  int slot = lua_tointeger(L,-1);
   edict_t * ent = get_ent_from_player_slot(slot);
+
+  ent_instance_prepare(ent);
   
-  if ( ent && ent->inuse ) {
-    lua_pushinteger(L,(int)ent);
-  } else {
-    lua_pushinteger(L,0);
-  }
+  // returns an entity instance table
   return 1;
 }
