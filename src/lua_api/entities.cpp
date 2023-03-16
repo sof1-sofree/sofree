@@ -1,3 +1,4 @@
+#ifdef LUA_ON
 #include <windows.h>
 #include "sofheader.h"
 #include "lua_api/generic.h"
@@ -76,3 +77,5 @@ function Account:withdraw (v)
 end
 
 */
+
+#endif

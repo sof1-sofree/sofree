@@ -1,5 +1,8 @@
+#ifdef LUA_ON
 extern void LuaInitalize(void);
 extern lua_State * L;
+
+#endif
 
 
 /*

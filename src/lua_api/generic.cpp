@@ -1,3 +1,4 @@
+#ifdef LUA_ON
 #include <windows.h>
 #include "sofheader.h"
 
@@ -52,3 +53,5 @@ void LuaLoadFiles(void)
 		}
 	}
 }
+
+#endif

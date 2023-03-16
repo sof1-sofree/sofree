@@ -2,4 +2,3 @@
 SOFDIR="/mnt/d/sof1/"
 strip --strip-all "bin/sofreeS.dll"
 cp "bin/sofreeS.dll" "${SOFDIR}"
-cp "bin/sofreeS.dll" /mnt/d/storage/FakeDesktop/

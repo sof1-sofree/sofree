@@ -1,3 +1,5 @@
+#ifdef LUA_ON
+
 #include <windows.h>
 #include "sofheader.h"
 #include "lua_api/generic.h"
@@ -20,3 +22,5 @@ void players_init(void) {
 	// pops value from stack and sets as new global
 	lua_setglobal(L,"Players");
 }
+
+#endif

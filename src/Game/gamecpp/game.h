@@ -280,6 +280,34 @@ typedef struct
 } game_import_t;
 
 
+/*
+CORRECT ORDER
+000 mov     dword_5015C8D0, 3
+000 mov     dword_5015C8D4, offset Init ; STR: "==== InitGame ====", "bot_waypoints", "bot_wp_edit", "botlist.txt", "bot_listfile", "bot_random", "bot_fillserv", "bot_configexec", "bot_chat", "bot_wppref"
+000 mov     dword_5015C8D8, offset ShutdownGame
+000 mov     dword_5015C8DC, offset SpawnEntities ; STR: "items", "weapons", "general", "fs_createpak", "ED_LoadFromFile: found %s when expecting {", "environ/waterspurt", "environ/oilspurt", "environ/chemspurt", "environ/metal_computer", "environ/glass_computer"
+000 mov     dword_5015C8E0, offset WriteGame
+000 mov     dword_5015C8E4, offset ReadGame
+000 mov     dword_5015C8E8, offset WriteLevel
+000 mov     dword_5015C8EC, offset ReadLevel ; STR: "Function index tables have changed size"
+000 mov     dword_5015C8F0, offset W_RefreshWeapon
+000 mov     dword_5015C8F4, offset ClientConnect ; STR: "rejected_banned", "spectator", "spectator_password", "rejected_spectator_password", "rejected_spectator_limit_exeeded", "password", "rejected_password", "rejmsg", "%s connected"
+000 mov     dword_5015C8F8, offset ClientBegin ; STR: "player"
+000 mov     dword_5015C8FC, offset ClientUserinfoChanged ; STR: "%s\%s\%s\0", "spectator", "%s\%s\%s\%d", "\name\badinfo\skin\mullins", "bestweap", "teamname"
+000 mov     dword_5015C900, offset ClientDisconnect
+000 mov     dword_5015C904, offset ClientCommand ; STR: "bot_wp_verifypaths", "bot_wp_botroute", "bot_wp_whichpath", "bot_wp_pathinfo", "bot_wp_connect", "makewp", "makewpj", "remwp", "makewp_nv", "makewp_el"
+000 mov     dword_5015C908, offset ClientThink ; STR: "player/jump.wav", "respawn"
+000 mov     dword_5015C90C, offset ResetCTFTeam
+000 mov     dword_5015C910, offset G_GameAllowaSave
+000 mov     dword_5015C914, offset G_SavesLeft
+000 mov     dword_5015C918, offset GetGameStats ; STR: "stat_playedtime_base", "stat_guyskilled", "stat_friendlieskilled", "stat_throatshots", "stat_nutshots", "stat_headshots", "stat_gibs", "stat_savesused", "%d.%02d.%02d", "stat_playedtime"
+000 mov     dword_5015C91C, offset G_UpdateInven
+000 mov     dword_5015C920, offset GetDMGameName
+000 mov     dword_5015C924, offset GetCinematicFreeze
+000 mov     dword_5015C928, offset SetCinematicFreeze
+000 mov     dword_5015C92C, offset G_RunFrame ; STR: "respawn", "bot_wp_edit"
+*/
+
 //
 // functions exported by the game subsystem
 //
@@ -290,41 +318,46 @@ typedef struct
 	// the init function will only be called when a game starts,
 	// not each time a level is loaded.  Persistant data for clients
 	// and the server can be allocated in init
-	void		(*Init) (void);
-	void		(*Shutdown) (void);
+	void		(*Init) (void); // 4
+	void		(*Shutdown) (void); // 8 
 
 	// each new level entered will cause a call to SpawnEntities
-	void		(*SpawnEntities) (char *mapname, char *entstring, char *spawnpoint);
+	void		(*SpawnEntities) (char *mapname, char *entstring, char *spawnpoint); // c
 
 	// Read/Write Game is for storing persistant cross level information
 	// about the world state and the clients.
 	// WriteGame is called every time a level is exited.
 	// ReadGame is called on a loadgame.
-	void		(*WriteGame) (bool autosave);
-	bool		(*ReadGame) (bool autosave);
+	void		(*WriteGame) (bool autosave); // 10
+	bool		(*ReadGame) (bool autosave); // 14
 
 	// ReadLevel is called after the default map information has been
 	// loaded with SpawnEntities
-	void		(*WriteLevel) (void);
-	void		(*ReadLevel) (void);
+	void		(*WriteLevel) (void); // 18
+	void		(*ReadLevel) (void); // 1c
 
-	qboolean	(*ClientConnect) (edict_t *ent, char *userinfo);
-	void		(*ClientBegin) (edict_t *ent);
-	void		(*ClientUserinfoChanged) (edict_t *ent, char *userinfo, bool not_first_time);
-	void		(*ClientDisconnect) (edict_t *ent);
-	void		(*ClientCommand) (edict_t *ent);
-	void		(*ClientThink) (edict_t *ent, usercmd_t *cmd);
-	void		(*ResetCTFTeam) (edict_t *ent);
 
-	int			(*GameAllowASave) (void);
-	void		(*SavesLeft) (void);
-	void		(*GetGameStats) (void);
-	void		(*UpdateInven) (void);
-	const char	*(*GetDMGameName) (void);
-	byte		(*GetCinematicFreeze) (void);
-	void		(*SetCinematicFreeze) (byte cf);
+	void		(*ClientThink) (edict_t *ent, usercmd_t *cmd); // real order 20
+	qboolean	(*ClientConnect) (edict_t *ent, char *userinfo); // 24
+	void	(*RefreshWeapon)(edict_t &ent); // real order 28
+	
+	void		(*ClientUserinfoChanged) (edict_t *ent, char *userinfo, bool not_first_time); // 2c
+	void		(*ClientDisconnect) (edict_t *ent); // real order 30
+	void		(*ClientBegin) (edict_t *ent); // real order 34
+	
+	void		(*ClientCommand) (edict_t *ent); // 38
+	
+	void		(*ResetCTFTeam) (edict_t *ent); // 3c
 
-	float		(*RunFrame) (int serverframe);
+	int			(*GameAllowASave) (void); // 40
+	void		(*SavesLeft) (void); // 44
+	void		(*GetGameStats) (void); // 48
+	void		(*UpdateInven) (void); // 4c
+	const char	*(*GetDMGameName) (void); // 50
+	byte		(*GetCinematicFreeze) (void); // 54
+	void		(*SetCinematicFreeze) (byte cf); // 58
+
+	float		(*RunFrame) (int serverframe); // 5c
 
 	//
 	// global variables shared between game and server

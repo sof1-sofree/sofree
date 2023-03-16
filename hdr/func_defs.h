@@ -1,3 +1,5 @@
+
+
 typedef void (*PM_AddCurrents_type) (vec3_t	wishvel);
 extern PM_AddCurrents_type orig_PM_AddCurrents;
 
@@ -108,6 +110,12 @@ void my_SV_WriteFrameToClient (client_t *client, sizebuf_t *msg);
 typedef void (*NET_SendPacket_type) (netsrc_t sock, int length, void *data, netadr_t to);
 extern NET_SendPacket_type orig_NET_SendPacket;
 // void my_NET_SendPacket(netsrc_t sock, int length, void *data, netadr_t to);
+
+typedef qboolean (*NET_StringToAdr_type)(char *s, netadr_t *a);
+extern NET_StringToAdr_type orig_NET_StringToAdr;
+
+typedef void (*Netchan_OutOfBandPrint_type) (int net_socket, netadr_t adr, char *format, ...);
+extern Netchan_OutOfBandPrint_type orig_Netchan_OutOfBandPrint;
 
 typedef void (*SV_Multicast_type) (vec3_t origin, multicast_t to,int thirdunknown);
 extern SV_Multicast_type orig_SV_Multicast;

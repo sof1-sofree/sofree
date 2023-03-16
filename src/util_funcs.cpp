@@ -1124,10 +1124,12 @@ void intersect(edict_t * fromPlayer)
 	}
 }
 
+#ifdef LUA_ON
 /*
 table name is often passed from lua so.
 access from lua stack
 */
+
 void luaReadTableAsVector(int tableStackPos, float* vecOut) {
 	lua_pushstring(L,"x");
 	lua_gettable(L,tableStackPos);
@@ -1167,7 +1169,7 @@ void luaPushVectorAsTable(vec3_t inVec) {
 
 	//table is still on stack
 }
-
+#endif
 /*
 
 int args = lua_gettop(L);

@@ -1,3 +1,5 @@
+#ifdef LUA_ON
+
 #include <windows.h>
 #include "sofheader.h"
 #include "lua_api/generic.h"
@@ -53,3 +55,5 @@ int lua_player_grab_ent(lua_State * L) {
   // returns an entity instance table
   return 1;
 }
+
+#endif

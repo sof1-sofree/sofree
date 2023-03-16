@@ -1,3 +1,4 @@
+#ifdef LUA_ON
 /*
 This is a metatable.
 Useful when creating type 'userdata'
@@ -54,3 +55,5 @@ luaL_Reg iolib[] = {
 luaL_newlibtable(L,iolib);
 luaL_setfuncs(L,iolib,0);
 */
+
+#endif

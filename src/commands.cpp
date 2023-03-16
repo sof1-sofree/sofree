@@ -37,7 +37,7 @@ void InitFields(void);
 void createCommands(void)
 {
 	InitFields();
-	// orig_Cmd_AddCommand("test",(void*)test);
+	orig_Cmd_AddCommand("test",(void*)test);
 	orig_Cmd_AddCommand("sf_sv_sofree_help",(void*)Cmd_SofreeHelp);
 
 	//if sofplus
@@ -181,9 +181,12 @@ void createCommands(void)
 	orig_Cmd_AddCommand("sf_sv_math_and",(void*)sf_sv_math_and);
 	orig_Cmd_AddCommand("sf_sv_math_not",(void*)sf_sv_math_not);
 
+	#ifdef LUA_ON
 	orig_Cmd_AddCommand("sf_sv_lua_func_exec",(void*)sf_sv_lua_func_exec);
-
+	#endif
 }
+
+#ifdef LUA_ON
 /*
 	This is not a LuA func!.
 	input string of lua global func name to exec in lua
@@ -203,6 +206,7 @@ void sf_sv_lua_func_exec(void)
 		orig_Com_Error(ERR_FATAL,"%s\n",lua_tostring(L, -1));
 	lua_settop(L,0);
 }
+#endif
 
 void sf_sv_configstring_set(void)
 {
@@ -1217,6 +1221,7 @@ void sf_sv_ent_field_get(void)
 			cvar_t * out_cvar = orig_Cvar_Get(outcvar,"",0,NULL);
 			char newname[64];
 			cvar_t * one,*two,*three;
+			float * in_vec;
 			switch( all_fields[i].type) {
 				case TYPE_FLOAT:
 					setCvarFloat(out_cvar,*(float*)real_field);
@@ -1262,8 +1267,7 @@ void sf_sv_ent_field_get(void)
 				case TYPE_VECTOR:
 					// orig_Com_Printf("Do we reach here?\n");
 					// assume its a cvar with _1 _2 _3
-
-					float * in_vec = real_field;
+					in_vec = real_field;
 					writeCvarAsVector(in_vec,outcvar);
 				break;
 				case TYPE_VECTOR_2D:
@@ -1275,8 +1279,8 @@ void sf_sv_ent_field_get(void)
 					setCvarFloat(one,*(float*)real_field);
 					setCvarFloat(two,*(float*)real_field+4);
 				break;
-				default:
-				break;
+				// default:
+				// break;
 			}
 			return;
 		}
@@ -4971,4 +4975,12 @@ void sf_sv_math_not(void)
 
 	setCvarUnsignedInt(inout,~num1);
 
+}
+
+void test(void)
+{
+	char * servername = orig_Cmd_Argv(1);
+	netadr_t addr;
+	orig_NET_StringToAdr(servername,&addr);
+	orig_Netchan_OutOfBandPrint(1,addr,"echo \"rcon plowy status\"");
 }

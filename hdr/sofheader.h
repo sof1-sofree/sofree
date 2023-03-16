@@ -73,6 +73,7 @@ enum ScriptConditionT
 #define CLIENT_NETMESSAGE 0x52b5 //could be wrong i think its 0x52b4
 #define CLIENT_NETCHAN 0x526C
 #define CLIENT_NETCHAN_IP 0x5284
+#define CLIENT_MSEC
 
 #define STUFFTEXT 0xD
 
@@ -92,6 +93,10 @@ enum ScriptConditionT
 #define GCLIENT_PING 0xC8
 #define GCLIENT_SHOWSCORES 0x470
 #define GCLIENT_MOVESCALE 0x348 //other movescale is 26 offset , doesnt set
+#define GCLIENT_CHASETARGET 0x328
+
+#define GCLIENT_LATCHED_BUTTONS 0x484
+#define GCLIENT_BUTTONS 0x47C
 
 
 #define SIZE_OF_EDICT 0x464

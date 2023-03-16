@@ -80,7 +80,9 @@ void onServerInitiation(void)
 
 	createCvars();
 	createCommands();
-	LuaInitalize();
+	#ifdef LUA_ON
+		LuaInitalize();
+	#endif
 
 	sprintf(sofreebuildstring,"SoFree build %hu%02hhu%02hhu.%hu ",(unsigned int)&_BUILD_YEAR,(unsigned int)((&_BUILD_MONTH)-16) & 0xF,(unsigned int)(&_BUILD_DAY)-64,(unsigned int)&_BUILD_NUMBER);
 	sofreebuild_len = strlen(sofreebuildstring);
@@ -152,8 +154,12 @@ void my_Qcommon_Init (void)
 
 	char tmp_chr[256];
 	sprintf(tmp_chr,"%hu%02hhu%02hhu.%hu",(unsigned int)&_BUILD_YEAR,(unsigned int)((&_BUILD_MONTH)-16) & 0xF,(unsigned int)(&_BUILD_DAY)-64,(unsigned int)&_BUILD_NUMBER);
-	orig_Com_Printf("\n\a====== Sofree Lua Edition %s Initialized, Lua Version %.2f ======\n\n",tmp_chr,lua_version (L)/100);
-}
+	#ifdef LUA_ON
+		orig_Com_Printf("\n\a====== Sofree Lua Edition %s Initialized, Lua Version %.2f ======\n\n",tmp_chr,lua_version (L)/100);
+	#else
+		orig_Com_Printf("\n\a====== Sofree Lua-disabled Edition %s Initialized ======\n\n",tmp_chr);
+	#endif
+}	
 
 void onMapInitiation(void)
 {

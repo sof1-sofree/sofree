@@ -1,3 +1,4 @@
+#ifdef LUA_ON
 #include <windows.h>
 #include "sofheader.h"
 #include "lua_api/generic.h"
@@ -445,3 +446,4 @@ int lua_ent_callback(lua_State * L)
 	}
 }
 
+#endif

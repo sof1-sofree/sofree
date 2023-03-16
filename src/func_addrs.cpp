@@ -2,6 +2,8 @@
 
 #include "sofheader.h"
 
+
+M_AddServerToList_type orig_M_AddServerToList = (M_AddServerToList_type)NULL;
 PM_AddCurrents_type orig_PM_AddCurrents = (PM_AddCurrents_type)0x20052DB0;
 PM_StepSlideMove__type orig_PM_StepSlideMove_ = (PM_StepSlideMove__type) NULL;
 PM_StepSlideMove_type orig_PM_StepSlideMove = (PM_StepSlideMove_type)NULL;
@@ -35,6 +37,8 @@ NET_SendPacket_type orig_NET_SendPacket = (NET_SendPacket_type)0x2004E9A0;
 SV_Multicast_type orig_SV_Multicast = (SV_Multicast_type)NULL;
 SV_Multicast_type orig_SV_Multicast2 = (SV_Multicast_type)NULL;
 
+Netchan_OutOfBandPrint_type orig_Netchan_OutOfBandPrint = (Netchan_OutOfBandPrint_type)0x2004D2F0;
+NET_StringToAdr_type orig_NET_StringToAdr = (NET_StringToAdr_type)0x2004E2D0;
 
 //inven funcs
 SetOwner_type orig_SetOwner = (SetOwner_type) 0x40005B30;
