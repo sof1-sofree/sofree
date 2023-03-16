@@ -493,7 +493,7 @@ void * my_Sys_GetGameApi(void * imports)
 	// // Reset original mem flags
 	// VirtualProtect(0x2005B150, 2, dwProt, new DWORD);
 
-	orig_M_AddServerToList = (M_AddServerToList_type)DetourCreate((LPVOID)0x200C7F40,(LPVOID)&my_M_AddServerToList,DETOUR_TYPE_JMP,5);
+	
 	orig_PM_AirMove = (PM_AirMove_type)DetourCreate((LPVOID) 0x200531A0 ,(LPVOID)&my_PM_AirMove,DETOUR_TYPE_JMP,8);
 }
 
@@ -2565,9 +2565,3 @@ void my_PM_ClipVelocity (vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 }
 
 
-
-void my_M_AddServerToList(netadr_t adr, char * serverdata)
-{
-	orig_Com_Printf("Calling M_AddServerToList!\n");
-	orig_M_AddServerToList(adr, serverdata);
-}
