@@ -58,16 +58,28 @@ void onServerInitiation(void)
 	//game.dll shutdown func
 	detourSysShutDown();
 
+	/*
+		-----------Sys_GetGameAPI---------------
+	*/
 	DetourRemove(orig_Sys_GetGameApi);
 	orig_Sys_GetGameApi = (Sys_GetGameApi_type) DetourCreate((void*)0x20065F20,(void*)&my_Sys_GetGameApi,DETOUR_TYPE_JMP,5);
+	/*
+		-----------Sys_GetPlayerAPI---------------
+	*/
 	DetourRemove(orig_Sys_GetPlayerAPI);
 	orig_Sys_GetPlayerAPI = (Sys_GetPlayerAPI_type) DetourCreate((void*)0x20066100,(void*)&my_Sys_GetPlayerAPI,DETOUR_TYPE_JMP,6);
 
+	/*
+		-----------SV_InitGameProgs---------------
+	*/
 	DetourRemove(orig_SV_InitGameProgs);
 	orig_SV_InitGameProgs = (SV_InitGameProgs_type) DetourCreate((void*)0x2005CDB0 , (void*)&my_SV_InitGameProgs,DETOUR_TYPE_JMP,5);
 
 	/*
 		fs:0 is try{} catch{} exception handling, overwritted it, so i have clean detour
+	*/
+	/*
+		-----------Qcommon_Init---------------
 	*/
 	DetourRemove(orig_Qcommon_Init);
 	orig_Qcommon_Init = (Qcommon_Init_type)DetourCreate((void*)0x2001F6F2 , (void*)&my_Qcommon_Init,DETOUR_TYPE_CALL,7);
@@ -135,6 +147,13 @@ void onServerInitiation(void)
 	// VirtualProtect(addr, 4, PAGE_READWRITE, &dwProt);
 	// *(unsigned int*)addr = (unsigned int)(&newrampslide); 
 	// VirtualProtect(addr, 4, dwProt, new DWORD);
+
+	// addr = 0x2005350E;
+	// VirtualProtect(addr, 4, PAGE_READWRITE, &dwProt);
+	// *(unsigned int*)addr = (unsigned int)(&groundDist); 
+	// VirtualProtect(addr, 4, dwProt, new DWORD);
+
+
 
 	// addr = 0x2005350E;
 	// VirtualProtect(addr, 4, PAGE_READWRITE, &dwProt);

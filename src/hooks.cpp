@@ -404,10 +404,6 @@ void * my_Sys_GetGameApi(void * imports)
 	// orig_PM_StepSlideMove_ = (PM_StepSlideMove__type)DetourCreate((LPVOID)0x20052620 , (LPVOID)&my_PM_StepSlideMove_,DETOUR_TYPE_JMP, 6);
 
 
-
-	
-
-
 	// fix any broken sound configstrings
 	for (int i=0 ; i<MAX_SOUNDS ; i++) {
 		char * c = (char*)(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH);

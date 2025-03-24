@@ -3,7 +3,7 @@
 #include "sofheader.h"
 
 
-M_AddServerToList_type orig_M_AddServerToList = (M_AddServerToList_type)NULL;
+
 PM_AddCurrents_type orig_PM_AddCurrents = (PM_AddCurrents_type)0x20052DB0;
 PM_StepSlideMove__type orig_PM_StepSlideMove_ = (PM_StepSlideMove__type) NULL;
 PM_StepSlideMove_type orig_PM_StepSlideMove = (PM_StepSlideMove_type)NULL;

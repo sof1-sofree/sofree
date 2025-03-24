@@ -60,8 +60,7 @@ gamerules_c *game_modes[] = {
 };
 
 gamerules_c * orig_modes[] = {
-	// &dm_none,
-	NULL,
+	NULL, // &dm_none
 	&dm_standard,
 	NULL,// &dm_assassin,
 	NULL,//&dm_arsenal,

@@ -665,20 +665,6 @@ int sf_sv_vector_copy(lua_State * L) {
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	// int c = orig_Cmd_Argc() - 1;
-	// if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-	// 	orig_Com_Printf(
-	// 		"Copy a vector\n"
-	// 		"----------------------------\n"
-	// 		"arg1 -> cvarname for output vector\n"
-	// 		"arg2 -> cvarname vector to copy\n"
-	// 	);
-	// 	return;
-	// }
-	// if ( c != 2 ) {
-	// 	orig_Com_Printf("sf_sv_vector_copy -h\n");
-	// 	return;
-	// }
 
 	lua_Number z = lua_tonumber(L,3);
 	lua_Number y = lua_tonumber(L,2);
@@ -1442,44 +1428,47 @@ int sf_sv_ent_find(lua_State * L)
 	AVOIDS USING FLOATS
 */
 
-int sf_sv_int_add(lua_State * L)
+int sf_sv_int_add(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"A simple math addition function, strictly for integers\n"
-			"eg. sofree_int_add ~meow 6\n"
-			"----------------------------\n"
-			"arg1 -> cvarname of cvar to do the addition on\n"
-			"arg2 -> integer value to apply addition with\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_int_add -h\n");
-		return;
-	}
+    int argc = lua_gettop(L);
+    if (argc == 1 && strcmp(lua_tostring(L, 1), "-h") == 0)
+    {
+        orig_Com_Printf(
+            "A simple math addition function, strictly for integers\n"
+            "eg. sofree_int_add ~meow 6\n"
+            "----------------------------\n"
+            "arg1 -> cvarname of cvar to do the addition on\n"
+            "arg2 -> integer value to apply addition with\n"
+        );
+        return 0;
+    }
+    if (argc != 2)
+    {
+        orig_Com_Printf("sf_sv_int_add -h\n");
+        return 0;
+    }
 
-	//name of cvar to save output in
-	// if does not exist error
-	cvar_t * out_cvar = findCvar(orig_Cmd_Argv(1));
-	if (!out_cvar) {
-		orig_Com_Printf("Error in sf_sv_int_add, supplied cvar does not exist\n");
-		return;
-	}
+    //name of cvar to save output in
+    // if does not exist error
+    const char *out_cvar_name = lua_tostring(L, 1);
+    cvar_t *out_cvar = findCvar(out_cvar_name);
+    if (!out_cvar)
+    {
+        orig_Com_Printf("Error in sf_sv_int_add, supplied cvar does not exist\n");
+        return 0;
+    }
 
-	/*
-		IMPORTANT: DONT USE FLOATS
-		USE STRING OR DOUBLE
-		BECAUSE OF PRECISION LOSS!!!
-	*/
-	unsigned int value = atoi(out_cvar->string) + atoi(orig_Cmd_Argv(2));
-	setCvarUnsignedInt(out_cvar,value);
+    /*
+        IMPORTANT: DONT USE FLOATS
+        USE STRING OR DOUBLE
+        BECAUSE OF PRECISION LOSS!!!
+    */
+    int value = atoi(out_cvar->string) + (int)lua_tonumber(L, 2);
+    setCvarUnsignedInt(out_cvar, (unsigned int)value);
+
+    return 0;
 }
+
 
 void Cmd_Swap_f(void)
 {
@@ -1601,15 +1590,21 @@ This function is super important as it builds a list of entities who are likely 
 in a given area by using their (absmin absmax) compared to teh area.
 area is absmin of the moving entity.. so it does compare absmin values after all..
 */
-int sf_sv_ent_relink(lua_State * L)
+int sf_sv_ent_relink(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
-	orig_SV_LinkEdict(ent);
+    // Get the first argument (entity index) as a number
+    int entIndex = lua_tonumber(L, 1);
+
+    // Get the edict_t pointer for the entity index
+    edict_t *ent = &g_edicts[entIndex];
+
+    // Call SV_LinkEdict to relink the entity
+    SV_LinkEdict(ent);
+
+    // Return 0 since this function does not return any value
+    return 0;
 }
+
 
 int sf_sv_ent_spawn(lua_State * L)
 {
@@ -1624,40 +1619,51 @@ int sf_sv_ent_spawn(lua_State * L)
 
 int sf_sv_ent_tint(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"Tints an entity a certain color.\n"
-			"----------------------------\n"
-			"arg1 -> immidiate value of entity handle\n"
-			"arg2 -> vector [floats] of r g b colors 0->1\n"
-			"arg3 -> [float] alpha/transparency value 0->1\n"
-		);
-		return;
-	}
-	if ( c != 3 ) {
-		orig_Com_Printf("sf_sv_ent_tint -h\n");
-		return;
-	}
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-	vec3_t colors;
-	readCvarAsVector(orig_Cmd_Argv(2),colors);
+    int c = lua_gettop(L);
+    if (c == 0) {
+        orig_Com_Printf("sf_sv_ent_tint -h\n");
+        return 0;
+    }
 
+    if (lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+        orig_Com_Printf(
+            "Tints an entity a certain color.\n"
+            "----------------------------\n"
+            "arg1 -> immidiate value of entity handle\n"
+            "arg2 -> table of r g b colors {r=float, g=float, b=float} 0->1\n"
+            "arg3 -> [float] alpha/transparency value 0->1\n"
+        );
+        return 0;
+    }
 
-	if ( ent->ghoulInst ) {
-		clientinst = (unsigned int*)(ent->ghoulInst);
-		GhoulSetTint(colors[0],colors[1],colors[2],atof(orig_Cmd_Argv(3)));
-	}
+    if (c != 3) {
+        orig_Com_Printf("sf_sv_ent_tint -h\n");
+        return 0;
+    }
+
+    edict_t *ent = (edict_t*)atoi(lua_tostring(L, 1));
+    if (!ent) {
+        orig_Com_Printf("Invalid Ent\n");
+        return 0;
+    }
+
+    vec3_t colors;
+    luaReadTableAsVector(2, colors);
+
+    if (ent->ghoulInst) {
+        clientinst = (unsigned int*)(ent->ghoulInst);
+        GhoulSetTint(colors[0], colors[1], colors[2], (float)lua_tonumber(L, 3));
+    }
+
+    return 0;
 }
+
+
 int sf_sv_ent_remove(lua_State * L)
 {	
 	#ifdef SOFREE_DEBUG
@@ -1747,34 +1753,31 @@ int sf_sv_ent_remove(lua_State * L)
 
 int sf_sv_ghoul_register(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one ,"-h" ) ) {
-		orig_Com_Printf(
-			"Registers a new ghoul file\n"
-			"----------------------------\n"
-			"arg1 -> name of ghoul\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_ghoul_register -h\n");
-		return;
-	}
-
-	int i;
-	// sv_soundindex(orig_Cmd_Argv(1));
-
-	char ver1[128];
-	strcpy(ver1,one);
-	replacechar(ver1,'\\','/');
-	orig_SV_FindIndex(ver1, CS_GHOULFILES, MAX_GHOULFILES, 1,"ghoulfile");
-	Cmd_CalcFreeGhoulSlots();
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int c = lua_gettop(L);
+    
+    if (c == 1 && lua_isstring(L, 1))
+    {
+        const char* ghoul_name = lua_tostring(L, 1);
+        
+        char ver1[128];
+        strcpy(ver1, ghoul_name);
+        replacechar(ver1,'\\','/');
+        orig_SV_FindIndex(ver1, CS_GHOULFILES, MAX_GHOULFILES, 1,"ghoulfile");
+        Cmd_CalcFreeGhoulSlots();
+    }
+    else
+    {
+        orig_Com_Printf("sf_sv_ghoul_register -h\n");
+    }
+    
+    return 0;
 }
+
 
 /*
 Order of matrix
@@ -1788,457 +1791,405 @@ int sf_sv_ghoul_translate(lua_State * L)
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one ,"-h" ) ) {
-		orig_Com_Printf(
-			"Shifts the ghoul model's origin by vector\n"
-			"Vector represents offset in each axis X Y Z\n"
-			"NB. Order of ghoul editting matters. Scale affects translation units\n"
-			"Translation affects point of rotation\n"
-			"----------------------------\n"
-			"arg1 -> entity handle\n"
-			"arg2 -> invector cvarname\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
+
+	int c = lua_gettop(L);
+
+	if (c != 2) {
 		orig_Com_Printf("sf_sv_ghoul_register -h\n");
-		return;
+		return 0;
 	}
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
+
+	if (!lua_istable(L, 1) || !lua_istable(L, 2)) {
+		orig_Com_Printf("Invalid arguments. Usage: sf_sv_ghoul_translate(ent, translate_v)\n");
+		return 0;
 	}
-	vec3_t translate_v;
-	readCvarAsVector(orig_Cmd_Argv(2),translate_v);
 
-	Matrix4 orig,trans,tmp;
+	vec3_t translate_v, orig_v;
+	luaReadTableAsVector(1, orig_v);
+	luaReadTableAsVector(2, translate_v);
 
-	clientinst = (unsigned int*)ent->ghoulInst;
+	Matrix4 orig, trans, tmp;
+
+	clientinst = (unsigned int*) orig_v[0];
 	GhoulGetXform(&orig);
-	trans.Translate(translate_v[0],translate_v[1],translate_v[2]);
-	tmp.Concat(trans,orig);
+	trans.Translate(translate_v[0], translate_v[1], translate_v[2]);
+	tmp.Concat(trans, orig);
 	GhoulSetXform(&tmp);
+
+	return 0;
 }
+
 
 int sf_sv_effect_register(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one ,"-h" ) ) {
-		orig_Com_Printf(
-			"Registers a new effect file\n"
-			"----------------------------\n"
-			"arg1 -> name of effect\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_effect_register -h\n");
-		return;
-	}
-
-	int i;
-	// sv_soundindex(orig_Cmd_Argv(1));
-
-	char ver1[128];
-	strcpy(ver1,one);
-	replacechar(ver1,'\\','/');
-	orig_SV_FindIndex(ver1, CS_EFFECTS, MAX_EFPACKS, 1,"effect");
-	Cmd_CalcFreeEffectSlots();
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    int c = lua_gettop(L);
+    if (c == 1 && lua_isstring(L, 1)) {
+        const char* effectName = lua_tostring(L, 1);
+        char ver1[128];
+        strcpy(ver1, effectName);
+        replacechar(ver1,'\\','/');
+        orig_SV_FindIndex(ver1, CS_EFFECTS, MAX_EFPACKS, 1,"effect");
+        Cmd_CalcFreeEffectSlots();
+    } else {
+        orig_Com_Printf("sf_sv_effect_register -h\n");
+    }
+    return 0;
 }
-int sf_sv_image_register(lua_State * L)
+
+int sf_sv_image_register(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int c = lua_gettop(L); // number of arguments passed to function
+    if (c != 1) {
+        orig_Com_Printf("sf_sv_image_register -h\n");
+        return 0;
+    }
+    
+    const char* imageName = lua_tostring(L, 1); // get first argument as string
+    
+    char ver1[128];
+    strncpy(ver1, imageName, sizeof(ver1)); // copy string to ver1 buffer
+    replacechar(ver1,'\\','/');
+    
+    int index = orig_SV_FindIndex(ver1, CS_IMAGES, MAX_IMAGES, 1, "image");
+    Cmd_CalcFreeImageSlots();
+    
+    return 0; // return number of values pushed to the Lua stack
+}
+
+
+
+int sf_sv_image_list(lua_State *L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    int c = lua_gettop(L);  // get number of arguments passed to the function
+    const char *arg1 = luaL_optstring(L, 1, "");  // get optional first argument, set to empty string if not provided
+
+    if (strcmp(arg1, "-h") == 0) {
+        orig_Com_Printf(
+            "Lists all registered images\n"
+            "----------------------------\n"
+            "takes optional argument as a search for substring\n"
+           "fills _sf_sv_image_X with the results\n"
+        );
+        return 0;
+    }
+
+    if (c > 1) {
+        orig_Com_Printf("sf_sv_image_list -h\n");
+        return 0;
+    }
+
+    int i;
+    cvar_t *savecvar = NULL;
+    int count = 0;
+
+    for (i = 1; i < MAX_IMAGES; i++) {
+        if (*(unsigned char*)(SV_CONFIGSTRINGS + (CS_IMAGES + i) * MAX_QPATH)) {
+            char line[65];
+            strcpy(line, SV_CONFIGSTRINGS + (CS_IMAGES + i) * MAX_QPATH);
+
+            if (c == 1) {
+                if (strstr(line, arg1) != NULL) {
+                    if (_sf_sv_sofree_debug->value)
+                        orig_Com_Printf("%s\n", line);
+
+                    char tmpname[64];
+                    sprintf(tmpname, "%s%i", "_sf_sv_image_", count + 1);
+                    savecvar = orig_Cvar_Get(tmpname, "", 0, NULL);
+                    setCvarString(savecvar, line);
+                    count++;
+                }
+            }
+            else {
+                if (_sf_sv_sofree_debug->value)
+                    orig_Com_Printf("%s\n", line);
+
+                char tmpname[64];
+                sprintf(tmpname, "%s%i", "_sf_sv_image_", i);
+                savecvar = orig_Cvar_Get(tmpname, "", 0, NULL);
+                setCvarString(savecvar, line);
+                count++;
+            }
+        }
+    }
+
+    cvar_t *finalcount = orig_Cvar_Get("_sf_sv_image_0", "", 0, NULL);
+    setCvarInt(finalcount, count);
+
+    return 0;
+}
+
+
+void Cmd_CalcFreeImageSlots(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one ,"-h" ) ) {
-		orig_Com_Printf(
-			"Registers a new image/m32 file\n"
-			"----------------------------\n"
-			"arg1 -> name of imagefile eg. pics/example.m32\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_image_register -h\n");
-		return;
-	}
-
-	int i;
-	// sv_soundindex(orig_Cmd_Argv(1));
-
-	char ver1[128];
-	strcpy(ver1,one);
-	replacechar(ver1,'\\','/');
-	orig_SV_FindIndex(ver1, CS_IMAGES, MAX_IMAGES, 1,"image");
-	Cmd_CalcFreeImageSlots();
-}
-
-
-int sf_sv_image_list(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"Lists all registered images\n"
-			"----------------------------\n"
-			"takes optional argument as a search for substring\n"
-			"fills _sf_sv_image_X with the results\n"
-		);
-		return;
-	}
-	if ( c > 1 ) {
-		orig_Com_Printf("sf_sv_image_list -h\n");
-		return;
-	}
-	int i;
-	cvar_t * savecvar = NULL;
-	int count = 0;
-	for (i=1 ; i<MAX_IMAGES ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_IMAGES+i)*MAX_QPATH) )
-		{
-			char line[65];
-			// sprintf(line,"%s",(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH));
-			strcpy(line,SV_CONFIGSTRINGS+(CS_IMAGES+i)*MAX_QPATH);
-			
-			if ( c ==  1 ) {
-				if ( StrStrI(line,orig_Cmd_Argv(1)) ) {
-					if ( _sf_sv_sofree_debug->value ) 
-						orig_Com_Printf("%s\n",line);
-
-					char tmpname[64];
-					sprintf(tmpname,"%s%i","_sf_sv_image_",count+1);
-					savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-					setCvarString(savecvar,line);
-					count++;
-
-				}
-			} else {
-				if ( _sf_sv_sofree_debug->value )
-					orig_Com_Printf("%s\n",line);
-
-				char tmpname[64];
-				sprintf(tmpname,"%s%i","_sf_sv_image_",i);
-				savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-				setCvarString(savecvar,line);
-				count++;
-			}
-			
-		}
-	}
-	cvar_t * finalcount = orig_Cvar_Get( "_sf_sv_image_0","",0,NULL);
-	setCvarInt(finalcount,count);
-	
-	// Cmd_CalcFreeImageSlots();
-}
-
-void Cmd_CalcFreeImageSlots(void)
-{
-
-	int freeslots = 0;
-	int i;
-	for (i=1 ; i<MAX_IMAGES ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_IMAGES+i)*MAX_QPATH) == '\0' )
-		{
-			freeslots++;
-		}
-	}
-	char num[8];
-	cvar_t * thecvar = findCvar("_sf_sv_image_info_slots");
-	setCvarUnsignedInt(thecvar,freeslots);
+    int freeslots = 0;
+    int i;
+    const char* configstrings = luaL_checkstring(L, 1); // get the configstrings table from Lua stack
+    for (i = 1; i < MAX_IMAGES; i++)
+    {
+        if (configstrings[(CS_IMAGES + i) * MAX_QPATH] == '\0')
+        {
+            freeslots++;
+        }
+    }
+    lua_getglobal(L, "_sf_sv_image_info_slots"); // get the _sf_sv_image_info_slots cvar from Lua
+    if (lua_istable(L, -1))
+    {
+        lua_pushstring(L, "setUnsignedInt");
+        lua_gettable(L, -2);
+        lua_pushvalue(L, -2);
+        lua_pushinteger(L, freeslots);
+        lua_call(L, 2, 0);
+    }
+    else
+    {
+        lua_pop(L, 1);
+    }
 }
 
 
 
-int sf_sv_effect_list(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"Lists all registered effects\n"
-			"----------------------------\n"
-			"takes optional argument as a search for substring\n"
-			"fills _sf_sv_effect_X with the results\n"
-		);
-		return;
-	}
-	if ( c > 1 ) {
-		orig_Com_Printf("sf_sv_effect_list -h\n");
-		return;
-	}
-	cvar_t * savecvar = NULL;
-	int count = 0;
-	int i;
-	for (i=1 ; i<MAX_EFPACKS ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_EFFECTS+i)*MAX_QPATH) )
-		{
-			char line[65];
-			// sprintf(line,"%s",(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH));
-			strcpy(line,SV_CONFIGSTRINGS+(CS_EFFECTS+i)*MAX_QPATH);
-			
-			if ( c ==  1 ) {
-				if ( StrStrI(line,orig_Cmd_Argv(1)) ) {
-					if ( _sf_sv_sofree_debug->value ) 
-						orig_Com_Printf("%s\n",line);
-					char tmpname[64];
-					sprintf(tmpname,"%s%i","_sf_sv_effect_",count+1);
-					savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-					setCvarString(savecvar,line);
-					count++;
-				}
-			} else {
-				if ( _sf_sv_sofree_debug->value ) 
-					orig_Com_Printf("%s\n",line);
 
-				char tmpname[64];
-				sprintf(tmpname,"%s%i","_sf_sv_effect_",i);
-				savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-				setCvarString(savecvar,line);
-				count++;
-			}
-			
-		}
-	}
-	cvar_t * finalcount = orig_Cvar_Get( "_sf_sv_effect_0","",0,NULL);
-	setCvarInt(finalcount,count);
-	// Cmd_CalcFreeEffectSlots();
+int sf_sv_effect_list(lua_State * L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int c = orig_Cmd_Argc() - 1;
+    if (c > 1) {
+        orig_Com_Printf("sf_sv_effect_list -h\n");
+        return 0;
+    }
+
+    if (lua_isstring(L, 1)) {
+        const char *searchString = lua_tostring(L, 1);
+        if (strcmp(searchString, "-h") == 0) {
+            lua_pushstring(L, "Lists all registered effects\n"
+                               "----------------------------\n"
+                               "takes optional argument as a search for substring\n"
+                               "returns a Lua table with the results\n");
+            return 1;
+        }
+    }
+
+    int count = 0;
+    lua_newtable(L);
+    for (int i = 1; i < MAX_EFPACKS; i++) {
+        if (*(unsigned char*)(SV_CONFIGSTRINGS + (CS_EFFECTS + i) * MAX_QPATH)) {
+            char line[65];
+            strcpy(line, SV_CONFIGSTRINGS + (CS_EFFECTS + i) * MAX_QPATH);
+
+            if (c == 1) {
+                if (strstr(line, lua_tostring(L, 1))) {
+                    if (_sf_sv_sofree_debug->value) {
+                        orig_Com_Printf("%s\n", line);
+                    }
+
+                    lua_pushinteger(L, ++count);
+                    lua_pushstring(L, line);
+                    lua_settable(L, -3);
+                }
+            } else {
+                if (_sf_sv_sofree_debug->value) {
+                    orig_Com_Printf("%s\n", line);
+                }
+
+                lua_pushinteger(L, i);
+                lua_pushstring(L, line);
+                lua_settable(L, -3);
+                count++;
+            }
+        }
+    }
+
+    lua_pushinteger(L, 0);
+    lua_pushinteger(L, count);
+    lua_settable(L, -3);
+
+    return 1;
 }
 
-void Cmd_CalcFreeEffectSlots(void)
-{
-	int freeslots = 0;
-	int i;
-	for (i=1 ; i<MAX_IMAGES ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_EFFECTS+i)*MAX_QPATH) == '\0' )
-		{
-			freeslots++;
-		}
-	}
-	char num[8];
-	cvar_t * thecvar = findCvar("_sf_sv_effect_info_slots");
-	setCvarUnsignedInt(thecvar,freeslots);
+
+void Cmd_CalcFreeEffectSlots(lua_State* L) {
+    int freeslots = 0;
+    for (int i = 1; i < MAX_IMAGES; i++) {
+        if (*(unsigned char*)(SV_CONFIGSTRINGS+(CS_EFFECTS+i)*MAX_QPATH) == '\0') {
+            freeslots++;
+        }
+    }
+    lua_pushinteger(L, freeslots);
 }
+
 
 
 
 int sf_sv_ghoul_list(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"Lists all registered ghoul files\n"
-			"----------------------------\n"
-			"takes optional argument as a search for substring\n"
-			"fills _sf_sv_ghoul_X with the results\n"
-		);
-		return;
-	}
-	if ( c > 1 ) {
-		orig_Com_Printf("sf_sv_ghoul_list -h\n");
-		return;
-	}
-	cvar_t * savecvar = NULL;
-	int count = 0;
-	int i;
-	for (i=1 ; i<MAX_GHOULFILES ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_GHOULFILES+i)*MAX_QPATH) )
-		{
-			char line[65];
-			// sprintf(line,"%s",(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH));
-			strcpy(line,SV_CONFIGSTRINGS+(CS_GHOULFILES+i)*MAX_QPATH);
-			
-			if ( c ==  1 ) {
-				if ( StrStrI(line,orig_Cmd_Argv(1)) ) {
-					if ( _sf_sv_sofree_debug->value )
-						orig_Com_Printf("%s\n",line);
-					char tmpname[64];
-					sprintf(tmpname,"%s%i","_sf_sv_ghoul_",count+1);
-					savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-					setCvarString(savecvar,line);
-					count++;
-				}
-			} else {
-				if ( _sf_sv_sofree_debug->value )
-					orig_Com_Printf("%s\n",line);
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    int c = lua_gettop(L); // get number of arguments on the stack
+    if ( c == 1 && strcmp(lua_tostring(L, 1), "-h") == 0 ) {
+        printf("Lists all registered ghoul files\n"
+               "----------------------------\n"
+               "takes optional argument as a search for substring\n"
+               "fills _sf_sv_ghoul_X with the results\n");
+        return 0;
+    }
+    if ( c > 1 ) {
+        printf("sf_sv_ghoul_list -h\n");
+        return 0;
+    }
 
-				char tmpname[64];
-				sprintf(tmpname,"%s%i","_sf_sv_ghoul_",i);
-				savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-				setCvarString(savecvar,line);
-				count++;
-			}
-			
-		}
-	}
+    int count = 0;
+    for (int i = 1; i < MAX_GHOULFILES; i++) {
+        const char* ghoulfile = (const char*)(SV_CONFIGSTRINGS+(CS_GHOULFILES+i)*MAX_QPATH);
+        if ( ghoulfile[0] != '\0' ) {
+            if ( c == 1 ) {
+                const char* searchstr = lua_tostring(L, 1);
+                if (strstr(ghoulfile, searchstr) != NULL) {
+                    printf("%s\n", ghoulfile);
+                    lua_pushstring(L, ghoulfile);
+                    count++;
+                }
+            } else {
+                printf("%s\n", ghoulfile);
+                lua_pushstring(L, ghoulfile);
+                count++;
+            }
+        }
+    }
 
-	cvar_t * finalcount = orig_Cvar_Get( "_sf_sv_ghoul_0","",0,NULL);
-	setCvarInt(finalcount,count);
-	// Cmd_CalcFreeGhoulSlots();
+    lua_pushinteger(L, count);
+    return 1; // number of return values on the stack
 }
 
-void Cmd_CalcFreeGhoulSlots(void)
+
+int Cmd_CalcFreeGhoulSlots(lua_State *L)
 {
-	int freeslots = 0;
-	int i;
-	for (i=1 ; i<MAX_GHOULFILES ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_GHOULFILES+i)*MAX_QPATH) == '\0' )
-		{
-			freeslots++;
-		}
-	}
-	char num[8];
-	cvar_t * thecvar = findCvar("_sf_sv_ghoul_info_slots");
-	setCvarUnsignedInt(thecvar,freeslots);
+    int freeslots = 0;
+    for (int i=1; i<MAX_GHOULFILES; i++) {
+        if (*(unsigned char*)(SV_CONFIGSTRINGS+(CS_GHOULFILES+i)*MAX_QPATH) == '\0') {
+            freeslots++;
+        }
+    }
+    lua_pushinteger(L, freeslots);
+    return 1;
+}
+
+
+int sf_sv_sound_list(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int argc = lua_gettop(L); // get number of arguments on the stack
+    
+    if (argc > 1) {
+        orig_Com_Printf("sf_sv_sound_list -h\n");
+        return 0;
+    }
+    
+    if (argc == 1 && !lua_isstring(L, 1)) {
+        return luaL_error(L, "invalid argument type, expected string");
+    }
+    
+    const char* search = (argc == 1) ? lua_tostring(L, 1) : NULL;
+    int count = 0;
+    
+    for (int i = 1; i < MAX_SOUNDS; i++) {
+        const char* sound = (const char*)(SV_CONFIGSTRINGS + (CS_SOUNDS + i) * MAX_QPATH);
+        if (*sound) {
+            if (search != NULL && strstr(sound, search) == NULL) {
+                continue;
+            }
+            if (_sf_sv_sofree_debug->value) {
+                orig_Com_Printf("%s\n", sound);
+            }
+            char tmpname[64];
+            sprintf(tmpname, "%s%i", "_sf_sv_sound_", count + 1);
+            lua_pushstring(L, tmpname); // push variable name onto the stack
+            lua_pushstring(L, sound); // push sound onto the stack
+            lua_settable(L, LUA_GLOBALSINDEX); // set the variable in the global table
+            count++;
+        }
+    }
+    
+    lua_pushstring(L, "_sf_sv_sound_info_slots"); // push variable name onto the stack
+    lua_pushinteger(L, MAX_SOUNDS - count); // push number of free sound slots onto the stack
+    lua_settable(L, LUA_GLOBALSINDEX); // set the variable in the global table
+    
+    return 1; // return number of results on the stack
 }
 
 
 
-int sf_sv_sound_list(lua_State * L)
+
+void Cmd_CalcFreeSoundSlots(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"Lists all registered sounds\n"
-			"See _sf_sv_sound_info_slots for how many sounds slots you have free\n"
-			"----------------------------\n"
-			"takes optional argument as a search for substring\n"
-			"fills _sf_sv_sound_X with the results\n"
-		);
-		return;
-	}
-	if ( c > 1 ) {
-		orig_Com_Printf("sf_sv_sound_list -h\n");
-		return;
-	}
-	cvar_t * savecvar = NULL;
-	int count = 0;
-	int i;
-	for (i=1 ; i<MAX_SOUNDS ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH) )
-		{
-			char line[65];
-			// sprintf(line,"%s",(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH));
-			strcpy(line,SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH);
-			
-			if ( c ==  1 ) {
-				if ( StrStrI(line,orig_Cmd_Argv(1)) ) {
-					if ( _sf_sv_sofree_debug->value ) 
-						orig_Com_Printf("%s\n",line);
-					char tmpname[64];
-					sprintf(tmpname,"%s%i","_sf_sv_sound_",count+1);
-					savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-					setCvarString(savecvar,line);
-					count++;
-				}
-			} else {
-				if ( _sf_sv_sofree_debug->value ) 
-					orig_Com_Printf("%s\n",line);
-
-				char tmpname[64];
-				sprintf(tmpname,"%s%i","_sf_sv_sound_",i);
-				savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-				setCvarString(savecvar,line);
-				count++;
-			}
-			
-		}
-	}
-	cvar_t * finalcount = orig_Cvar_Get( "_sf_sv_sound_0","",0,NULL);
-	setCvarInt(finalcount,count);
-	// Cmd_CalcFreeSoundSlots();
+    int freeslots = 0;
+    int i;
+    for (i = 1; i < MAX_SOUNDS; i++)
+    {
+        if (*(unsigned char*)(SV_CONFIGSTRINGS + (CS_SOUNDS + i) * MAX_QPATH) == '\0')
+        {
+            freeslots++;
+        }
+    }
+    lua_pushinteger(L, freeslots);
 }
 
-void Cmd_CalcFreeSoundSlots(void)
-{
-	int freeslots = 0;
-	int i;
-	for (i=1 ; i<MAX_SOUNDS ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH) == '\0' )
-		{
-			freeslots++;
-		}
-	}
-	char num[8];
-	cvar_t * thecvar = findCvar("_sf_sv_sound_info_slots");
-	setCvarUnsignedInt(thecvar,freeslots);
-}
 // configstrings is a giant array of 64 chars / MAX_QPATH
 
 //1: name of sound
-int sf_sv_sound_register(lua_State * L)
+int sf_sv_sound_register(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	
-	int args = lua_gettop(L);
-	assert(args == 1 && "invalid arg count");
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
 
-	char * soundName = lua_tostring(L,1);
-	replacechar(soundName,'\\','/');
-	orig_SV_FindIndex(soundName, CS_SOUNDS, MAX_SOUNDS, 1,"sound");
-	Cmd_CalcFreeSoundSlots();
+    int args = lua_gettop(L);
+    assert(args == 1 && "invalid arg count");
 
-	return 0;
+    const char *soundName = luaL_checkstring(L, 1);
+    std::string soundNameStr(soundName);
+    replacechar(soundNameStr, '\\', '/');
+    orig_SV_FindIndex(soundNameStr.c_str(), CS_SOUNDS, MAX_SOUNDS, 1, "sound");
+    Cmd_CalcFreeSoundSlots();
+
+    lua_pushinteger(L, 0);
+    return 1;
 }
+
 
 int sf_sv_sound_remove(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Unregisters a soundfile that is already registered\n"
-			"Sound files live in your %%User%%/sound directory\n"
-			"See _sf_sv_sound_info_slots for how many sounds slots you have free\n"
-			"----------------------------\n"
-			
-			"arg1 -> name of soundfile eg. misc/talk.wav\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_sound_remove -h\n");
-		return;
-	}
-	char ver1[128];
-	strcpy(ver1,one);
-	replacechar(ver1,'\\','/');
-	// sends a packet to cleints asking to remove sound configstrnig
-	orig_SV_RemoveSound(ver1);
-	Cmd_CalcFreeSoundSlots();
+    int args = lua_gettop(L);
+    assert(args == 1 && "invalid arg count");
+
+    const char* soundName = lua_tostring(L, 1);
+    replacechar(soundName, '\\', '/');
+    orig_SV_RemoveSound(soundName);
+    Cmd_CalcFreeSoundSlots();
+
+    return 0;
 }
+
+
 
 //(edict_t *entity, int channel, int sound_num, float volume, float attenuation, float timeofs)
 //1: name of sound
@@ -2330,101 +2281,99 @@ sound_overrides_t sound_overrides;
 // sp_sv_sound_override "/impact/player/*" ""
 int sf_sv_sound_override(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Plays a specific sound in place of a previous one\n"
-			"----------------------------\n"
-			"arg1 -> the known original sound - can end with a * to target many sounds\n"
-			"arg2 -> your new sound - can be empty then will play no sound\n"
-			"arg3 -> altered attenuation value - "" empty string does not alter\n"
-		);
-		return;
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int c = lua_gettop(L);
+    char * one = lua_tostring(L, 1);
+    
+    if ( !strcmp(one,"-h" ) ) {
+        orig_Com_Printf(
+            "Plays a specific sound in place of a previous one\n"
+            "----------------------------\n"
+            "arg1 -> the known original sound - can end with a * to target many sounds\n"
+            "arg2 -> your new sound - can be empty then will play no sound\n"
+            "arg3 -> altered attenuation value - "" empty string does not alter\n"
+        );
+        return 0;
+    }
+    
+    if ( c != 3 ) {
+        orig_Com_Printf("sf_sv_sound_override -h\n");
+        return 0;
+    }
+    
+    char * name = lua_tostring(L, 1);
+    
+    sound_overrides_t *z, *next;
+    for (z = sound_overrides.next ; z != &sound_overrides ; z = next) {
+        next = z->next;
+        
+        bool star_input = false, star_already = false;
+        char *c, *d;
+        c = strchr(name,'*');
+        star_input = c && (c+1 == 0x00);
+        d = strchr(z->orig_sound,'*');
+        star_already = d && (d+1 == 0x00);
+        if ( star_input || star_already ) {
+            if ( star_already && star_input ) {
+                // both stars
+                // check smaller length star
+                if ( d - z->orig_sound < c - name ) {
+                    if ( !strnicmp(z->orig_sound, name, d - z->orig_sound )) {
+                        //they are equal and both stars
+                        orig_Com_Printf("This sound is already overriden, sorry\n");
+                        return 0;
+                    }       
+                } else {
+                    if ( !strnicmp(z->orig_sound, name, c - name ) ) {
+                        //they are equal and both stars
+                        orig_Com_Printf("This sound is already overriden, sorry\n");
+                        return 0;
+                    }       
+                }
+                
+            } else {
+                // 1star name
+                if ( star_already ) {
+                    //star already
+                    if ( !strnicmp(z->orig_sound, name, d - z->orig_sound ) ) {
+                        orig_Com_Printf("This sound is already overriden, sorry\n");
+                        return 0;
+                    }
+                } else {
+                    //star input
+                    if ( !strnicmp(z->orig_sound, name, c - name ) ) {
+                        orig_Com_Printf("This sound is already overriden, sorry\n");
+                        return 0;
+                    }
+                }
+            }
+        } else if ( !stricmp(name, z->orig_sound) ) {
+            orig_Com_Printf("This sound is already overriden, sorry\n");
+            return 0;
+        }
+    }
+    
+    // if we got here, assume the sound can be created
+    z = malloc(sizeof(sound_overrides_t));
+
+    z->next = sound_overrides.next;
+    z->prev = &sound_overrides;
+    sound_overrides.next->prev = z;
+    sound_overrides.next = z;
+
+    strcpy(z->orig_sound, lua_tostring(L, 1));
+    strcpy(z->new_sound, lua_tostring(L, 2));
+    z->index = 0;
+	const char* atn_str = lua_tostring(L, 3);
+	if (strlen(atn_str) > 0) {
+	    z->atten_mod = atof(atn_str);
+	} else {
+	    z->atten_mod = -1.0f;
 	}
-	if ( c != 3 ) {
-		orig_Com_Printf("sf_sv_sound_override -h\n");
-		return;
-	}
-
-	char * name = orig_Cmd_Argv(1);
-	
-	sound_overrides_t	*z, *next;
-	for (z=sound_overrides.next ; z != &sound_overrides ; z=next)
-	{
-		next = z->next;
-		
-		bool star_input = false,star_already = false;
-		char * c,*d;
-		c = strchr(name,'*');
-		star_input = c && (c+1 == 0x00);
-		d = strchr(z->orig_sound,'*');
-		star_already = d && (d+1 == 0x00);
-		if ( star_input || star_already ) {
-			if ( star_already && star_input) {
-				// both stars
-				// check smaller length star
-				if ( d - z->orig_sound < c - name ) {
-					if ( !strnicmp(z->orig_sound,name,d - z->orig_sound )) {
-						//they are equal and both stars
-						orig_Com_Printf("This sound is already overriden, sorry\n");
-						return;
-					}		
-				} else {
-					if ( !strnicmp(z->orig_sound,name,c - name ) ) {
-						//they are equal and both stars
-						orig_Com_Printf("This sound is already overriden, sorry\n");
-						return;
-					}		
-				}
-				
-			} else
-			{
-				// 1star name
-				if ( star_already ) {
-					//star already
-					if ( !strnicmp(z->orig_sound,name,d - z->orig_sound ) ) {
-						orig_Com_Printf("This sound is already overriden, sorry\n");
-						return;
-					}
-				} else {
-					//star input
-					if ( !strnicmp(z->orig_sound,name,c - name ) ) {
-						orig_Com_Printf("This sound is already overriden, sorry\n");
-						return;
-					}
-				}
-			}
-
-			
-		} else if ( !stricmp(name,z->orig_sound) ) {
-			orig_Com_Printf("This sound is already overriden, sorry\n");
-			return;
-		}
-	}
-	
-	// if we got here, assume the sound can be created
-
-
-	z = malloc(sizeof(sound_overrides_t));
-
-	z->next = sound_overrides.next;
-	z->prev = &sound_overrides;
-	sound_overrides.next->prev = z;
-	sound_overrides.next = z;
-
-	strcpy(z->orig_sound,orig_Cmd_Argv(1));
-	strcpy(z->new_sound,orig_Cmd_Argv(2));
-	z->index = 0;
-	char * atn_str = orig_Cmd_Argv(3);
-	if ( strlen(atn_str) ) {
-		z->atten_mod = atof(orig_Cmd_Argv(3));
-	} else z->atten_mod = -1.0f;
-	
 }
 
 
@@ -2437,29 +2386,29 @@ void Cmd_TakePiss(lua_State * L)
 
 char layoutstring[1024];
 int layoutstring_len = 0;
-int sf_sv_draw_clear(lua_State * L)
+
+int sf_sv_draw_clear(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Clears all interface text on screen\n"
-		);
-		return;
-	}
-	if ( c != 0 ) {
-		orig_Com_Printf("sf_sv_draw_clear -h\n");
-		return;
-	}
-	layoutstring_len = 0;
-	layoutstring[0] = 0x00;
-	sprintf(layoutstring,"xr %i yb -16 altstring \"%s\" ",0 - (sofreebuild_len*8+8),sofreebuildstring);
-	// orig_Com_Printf("Layoutstring is : %s\n",layoutstring);
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int nargs = lua_gettop(L);
+    
+    if (nargs > 0) {
+        lua_pushstring(L, "sf_sv_draw_clear -h\n");
+        lua_error(L);
+    }
+    
+    layoutstring_len = 0;
+    layoutstring[0] = 0x00;
+    sprintf(layoutstring,"xr %i yb -16 altstring \"%s\" ",0 - (sofreebuild_len*8+8),sofreebuildstring);
+    // orig_Com_Printf("Layoutstring is : %s\n",layoutstring);
+    
+    return 0;
 }
+
 /*
 yb yBottom 0 = bottom of screen, up=negative, down=positive
 yt yTop 0 = top of screen, up=negative, down=positive
@@ -2469,15 +2418,14 @@ xl xLeft
 xr xRight
 xv centered
 */
-int sf_sv_draw_string(lua_State * L)
-{
+int sf_sv_draw_string(lua_State * L) {
 	#ifdef SOFREE_DEBUG
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
+
+	int nargs = lua_gettop(L);
+	if (nargs == 1 && lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
 		orig_Com_Printf(
 			"Draw a string at offset x y with message\n"
 			"----------------------------\n"
@@ -2485,107 +2433,118 @@ int sf_sv_draw_string(lua_State * L)
 			"arg2 -> offsety\n"
 			"arg3 -> message\n"
 		);
-		return;
+		return 0;
 	}
-	if ( c != 3 ) {
+
+	if (nargs != 3) {
 		orig_Com_Printf("sf_sv_draw_string -h\n");
-		return;
+		return 0;
 	}
-	int offsetx = atoi(orig_Cmd_Argv(1));
-	int offsety = atoi(orig_Cmd_Argv(2));
-	char * message = orig_Cmd_Argv(3);
+
+	int offsetx = lua_tonumber(L, 1);
+	int offsety = lua_tonumber(L, 2);
+	const char * message = lua_tostring(L, 3);
 	int len = strlen(message);
 
-	if ( layoutstring_len + len <= 1024 ) {
+	if (layoutstring_len + len <= 1024) {
 		char newstring[256];
-		sprintf(newstring,"xv %i yv %i string \"%s\" ",offsetx,offsety,message);
+		sprintf(newstring, "xv %i yv %i string \"%s\" ", offsetx, offsety, message);
 		int newlen = strlen(newstring);
 		strcat(layoutstring, newstring);
-		layoutstring_len+=newlen;
+		layoutstring_len += newlen;
 	} else {
-		orig_Com_Printf("Cant draw this , run out of space\n");
+		orig_Com_Printf("Cant draw this, ran out of space\n");
 	}
+
+	// Push any necessary output values onto the Lua stack
+	lua_pushnumber(L, offsetx);
+	lua_pushnumber(L, offsety);
+	lua_pushstring(L, message);
+
+	return 3;
 }
 
-int sf_sv_draw_string2(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Draw a string at offset x y with message\n"
-			"----------------------------\n"
-			"arg1 -> offsetx\n"
-			"arg2 -> offsety\n"
-			"arg3 -> message\n"
-		);
-		return;
-	}
-	if ( c != 3 ) {
-		orig_Com_Printf("sf_sv_draw_string2 -h\n");
-		return;
-	}
-	int offsetx = atoi(orig_Cmd_Argv(1));
-	int offsety = atoi(orig_Cmd_Argv(2));
-	char * message = orig_Cmd_Argv(3);
-	int len = strlen(message);
 
-	if ( layoutstring_len + len <= 1024 ) {
-		char newstring[256];
-
-		sprintf(newstring,"%s ",message);
-		int newlen = strlen(newstring);
-		strcat(layoutstring, newstring);
-		layoutstring_len+=newlen;
-	} else {
-		orig_Com_Printf("Cant draw this , run out of space\n");
-	}
+int sf_sv_draw_string2(lua_State *L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int c = lua_gettop(L);
+    
+    if (c == 0) {
+        orig_Com_Printf("sf_sv_draw_string2 -h\n");
+        return 0;
+    }
+    
+    if (c != 3 || !lua_isnumber(L, 1) || !lua_isnumber(L, 2) || !lua_isstring(L, 3)) {
+        orig_Com_Printf("Invalid arguments. Usage: sf_sv_draw_string2 <offsetx> <offsety> <message>\n");
+        return 0;
+    }
+    
+    int offsetx = lua_tonumber(L, 1);
+    int offsety = lua_tonumber(L, 2);
+    const char* message = lua_tostring(L, 3);
+    int len = strlen(message);
+    
+    if (layoutstring_len + len <= 1024) {
+        char newstring[256];
+        sprintf(newstring,"%s ",message);
+        int newlen = strlen(newstring);
+        strcat(layoutstring, newstring);
+        layoutstring_len += newlen;
+    } else {
+        orig_Com_Printf("Cant draw this, run out of space\n");
+    }
+    
+    // Push the updated layoutstring and layoutstring_len to the Lua stack as return values
+    lua_pushstring(L, layoutstring);
+    lua_pushnumber(L, layoutstring_len);
+    
+    return 2;
 }
 
-int sf_sv_draw_altstring(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Draw a grey string at offset x y with message\n"
-			"----------------------------\n"
-			"arg1 -> offsetx\n"
-			"arg2 -> offsety\n"
-			"arg3 -> message\n"
-		);
-		return;
-	}
-	if ( c != 3 ) {
-		orig_Com_Printf("sf_sv_draw_altstring -h\n");
-		return;
-	}
-	int offsetx = atoi(orig_Cmd_Argv(1));
-	int offsety = atoi(orig_Cmd_Argv(2));
-	char * message = orig_Cmd_Argv(3);
-	int len = strlen(message);
-	if ( layoutstring_len + len <= 1024 ) {
-		for (int i = 0; i < len; i++ ) {
-				*(message+i) = *(message+i) | 0x80;
-		}
 
-		char newstring[256];
-		sprintf(newstring,"xv %i yv %i altstring \"%s\" ",offsetx,offsety,message);
-		int newlen = strlen(newstring);
-		strcat(layoutstring, newstring);
-		layoutstring_len+=newlen;
-	} else {
-		orig_Com_Printf("Cant draw this , run out of space\n");
-	}
+int sf_sv_draw_altstring(lua_State *L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    int argc = lua_gettop(L);
+    if (argc == 1 && lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+        orig_Com_Printf(
+            "Draw a grey string at offset x y with message\n"
+            "----------------------------\n"
+            "arg1 -> offsetx\n"
+            "arg2 -> offsety\n"
+            "arg3 -> message\n"
+        );
+        return 0;
+    } else if (argc != 3) {
+        orig_Com_Printf("sf_sv_draw_altstring -h\n");
+        return 0;
+    }
+    int offsetx = luaL_checkinteger(L, 1);
+    int offsety = luaL_checkinteger(L, 2);
+    const char *message = luaL_checkstring(L, 3);
+    int len = strlen(message);
+    if (layoutstring_len + len <= 1024) {
+        for (int i = 0; i < len; i++) {
+            *(message+i) = *(message+i) | 0x80;
+        }
+        char newstring[256];
+        sprintf(newstring, "xv %i yv %i altstring \"%s\" ", offsetx, offsety, message);
+        int newlen = strlen(newstring);
+        strcat(layoutstring, newstring);
+        layoutstring_len += newlen;
+    } else {
+        orig_Com_Printf("Cant draw this , run out of space\n");
+    }
+    return 0;
 }
+
+
 
 // 32kb
 // char floadfilebuffer[32768];
@@ -2593,463 +2552,451 @@ int sf_sv_draw_altstring(lua_State * L)
 // i try to preserve sofreeS as using 7.. in a levelInit hook earlier than spawnentities after whcih sofplus uses on map_begin
 int valid_ID[97] = {7,15,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,56,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,196,197,198,199,201,202,204,209,240,245,249,250,254,255};
 int next_available_ID = 0;
-int sf_sv_spackage_list(lua_State * L)
+int sf_sv_spackage_list(lua_State *L) 
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1) ,"-h" ) ) {
-		orig_Com_Printf(
-			"Lists all registered string packages\n"
-			"----------------------------\n"
-			"takes optional argument as a search for substring\n"
-			"fills _sf_sv_spackage_X with the results\n"
-		);
-		return;
-	}
-	if ( c > 1 ) {
-		orig_Com_Printf("sf_sv_spackage_list -h\n");
-		return;
-	}
-	int i;
-	cvar_t * savecvar = NULL;
-	int count = 0;
-	char fileline[256];
-	for (i=1 ; i<MAX_STRING_PACKAGES ; i++) {
-		if ( *(unsigned char*)(SV_CONFIGSTRINGS+(CS_STRING_PACKAGES+i)*MAX_QPATH) )
-		{
-			char line[65];
-			// sprintf(line,"%s",(SV_CONFIGSTRINGS+(CS_SOUNDS+i)*MAX_QPATH));
-			strcpy(line,SV_CONFIGSTRINGS+(CS_STRING_PACKAGES+i)*MAX_QPATH);
-			
-			if ( c ==  1 ) {
-				if ( StrStrI(line,orig_Cmd_Argv(1)) ) {
-					if ( _sf_sv_sofree_debug->value ) 
-						orig_Com_Printf("%s\n",line);
-
-					char tmpname[64];
-					sprintf(tmpname,"%s%i","_sf_sv_spackage_",count+1);
-					savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-					setCvarString(savecvar,line);
-					count++;
-
-				}
-			} else {
-				if ( _sf_sv_sofree_debug->value ) {
-					
-					char fname[64];
-					sprintf(fname,"strip/%s.sp",line);
-					unsigned char * filedata;
-					int ret = orig_FS_LoadFile(fname,&filedata,false);
-					// orig_Com_Printf("ret is %08X\n",ret);
-					if ( ret != -1 ) {
-						// fgets(fileline, sizeof(fileline), spfile);
-						// fgets(fileline, sizeof(fileline), spfile);
-
-						char * d = filedata;
-						char * second_line = NULL;
-						
-						int count = 1;
-						// it will break when d=='\n'
-						while ( *d != '\n' &&  count < ret ) {
-							d++;
-							count++;
-						}
-						// d == '\n'
-						if ( count < ret) {
-							d++;
-							count++;
-							second_line = d;
-						}
-						while ( *d != '\n' && count < ret) {
-							d++;
-							count++;
-						}
-						*d=0x00;
-						
-						orig_Com_Printf("%s : %s\n",line,second_line);
-
-						orig_Z_Free(filedata);
-					}
-					
-				}
-
-				char tmpname[64];
-				sprintf(tmpname,"%s%i","_sf_sv_spackage_",i);
-				savecvar = orig_Cvar_Get( tmpname,"",0,NULL);
-				setCvarString(savecvar,line);
-				count++;
-			}
-			
-		}
-	}
-	cvar_t * finalcount = orig_Cvar_Get( "_sf_sv_spackage_0","",0,NULL);
-	setCvarInt(finalcount,count);
-	
-	// Cmd_CalcFreeImageSlots();
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int argc = lua_gettop(L);
+    if (argc > 0 && !lua_isstring(L, 1)) {
+        luaL_error(L, "Argument 1 should be a string or nil.");
+    }
+    const char* search = (argc > 0) ? lua_tostring(L, 1) : NULL;
+    
+    int count = 0;
+    char fileline[256];
+    for (int i=1 ; i<MAX_STRING_PACKAGES ; i++) {
+        if (*(unsigned char*)(SV_CONFIGSTRINGS+(CS_STRING_PACKAGES+i)*MAX_QPATH)) {
+            char line[65];
+            strcpy(line,SV_CONFIGSTRINGS+(CS_STRING_PACKAGES+i)*MAX_QPATH);
+            
+            if (search != NULL) {
+                if (!strstr(line, search)) {
+                    continue;
+                }
+            }
+            
+            if (_sf_sv_sofree_debug->value) {
+                char fname[64];
+                sprintf(fname,"strip/%s.sp",line);
+                unsigned char * filedata;
+                int ret = orig_FS_LoadFile(fname,&filedata,false);
+                if (ret != -1) {
+                    char * d = filedata;
+                    char * second_line = NULL;
+                    int count = 1;
+                    while (*d != '\n' &&  count < ret) {
+                        d++;
+                        count++;
+                    }
+                    if (count < ret) {
+                        d++;
+                        count++;
+                        second_line = d;
+                    }
+                    while (*d != '\n' && count < ret) {
+                        d++;
+                        count++;
+                    }
+                    *d=0x00;
+                    
+                    orig_Com_Printf("%s : %s\n", line, second_line);
+                    
+                    orig_Z_Free(filedata);
+                }
+            }
+            
+            lua_pushstring(L, line);
+            count++;
+        }
+    }
+    
+    lua_pushnumber(L, count);
+    return 2;
 }
 
-// Register a string package
-int sf_sv_spackage_register(lua_State * L)
+
+int sf_sv_spackage_register(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Register a .sp string package file that the client will download\n"
-			"----------------------------\n"
-			"arg1 -> name of file including .sp extension\n"
-			"eg. sf_sv_spackage_register mystringpackage.sp\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_spackage_register -h\n");
-		return;
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int n_args = lua_gettop(L);
 
-	char temp[128];
-	sprintf(temp,"strip/%s",one);
-	// z_malloc only called when 2nd arg is not NULL
-	if ( orig_FS_LoadFile(temp,NULL,false) == -1 ) {
-		orig_Com_Error(ERR_FATAL,"Error sf_sv_spackage_register: file %s cannot be found\n",temp);
-		return;
-	}
-	
-	sprintf(temp,"%s/strip/%s",user->string,one);
+    // check for help flag
+    if (n_args == 1 && lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+        orig_Com_Printf(
+            "Register a .sp string package file that the client will download\n"
+            "----------------------------\n"
+            "arg1 -> name of file including .sp extension\n"
+            "eg. sf_sv_spackage_register mystringpackage.sp\n"
+        );
+        return 0;
+    }
+    
+    // check for valid number of arguments
+    if (n_args != 1) {
+        orig_Com_Printf("sf_sv_spackage_register -h\n");
+        return 0;
+    }
 
-	// modify the file 
-	FILE * thefile = fopen(temp,"r+");
-	if ( !thefile ) {
-		// assume its a standard strip in one of the .pak files
-		// dont apply checksum to it or validate its ID
-		// orig_Com_Printf("This SP is not in the user, assuming pakfile.\n");
-		char * shorten= strchr(one,'.');
-		if ( shorten ) {
-			*shorten = 0x00;	
-		}
-		orig_SP_Register(one);
+    const char* file_name = lua_tostring(L, 1);
 
-	} else {
-		char line[512];
-		char * mybuffer = NULL;
-		char * newb;
-		int line_count = 0;
-		bool nowrite = false;
+    char temp[128];
+    sprintf(temp, "strip/%s", file_name);
 
-		// fgets = The result stored in str is appended with a null character.
-		while ( fgets(line,512,thefile) ) {
-			// there is a newline at the end of each string
+    // z_malloc only called when 2nd arg is not NULL
+    if (orig_FS_LoadFile(temp, NULL, false) == -1) {
+        orig_Com_Error(ERR_FATAL, "Error sf_sv_spackage_register: file %s cannot be found\n", temp);
+        return 0;
+    }
 
-			// change ID to safe value
-			if ( line_count+1 == 2) {
-				char * find = strstr(line,"ID ");
-				if ( find ) {
-					find += 3;
-					char comp[16];
-					_itoa(valid_ID[next_available_ID],comp,10);
-					// you can be destructive to line buffer its overwritten after anyway
-					find[strlen(find)-1] = 0x00;
-					if ( !strncmp(find,comp,3) ) {
-						// it already has this value no need to write
-						nowrite = true;
-						break;
-					}
-				}
-				// adjust the ID
-				sprintf(line,"ID %i\n",valid_ID[next_available_ID]);
-			}
-			mybuffer = my_realloc(mybuffer,512*(line_count+1));
-			strcpy(mybuffer + (line_count*512),line);
-			line_count++;
-		}
-		// nowrite=false
-		if ( !nowrite ) {
-			int totalbytes = 0;
-			fseek(thefile,0,SEEK_SET);
-			// orig_Com_Printf("Writing modified data\n");
-			for ( int i=0;i<line_count; i++ ){
-				totalbytes += strlen(mybuffer + (i*512));
-				fputs(mybuffer + (i*512),thefile);
-			}
-			changesize(thefile,totalbytes);
-		}
-		char * newfile = orig_spfileChecksum("strip/",one);
-		char * shorten= strchr(newfile,'.');
-		if ( shorten ) {
-			*shorten = 0x00;	
-		}
-		orig_SP_Register(newfile);
+    sprintf(temp, "%s/strip/%s", user->string, file_name);
 
-		next_available_ID++;
-		free(mybuffer);
-	}
+    // modify the file
+    FILE* thefile = fopen(temp, "r+");
+    if (!thefile) {
+        // assume its a standard strip in one of the .pak files
+        // dont apply checksum to it or validate its ID
+        // orig_Com_Printf("This SP is not in the user, assuming pakfile.\n");
+        char* shorten = strchr(file_name, '.');
+        if (shorten) {
+            *shorten = 0x00;
+        }
+        orig_SP_Register(file_name);
+    }
+    else {
+        char line[512];
+        char* mybuffer = NULL;
+        char* newb;
+        int line_count = 0;
+        bool nowrite = false;
 
+        // fgets = The result stored in str is appended with a null character.
+        while (fgets(line, 512, thefile)) {
+            // there is a newline at the end of each string
+
+            // change ID to safe value
+            if (line_count + 1 == 2) {
+                char* find = strstr(line, "ID ");
+                if (find) {
+                    find += 3;
+                    char comp[16];
+                    _itoa(valid_ID[next_available_ID], comp, 10);
+                    // you can be destructive to line buffer its overwritten after anyway
+                    find[strlen(find) - 1] = 0x00;
+                    if (!strncmp(find, comp, 3)) {
+                        // it already has this value no need to write
+                        nowrite = true;
+                        break;
+                    }
+                }
+                // adjust the ID
+                sprintf(line, "ID %i\n", valid_ID[next_available_ID]);
+            }
+            mybuffer = my_realloc(mybuffer, 512 * (line_count + 1));
+            strcpy(mybuffer + (line_count * 512), line);
+            line_count++;
+        }
+
+        // nowrite=false
+        if (!nowrite) {
+            int totalbytes = 0;
+            fseek(thefile, 0, SEEK_SET);
+            // orig_Com_Printf("Writing modified data\n");
+             // Write modified data
+                for ( int i = 0; i < line_count; i++ ) {
+                    const char* line = mybuffer + (i * 512);
+                    totalbytes += strlen(line);
+                    fputs(line, thefile);
+                }
+
+                // Change file size to match the new content size
+                changesize(thefile, totalbytes);
+        }
+
+        // Register the new file with the game
+        char* newfile = orig_spfileChecksum("strip/", one);
+        char* shorten = strchr(newfile, '.');
+        if (shorten) {
+            *shorten = 0x00;    
+        }
+        orig_SP_Register(newfile);
+
+        next_available_ID++;
+        free(mybuffer);
+    }
 	fclose(thefile);
-	
 }
 
 
 
-int sf_sv_spackage_print_ref(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Register a .sp string package file that the client will download\n"
-			"----------------------------\n"
-			"arg1 -> ent handle or 0 for broadcast\n"
-			"arg2 -> File reference string\n"
-			"arg3 -> Index reference string\n"
-			"arg4+ -> Extra strings for passing data into the output\n"
-			"eg. sf_sv_spackage_print_id SOFREE CHEER ...\n"
-			"NB. %d = integer %p = byte %s = string %hd = signed_short %hu = unsigned short\n"
-		);
-		return;
-	}
-	if ( c < 3 ) {
-		orig_Com_Printf("sf_sv_spackage_print_ref -h\n");
-		return;
-	}
+int sf_sv_spackage_print_ref(lua_State *L) {
+#ifdef SOFREE_DEBUG
+  printf(__FUNCTION__);
+  printf("\n");
+#endif
 
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
+  int nargs = lua_gettop(L);
+  if (nargs < 3) {
+    orig_Com_Printf("sf_sv_spackage_print_ref -h\n");
+    return 0;
+  }
 
-	char temp[64];
-	sprintf(temp,"%s_%s",orig_Cmd_Argv(2),orig_Cmd_Argv(3));
-	short final = SP_ReferenceToID(temp);
+  edict_t *ent = (edict_t*)lua_touserdata(L, 1);
 
-	if ( final != -1 ) {
-		// orig_Com_Printf("Your id is %04X ENJOY!\n",final);
-		// it can take extra params, hmm
-		// it will read from Cmd_Argv(X) for how many % it finds in the string
-		INSIDE_SPACKAGE_PRINT_ID = true;
-		orig_SP_Print(ent,final);
-	} else {
-		orig_Com_Printf("Error sf_sv_spackage_print_ref : cant find the string refs %s %s\n",orig_Cmd_Argv(2),orig_Cmd_Argv(3));
-	}
+  const char *file_ref = lua_tostring(L, 2);
+  const char *index_ref = lua_tostring(L, 3);
+
+  char temp[64];
+  sprintf(temp, "%s_%s", file_ref, index_ref);
+  short final = SP_ReferenceToID(temp);
+
+  if (final != -1) {
+    INSIDE_SPACKAGE_PRINT_ID = true;
+
+    // iterate over remaining arguments to build format string
+    const char *format = "";
+    int i;
+    for (i = 4; i <= nargs; i++) {
+      format = lua_pushfstring(L, "%s%s", format, lua_tostring(L, i));
+    }
+
+    orig_Com_Printf("Format string: %s\n", format);
+
+    // call original SP_Print with format string and arguments from the stack
+    int result = orig_SP_Print(ent, final, format, nargs - 3);
+    lua_pushinteger(L, result);
+
+  } else {
+    orig_Com_Printf("Error sf_sv_spackage_print_ref : cant find the string refs %s %s\n", file_ref, index_ref);
+    lua_pushboolean(L, false);
+  }
+
+  return 1;
 }
+
 
 bool INSIDE_SPACKAGE_PRINT_ID = false;
 
 //typedef void (*SP_Print)(edict_t *ent, unsigned short ID, ...);
 // who,num
-int sf_sv_spackage_print_id(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	char * one = orig_Cmd_Argv(1);
-	if ( !strcmp(one,"-h" ) ) {
-		orig_Com_Printf(
-			"Print an entry from a .sp string package file\n"
-			"----------------------------\n"
-			"arg1 -> ent handle or 0 for broadcast\n"
-			"arg2 -> ID of stringpackage file (found inside the file)\n"
-			"arg3 -> Index number of the text you want to print\n"
-			"arg4+ -> Extra strings for passing data into the output\n"
-			"eg. sf_sv_spackage_print_id 18 25 ...\n"
-			"NB. %d = integer %p = byte %s = string %hd = signed_short %hu = unsigned short\n"
-		);
-		return;
-	}
-	if ( c < 3 ) {
-		orig_Com_Printf("sf_sv_spackage_print_id -h\n");
-		return;
-	}
+int sf_sv_spackage_print_id(lua_State *L) {
+    int c = lua_gettop(L);
+    const char* one = luaL_checkstring(L, 1);
+    if (strcmp(one, "-h") == 0) {
+        orig_Com_Printf(
+            "Print an entry from a .sp string package file\n"
+            "----------------------------\n"
+            "arg1 -> ent handle or 0 for broadcast\n"
+            "arg2 -> ID of stringpackage file (found inside the file)\n"
+            "arg3 -> Index number of the text you want to print\n"
+            "arg4+ -> Extra strings for passing data into the output\n"
+            "eg. sf_sv_spackage_print_id 18 25 ...\n"
+            "NB. %%d = integer %%p = byte %%s = string %%hd = signed_short %%hu = unsigned short\n"
+        );
+        return 0;
+    }
+    if (c < 3) {
+        orig_Com_Printf("sf_sv_spackage_print_id -h\n");
+        return 0;
+    }
 
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
-	unsigned char file_id = atoi(orig_Cmd_Argv(2));
-	unsigned char index = atoi(orig_Cmd_Argv(3));
-	unsigned short final = file_id << 8;
-	final |= index;
-	INSIDE_SPACKAGE_PRINT_ID = true;
-	// it can take extra params, hmm
-	orig_SP_Print(ent,final);
+    edict_t* ent = atoi(luaL_checkstring(L, 1));
+    unsigned char file_id = atoi(luaL_checkstring(L, 2));
+    unsigned char index = atoi(luaL_checkstring(L, 3));
+    unsigned short final = file_id << 8;
+    final |= index;
+    INSIDE_SPACKAGE_PRINT_ID = true;
+    // it can take extra params, hmm
+    orig_SP_Print(ent, final);
+    return 0;
 }
+
 // typedef void (*SP_Print_Obit)(edict_t *ent, unsigned short ID, ...);
 // who,num
 int sf_sv_spackage_print_obit(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	unsigned int ed_base = *(unsigned int*)EDICT_BASE;
-	orig_SP_Print(ed_base + (atoi(orig_Cmd_Argv(1))+1)*SIZE_OF_EDICT,atoi(orig_Cmd_Argv(2)));
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    unsigned int ed_base = *(unsigned int*)EDICT_BASE;
+
+    // Get arguments from Lua Stack
+    int edictNum = luaL_checkinteger(L, 1);
+    int obitId = luaL_checkinteger(L, 2);
+
+    // Call the original function with the arguments
+    orig_SP_Print(ed_base + (edictNum + 1) * SIZE_OF_EDICT, obitId);
+    
+    return 0;
 }
+
 // typedef int (*SP_SPrint)(char *buffer, int buffer_size, unsigned short ID, ...);
 
 // who,msg,len
-int sf_sv_spackage_print_string(lua_State * L)
+int sf_sv_spackage_print_string(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	orig_SP_Print((edict_t*)orig_Cmd_Argv(2),(edict_t*)atoi(orig_Cmd_Argv(3)),(edict_t*)atoi(orig_Cmd_Argv(1)));
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
+
+    edict_t* ent = (edict_t*)lua_tonumber(L, 2);
+    unsigned short sp_id = (unsigned short)lua_tointeger(L, 3);
+    edict_t* str = (edict_t*)lua_tonumber(L, 1);
+
+    orig_SP_Print(str, ent, sp_id);
+
+    return 0;
 }
+
 // typedef const char	*(*SP_GetStringText)(unsigned short ID);
 int Cmd_SP_GetStringText(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	char out[2048] = "echo ";
-	strcat(out,orig_SP_GetStringText(atoi(orig_Cmd_Argv(1))));
-	orig_Cbuf_AddText(out);	
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int argCount = lua_gettop(L);
+    if (argCount < 1 || !lua_isnumber(L, 1)) {
+        orig_Com_Printf("Cmd_SP_GetStringText -h\n");
+        return 0;
+    }
+    
+    int index = lua_tonumber(L, 1);
+    char out[2048] = "echo ";
+    strcat(out, orig_SP_GetStringText(index));
+    orig_Cbuf_AddText(out);
+
+    return 0;
 }
 
 
-
-
-
-int Cmd_New_Run_Script(lua_State * L)
+int Cmd_New_Run_Script(lua_State* L)
 {
-	try {
+    try {
+        #ifdef SOFREE_DEBUG
+        printf(__FUNCTION__);
+        printf("\n");
+        #endif
+        
+        int nargs = lua_gettop(L);
+        if (nargs != 1) {
+            orig_Com_Printf("[commandname] -h\n");
+            return 0;
+        }
 
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"DesignerScripts are .ds files compiled into .os files using sofds.exe from SoF SDK\n"
-			"----------------------------\n"
-			"Returns execution to a previously loaded script file\n"
-			"You must pass in the handle you saved from sp_sv_script_load\n"
-			"eg. \"sp_sv_script_run $my_script\" , where myscript is the cvar storing the handle\n"
-			"----------------------------\n"
-			"arg1 -> handle to loaded script\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("[commandname] -h\n");
-		return;
-	}
+        const char* script_handle_str = lua_tostring(L, 1);
+        edict_t* ent = atoi(script_handle_str);
+        if (!ent->inuse) {
+            orig_Com_Printf("Invalid script handle\n");
+            return 0;
+        }
 
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent->inuse ) {
-		orig_Com_Printf("Invalid script handle\n");
-		return;
-	}
-	//ent other activator
-	orig_script_use(ent,ent,ent);
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
-	
+        //ent other activator
+        orig_script_use(ent, ent, ent);
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+    }
+    
+    return 0;
 }
+
 
 script_list_t the_scripts;
 
-int sf_sv_script_load(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try {
-	int n = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"DesignerScripts are .ds files compiled into .os files using sofds.exe from SoF SDK\n"
-			"----------------------------\n"
-			"Loads a DesignerScript file (.os), located in your %%User%%/ds/ directory\n"
-			"----------------------------\n"
-			"arg1 -> cvarname to store handle\n"
-			"arg2 -> name of script\n"
-			"args3+ -> optional parameters to pass\n"
-			"...\n"
-		);
-		return;
-	}
-	if ( n < 2 ) {
-		orig_Com_Printf("[commandname] -h\n");
-		return;
-	}
+int sf_sv_script_load(lua_State * L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    try {
+        int n = orig_Cmd_Argc() - 1;
+        if (!strcmp(orig_Cmd_Argv(1), "-h")) {
+            orig_Com_Printf(
+                "DesignerScripts are .ds files compiled into .os files using sofds.exe from SoF SDK\n"
+                "----------------------------\n"
+                "Loads a DesignerScript file (.os), located in your %%User%%/ds/ directory\n"
+                "----------------------------\n"
+                "arg1 -> cvarname to store handle\n"
+                "arg2 -> name of script\n"
+                "args3+ -> optional parameters to pass\n"
+                "...\n"
+            );
+            return 0;
+        }
+        if (n < 2) {
+            orig_Com_Printf("[commandname] -h\n");
+            return 0;
+        }
 
-	// if ( !orig_FS_FileExists(orig_Cmd_Argv(2)) ) {
-	// 	PrintOut(PRINT_BAD,false,"Cannot find a script named %s.os , make sure its compiled\n",orig_Cmd_Argv(1));
-	// 	return;
-	// }
+        // if (!orig_FS_FileExists(orig_Cmd_Argv(2))) {
+        //     PrintOut(PRINT_BAD,false,"Cannot find a script named %s.os , make sure its compiled\n",orig_Cmd_Argv(1));
+        //     return;
+        // }
 
-	cvar_t * out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1),"",0,NULL);
+        cvar_t* out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1), "", 0, NULL);
 
-	// script_list_t * s = getFreeLinkedListSlot_Scripts(&the_scripts,&num_scripts,sizeof(script_list_t));
-	script_list_t	*z = malloc(sizeof(script_list_t));
+        // script_list_t * s = getFreeLinkedListSlot_Scripts(&the_scripts,&num_scripts,sizeof(script_list_t));
+        script_list_t* z = malloc(sizeof(script_list_t));
 
-	z->next = the_scripts.next;
-	z->prev = &the_scripts;
-	the_scripts.next->prev = z;
-	the_scripts.next = z;
+        z->next = the_scripts.next;
+        z->prev = &the_scripts;
+        the_scripts.next->prev = z;
+        the_scripts.next = z;
 
-	char * blehparms[16] = {0};
-	// move all arguments into parms
-	for ( int i = 0 ; i < n-2 && i < 16; i++ ) {
-		int len = strlen(orig_Cmd_Argv(i+1 + 2)) + 1;
-		// orig_Com_Printf("A parm\n");
-		// orig_Com_Printf(orig_Cmd_Argv(i+1 + 2));
-		char * lul = malloc(len);
-		strncpy(lul,orig_Cmd_Argv(i+1 + 2),len);
-		lul[len-1] = 0x00;
-		*(unsigned int*)(0x5015CC34+4*i) = lul;
-		
-		blehparms[i] = lul;
-	}
-	strcpy(z->script_name,orig_Cmd_Argv(2));
+        char* blehparms[16] = { 0 };
+        // move all arguments into parms
+        for (int i = 0; i < n - 2 && i < 16; i++) {
+            int len = strlen(orig_Cmd_Argv(i + 1 + 2)) + 1;
+            // orig_Com_Printf("A parm\n");
+            // orig_Com_Printf(orig_Cmd_Argv(i+1 + 2));
+            char* lul = malloc(len);
+            strncpy(lul, orig_Cmd_Argv(i + 1 + 2), len);
+            lul[len - 1] = 0x00;
+            *(unsigned int*)(0x5015CC34 + 4 * i) = lul;
 
-	edict_t * newrunner = orig_G_Spawn();
-	newrunner->classname = "script_runner";
+            blehparms[i] = lul;
+        }
+        strcpy(z->script_name, orig_Cmd_Argv(2));
 
-	*(unsigned int*)0x5015CC30 = &z->script_name;
-	orig_SP_script_runner(newrunner);
-	z->cscript = last_created_cscript;
+        edict_t* newrunner = orig_G_Spawn();
+        newrunner->classname = "script_runner";
 
+        *(unsigned int*)0x5015CC30 = &z->script_name;
+        orig_SP_script_runner(newrunner);
+        z->cscript = last_created_cscript;
 
+        for (int j = 0; j < 16; j++) {
+            if (blehparms[j])
+                free(blehparms);
+        }
 
-	for (int j = 0; j < 16; j++ ) {
-		if ( blehparms[j] )
-			free(blehparms);
-	}
+        z->next = NULL;
+        z->runner = newrunner;
 
-	
-	z->next = NULL;
-	z->runner = newrunner;
-	
-
-
-	unsigned int value = newrunner;
-
-
-	setCvarInt(out_cvar,value);
-
-
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+        lua_pushinteger(L, (unsigned int)newrunner);
+        return 1;
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+        return 0;
+    }
 }
+
 
 /*
 typedef struct zhead_s
@@ -3079,63 +3026,70 @@ for (z=z_chain.next ; z != &z_chain ; z=next)
 }
 */
 
-int sf_sv_script_unload(lua_State * L)
+int sf_sv_script_unload(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"DesignerScripts are .ds files compiled into .os files using sofds.exe from SoF SDK\n"
-			"----------------------------\n"
-			"Stops execution to a previously loaded script file and unloads the script file\n"
-			"Your script handle is no longer valid after calling this function\n"
-			"You must pass in the handle you saved from sp_sv_script_load\n"
-			"eg. \"sp_sv_script_unload $my_script\" , where myscript is the cvar storing the handle\n"
-			"----------------------------\n"
-			"arg1 -> handle to loaded script\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("[commandname] -h\n");
-		return;
-	}
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
+    try {
+        int c = lua_gettop(L);
+        if (c == 0) {
+            orig_Com_Printf("[commandname] -h\n");
+            return 0;
+        }
 
-	edict_t * ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent->inuse ) {
-		orig_Com_Printf("Invalid script handle\n");
-		return;
-	}
+        if (lua_isstring(L, 1) && !strcmp(lua_tostring(L, 1), "-h")) {
+            orig_Com_Printf(
+                "DesignerScripts are .ds files compiled into .os files using sofds.exe from SoF SDK\n"
+                "----------------------------\n"
+                "Stops execution to a previously loaded script file and unloads the script file\n"
+                "Your script handle is no longer valid after calling this function\n"
+                "You must pass in the handle you saved from sp_sv_script_load\n"
+                "eg. \"sp_sv_script_unload $my_script\" , where myscript is the cvar storing the handle\n"
+                "----------------------------\n"
+                "arg1 -> handle to loaded script\n"
+            );
+            return 0;
+        }
 
-	script_list_t	*z, *next;
-	for (z=the_scripts.next ; z != &the_scripts ; z=next)
-	{
-		next = z->next;		
-		// if ( !strcmp(p->script_name,orig_Cmd_Argv(1)) ) {
-		if ( z->runner == ent ) {
-			z->prev->next = z->next;
-			z->next->prev = z->prev;
+        if (c != 1) {
+            orig_Com_Printf("[commandname] -h\n");
+            return 0;
+        }
 
-			//would be nice to free CScript here, but oh well
-			stset(z->cscript,CSCRIPT_SCRIPTCONDITION,COND_COMPLETED);
-			orig_G_FreeEdict(z->runner);
-			free(z);
-			
-			break;
-		}
-	}
+        const char* handle_str = lua_tostring(L, 1);
+        edict_t* ent = atoi(handle_str);
+        if (!ent->inuse) {
+            orig_Com_Printf("Invalid script handle\n");
+            return 0;
+        }
 
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+        script_list_t* z, * next;
+        for (z = the_scripts.next; z != &the_scripts; z = next) {
+            next = z->next;
+            if (z->runner == ent) {
+                z->prev->next = z->next;
+                z->next->prev = z->prev;
+
+                //would be nice to free CScript here, but oh well
+                stset(z->cscript, CSCRIPT_SCRIPTCONDITION, COND_COMPLETED);
+                orig_G_FreeEdict(z->runner);
+                free(z);
+
+                break;
+            }
+        }
+
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+    }
+    return 0;
 }
+
 
 
 
@@ -3153,80 +3107,50 @@ int d_script_pointer = 0;
 
 // they must have moved script_use into the class...
 // void script_use(edict_t *ent, edict_t *other, edict_t *activator)
-int sf_sv_script_run(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Executes a DesignerScript file (.os), located in your %%User%%/ds/ directory\n"
-			"DesignerScripts are .ds files compiled into .os files using sofds.exe\n"
-			"eg. \"sp_sv_script_run elevator\" -notice no file extension\n"
-			"----------------------------\n"
-			"arg1 -> name of script\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("[commandname] -h\n");
-		return;
-	}
-	// void * cl = (void*)((*(unsigned int*)CLIENT_BASE) + ( (unsigned int)(atoi(orig_Cmd_Argv(1))) * SIZE_OF_CLIENT));
-	// edict_t * entbleh = *(edict_t**)(cl + CLIENT_ENT);
+int sf_sv_script_run(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
+    int argc = lua_gettop(L);
+    if (argc != 1 || !lua_isstring(L, 1)) {
+        orig_Com_Printf("[commandname] -h\n");
+        return 0;
+    }
 
+    const char* scriptname = lua_tostring(L, 1);
+    char full_scriptname[256];
+    snprintf(full_scriptname, sizeof(full_scriptname), "ds/%s.os", scriptname);
+    if (!orig_FS_FileExists(full_scriptname)) {
+        orig_Com_Printf("You are trying to run a script that is unlikely to be loaded.\n");
+        return 0;
+    }
 
-	char scriptname[64];
-	sprintf(scriptname,"ds/%s.os",orig_Cmd_Argv(1));
-	if ( !orig_FS_FileExists(scriptname) ) {
-		orig_Com_Printf("You are trying run a script that is unlikely to be loaded.\n");
-		return;
-	}
+    unsigned int ed_base = stget(EDICT_BASE, 0);
 
-	unsigned int ed_base = stget(EDICT_BASE,0);
+    // Search for scriptname
+    struct d_script_s* ds = NULL;
+    for (int i = 0; i < d_script_pointer; i++) {
+        struct d_script_s* ds = dende_scripts[i];
+        if (!strcmp(full_scriptname, ds->name)) {
+            unsigned int cond = stget(ds->handle, CSCRIPT_SCRIPTCONDITION);
 
-	//search for scriptname
-	struct d_script_s * ds = NULL;
-	
-	for ( int i = 0 ; i < d_script_pointer; i++ ) {
-		struct d_script_s * ds = dende_scripts[i];
-		if ( !strcmp(scriptname,ds->name) ) {
-			unsigned int  cond = stget(ds->handle,CSCRIPT_SCRIPTCONDITION);
+            if (cond != COND_COMPLETED && cond != COND_READY) {
+                orig_Com_Printf("Seems like script %s is already running\n", full_scriptname);
+                return 0;
+            }
 
-			if ( cond != COND_COMPLETED && cond != COND_READY )
-			{
-				orig_Com_Printf("Seems like script %s is already running\n",scriptname);
-				return;
-			}
+            orig_Com_Printf("Running script %s\n", full_scriptname);
+            orig_script_use(ed_base, ed_base, ed_base);
+            return 0;
+        }
+    }
+    orig_Com_Printf("Script %s isn't loaded yet\n", full_scriptname);
 
-			// ParameterValues.push_back(new StringVar("parm",Value))
-
-			// To allow many scripts to use one entity?
-			//Link entity to script before run ?
-			// *(unsigned int*)(ed_base+EDICT_SCRIPT) = ds->handle;
-
-			orig_Com_Printf("Running script %s\n",scriptname);
-			// *(unsigned int*)(ds->handle + CSCRIPT_SCRIPTCONDITION) = COND_READY;
-			orig_script_use(ed_base,ed_base,ed_base);
-			return;
-		}
-	}
-	orig_Com_Printf("Script %s isn't loaded yet\n",scriptname);
-	
-
-/*
-	asm volatile(	"push %1;"//push scriptname
-					"push %2;"//push owner
-					"push %3;"//push owner
-					"movl %0,%%ecx;"//new_mem->ecx
-					"call *%4;"//call orig_script_use
-					::"m"(myscript),"m"(entbleh),"m"(entbleh),"m"(entbleh),"m"(orig_script_use):"%ecx");
-
-*/
+    return 0;
 }
+
 
 
 
@@ -3235,114 +3159,111 @@ int sf_sv_script_run(lua_State * L)
 d_script_pointer currently points to next element free
 this doesnt expect gaps :/
 */
-int Cmd_LoadScript(lua_State * L)
-{	
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Loads a DesignerScript file (.os), located in your %%User%%/ds/ directory\n"
-			"DesignerScripts are .ds files compiled into .os files using sofds.exe\n"
-			"eg. \"sp_sv_script_load elevator\" -notice no file extension\n"
-			"----------------------------\n"
-			"arg1 -> name of script\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("[commandname] -h\n");
-		return;
-	}
+int Cmd_LoadScript(lua_State * L) {
+#ifdef SOFREE_DEBUG
+  printf(__FUNCTION__);
+  printf("\n");
+#endif
 
-	if ( d_script_pointer == MAX_D_SCRIPTS ) {
-		orig_Com_Printf("Sofree can't load that many scripts :~(\n");
-		return;
-	}
-	void * newscript = orig_cplusplus_new(0x4b4);
+  int num_args = lua_gettop(L);
 
-	char scriptname[64];
-	sprintf(scriptname,"ds/%s.os",orig_Cmd_Argv(1));
+  if (num_args == 0) {
+    orig_Com_Printf("[commandname] -h\n");
+    return 0;
+  }
 
-	if ( !orig_FS_FileExists(scriptname) ) {
-		orig_Com_Printf("You are trying to load a non-existant file.\n");
-		return;
-	}
+  if (lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+    orig_Com_Printf(
+      "Loads a DesignerScript file (.os), located in your %%User%%/ds/ directory\n"
+      "DesignerScripts are .ds files compiled into .os files using sofds.exe\n"
+      "eg. \"sp_sv_script_load elevator\" -notice no file extension\n"
+      "----------------------------\n"
+      "arg1 -> name of script\n"
+    );
+    return 0;
+  }
 
-	struct d_script_s * ds = NULL;
-	
-	for ( int i = 0 ; i < d_script_pointer; i++ ) {
-		struct d_script_s * ds = dende_scripts[i];
-		if ( !strcmp(scriptname,ds->name) ) {
-			orig_Com_Printf("Script %s is already loaded\n",scriptname);
-			return;
-		}
-	}	
+  if (num_args != 1) {
+    orig_Com_Printf("[commandname] -h\n");
+    return 0;
+  }
 
+  if (d_script_pointer == MAX_D_SCRIPTS) {
+    orig_Com_Printf("Sofree can't load that many scripts :~(\n");
+    return 0;
+  }
 
-	orig_Com_Printf("Loading script %s\n",scriptname);
+  char scriptname[64];
+  snprintf(scriptname, 64, "ds/%s.os", lua_tostring(L, 1));
 
-	// create the d_script
-	ds = dende_scripts[d_script_pointer] = malloc(sizeof(struct d_script_s));
-	d_script_pointer++;
-	strcpy(ds->name,scriptname);
-	ds->handle = newscript;
+  if (!orig_FS_FileExists(scriptname)) {
+    orig_Com_Printf("You are trying to load a non-existant file.\n");
+    return 0;
+  }
 
+  struct d_script_s * ds = NULL;
 
+  for (int i = 0; i < d_script_pointer; i++) {
+    ds = dende_scripts[i];
+    if (!strcmp(scriptname, ds->name)) {
+      orig_Com_Printf("Script %s is already loaded\n", scriptname);
+      return 0;
+    }
+  }
 
-	//st.script = scriptname
-	*(unsigned int*)0x5015CC30 = &(scriptname[0]);
-	//orig_SP_script_runner(owner);
-	
-	unsigned int worldspawn = stget(EDICT_BASE,0);
-	unsigned int p_to_string = &(scriptname[0]);
+  orig_Com_Printf("Loading script %s\n", scriptname);
 
+  // create the d_script
+  ds = dende_scripts[d_script_pointer] = malloc(sizeof(struct d_script_s));
+  d_script_pointer++;
+  strcpy(ds->name, scriptname);
+  ds->handle = orig_cplusplus_new(0x4b4);
 
-	asm volatile(	"push %1;"//push scriptname
-					"push %2;"//push owner
-					"movl %0,%%ecx;"//new_mem->ecx
-					"call *%3;"//call orig_CScript
-					::"m"(newscript),"m"(worldspawn),"m"(p_to_string),"m"(orig_CScript):"%ecx");
+  // st.script = scriptname
+  *(unsigned int*)0x5015CC30 = &(scriptname[0]);
+  
+  unsigned int worldspawn = stget(EDICT_BASE, 0);
+  unsigned int p_to_string = &(scriptname[0]);
 
-							   //nameofscript,ent
-	//ent->Script = new CScript(temp, ent);
-	// ent->script = newscript
-	stset(worldspawn,EDICT_SCRIPT,newscript);
+  asm volatile (
+    "push %1;"  // push scriptname
+    "push %2;"  // push owner
+    "movl %0,%%ecx;"  // new_mem->ecx
+    "call *%3;"  // call orig_CScript
+    ::"m"(ds->handle),"m"(worldspawn),"m"(p_to_string),"m"(orig_CScript):"%ecx"
+  );
 
-	// // append to list of scripts
-	// //Scripts.push_back(ent->Script);
-	void * newListItem = orig_cplusplus_new(0xC);
+  stset(worldspawn, EDICT_SCRIPT, ds->handle);
 
-	// //no fucking idea what that does, i was insane copying it bit by bit from asm
-	unsigned int esi = stget(0x5015c504,0);
+  // append to list of scripts
+  void * newListItem = orig_cplusplus_new(0xC);
 
-	stset(newListItem,0,esi);
+  unsigned int esi = stget(0x5015c504, 0);
+  stset(newListItem, 0, esi);
 
-	unsigned int edi = stget(esi,4);
+  unsigned int edi = stget(esi, 4);
+  stset(newListItem, 4, edi);
+  stset(esi, 4, newListItem);
 
-	stset(newListItem,4,edi);
-	stset(esi,4,newListItem);
+  stset(stget(newListItem, 4), 0, newListItem);
+  stset(newListItem, 8, stget(worldspawn, EDICT_SCRIPT));
 
-
-	stset(stget(newListItem,4),0,newListItem);
-	stset(newListItem,8,stget(worldspawn,EDICT_SCRIPT));
 
 	stset(0x5015C508,0,stget(0x5015C508,0) + 1);
-
 }
 
 
 
-int Cmd_StopScript(lua_State * L)
-{
+
+int Cmd_StopScript(lua_State * L) {
 	#ifdef SOFREE_DEBUG
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
+	
+	const char* scriptname = luaL_checkstring(L, 1);
+	
+	if (strcmp(scriptname, "-h") == 0) {
 		orig_Com_Printf(
 			"Stops excution of a DesignerScript file (.os), located in your %%User%%/ds/ directory\n"
 			"DesignerScripts are .ds files compiled into .os files using sofds.exe\n"
@@ -3350,30 +3271,35 @@ int Cmd_StopScript(lua_State * L)
 			"----------------------------\n"
 			"arg1 -> name of script\n"
 		);
-		return;
+		return 0;
 	}
-	if ( c != 1 ) {
+	
+	if (lua_gettop(L) != 1) {
 		orig_Com_Printf("[commandname] -h\n");
-		return;
-	}
-	char scriptname[64];
-	sprintf(scriptname,"ds/%s.os",orig_Cmd_Argv(1));
-	if ( !orig_FS_FileExists(scriptname) ) {
-		orig_Com_Printf("You are trying stop a script that is unlikely to be loaded.\n");
-		return;
+		return 0;
 	}
 
-	struct d_script_s * ds = NULL;
-	for ( int i = 0 ; i < d_script_pointer; i++ ) {
-		struct d_script_s * ds = dende_scripts[i];
-		if ( !strcmp(scriptname,ds->name) ) {
-			orig_Com_Printf("Stopping script %s\n",scriptname);
-			stset(ds->handle,CSCRIPT_SCRIPTCONDITION,COND_COMPLETED);
-			return;
+	char filename[128];
+	snprintf(filename, sizeof(filename), "ds/%s.os", scriptname);
+
+	if (!orig_FS_FileExists(filename)) {
+		orig_Com_Printf("You are trying stop a script that is unlikely to be loaded.\n");
+		return 0;
+	}
+
+	struct d_script_s* ds = NULL;
+	for (int i = 0; i < d_script_pointer; i++) {
+		struct d_script_s* ds = dende_scripts[i];
+		if (strcmp(filename, ds->name) == 0) {
+			orig_Com_Printf("Stopping script %s\n", filename);
+			stset(ds->handle, CSCRIPT_SCRIPTCONDITION, COND_COMPLETED);
+			return 0;
 		}
 	}
 
+	return 0;
 }
+
 
 /*
 	Update the origin of the player
@@ -3406,96 +3332,108 @@ int sf_sv_player_move(lua_State * L)
 
 int sf_sv_player_gravity(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Sets the gravity strength on the chosen player\n"
-			"----------------------------\n"
-			"arg1 -> valid slot id\n"
-			"arg2 -> gravity value\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_player_gravity -h\n");
-		return;
-	}
-	int slot = atoi(orig_Cmd_Argv(1));
-	edict_t* ent = get_ent_from_player_slot(slot);
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
-	
-	short grav = atoi(orig_Cmd_Argv(2));
-	ent->client->ps.pmove.gravity = grav;
-	client_gravity[slot] = grav;
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+
+    try {
+        int nargs = lua_gettop(L);
+        if (nargs < 2) {
+            orig_Com_Printf("sf_sv_player_gravity -h\n");
+            return 0;
+        }
+
+        if (lua_isstring(L, 1) && !strcmp(lua_tostring(L, 1), "-h")) {
+            orig_Com_Printf(
+                "Sets the gravity strength on the chosen player\n"
+                "----------------------------\n"
+                "arg1 -> valid slot id\n"
+                "arg2 -> gravity value\n"
+            );
+            return 0;
+        }
+
+        if (!lua_isnumber(L, 1) || !lua_isnumber(L, 2)) {
+            orig_Com_Printf("Invalid arguments\n");
+            return 0;
+        }
+
+        int slot = lua_tonumber(L, 1);
+        edict_t* ent = get_ent_from_player_slot(slot);
+        if (!ent) {
+            orig_Com_Printf("Invalid Ent\n");
+            return 0;
+        }
+
+        short grav = lua_tonumber(L, 2);
+        ent->client->ps.pmove.gravity = grav;
+        client_gravity[slot] = grav;
+
+    } catch (...) {
+        char temp[64];
+        sprintf(temp,"ERROR IN %s",__FUNCTION__);
+        MessageBox(NULL,temp,NULL,MB_OK);
+    }
+
+    return 0;
 }
+
 
 
 
 float player_tint[32][4];
 float player_wep_tint[32][4];
-int sf_sv_player_paint(lua_State * L)
+int sf_sv_player_paint(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Applies a coloured tint on a specific player\n"
-			"----------------------------\n"
-			"arg1 -> valid slot id\n"
-			"arg2 -> red component between 0.0 and 1.0\n"
-			"arg3 -> green component between 0.0 and 1.0\n"
-			"arg4 -> blue component between 0.0 and 1.0\n"
-			"arg5 -> opacity component between 0.0 and 1.0 , 1.0 being fully visible\n"
-		);
-		return;
-	}
-	if ( c != 5 ) {
-		orig_Com_Printf("sf_sv_player_paint -h\n");
-		return;
-	}
-	unsigned int slot = atoi(orig_Cmd_Argv(1));
-	edict_t* ent = get_ent_from_player_slot(slot);
-	//!stget(ent,EDICT_INUSE)
-	if ( !ent ) {
-		// PrintOut(PRINT_BAD,false,"Invalid Ent\n");
-		return;
-	}
-	// PrintOut(PRINT_GOOD,false,"argc is : %i\n",orig_Cmd_Argc());
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-	float r = atof(orig_Cmd_Argv(2));
-	float g = atof(orig_Cmd_Argv(3));
-	float b = atof(orig_Cmd_Argv(4));
-	float a = atof(orig_Cmd_Argv(5));
-	player_tint[slot][0] = r;
-	player_tint[slot][1] = g;
-	player_tint[slot][2] = b;
-	player_tint[slot][3] = a;
-	
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+    try {
+        int n = lua_gettop(L); // Number of arguments
+        if (n == 0) {
+            orig_Com_Printf(
+                "Applies a coloured tint on a specific player\n"
+                "----------------------------\n"
+                "arg1 -> valid slot id\n"
+                "arg2 -> red component between 0.0 and 1.0\n"
+                "arg3 -> green component between 0.0 and 1.0\n"
+                "arg4 -> blue component between 0.0 and 1.0\n"
+                "arg5 -> opacity component between 0.0 and 1.0 , 1.0 being fully visible\n"
+            );
+            return 0;
+        }
+        if (n != 5) {
+            orig_Com_Printf("sf_sv_player_paint -h\n");
+            return 0;
+        }
+
+        unsigned int slot = lua_tointeger(L, 1);
+        edict_t* ent = get_ent_from_player_slot(slot);
+        if (!ent) {
+            // PrintOut(PRINT_BAD,false,"Invalid Ent\n");
+            return 0;
+        }
+
+        float r = lua_tonumber(L, 2);
+        float g = lua_tonumber(L, 3);
+        float b = lua_tonumber(L, 4);
+        float a = lua_tonumber(L, 5);
+        player_tint[slot][0] = r;
+        player_tint[slot][1] = g;
+        player_tint[slot][2] = b;
+        player_tint[slot][3] = a;
+
+    } catch(...) {
+        char temp[64];
+        sprintf(temp,"ERROR IN %s",__FUNCTION__);
+        MessageBox(NULL,temp,NULL,MB_OK);
+    }
+    return 0;
 }
+
 unsigned int was_ghosted[32];
 int sf_sv_player_weap_paint(lua_State * L)
 {
@@ -3504,8 +3442,7 @@ int sf_sv_player_weap_paint(lua_State * L)
 	printf("\n");
 	#endif
 	try{
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
+	if (lua_gettop(L) == 1 && lua_type(L, 1) == LUA_TSTRING && strcmp(lua_tostring(L, 1), "-h") == 0) {
 		orig_Com_Printf(
 			"Applies a coloured tint on a specific player's weapon\n"
 			"----------------------------\n"
@@ -3515,25 +3452,24 @@ int sf_sv_player_weap_paint(lua_State * L)
 			"arg4 -> blue component between 0.0 and 1.0\n"
 			"arg5 -> opacity component between 0.0 and 1.0 , 1.0 being fully visible\n"
 		);
-		return;
+		return 0;
 	}
-	if ( c != 5 ) {
+	if ( lua_gettop(L) != 5 ) {
 		orig_Com_Printf("sf_sv_player_weap_paint -h\n");
-		return;
+		return 0;
 	}
-	unsigned int slot = atoi(orig_Cmd_Argv(1));
+	unsigned int slot = (unsigned int)lua_tointeger(L, 1);
 	edict_t* ent = get_ent_from_player_slot(slot);
 	//!stget(ent,EDICT_INUSE)
 	if ( !ent ) {
 		// PrintOut(PRINT_BAD,false,"Invalid Ent\n");
-		return;
+		return 0;
 	}
-	// PrintOut(PRINT_GOOD,false,"argc is : %i\n",orig_Cmd_Argc());
 
-	float r = atof(orig_Cmd_Argv(2));
-	float g = atof(orig_Cmd_Argv(3));
-	float b = atof(orig_Cmd_Argv(4));
-	float a = atof(orig_Cmd_Argv(5));
+	float r = (float)lua_tonumber(L, 2);
+	float g = (float)lua_tonumber(L, 3);
+	float b = (float)lua_tonumber(L, 4);
+	float a = (float)lua_tonumber(L, 5);
 	player_wep_tint[slot][0] = r;
 	player_wep_tint[slot][1] = g;
 	player_wep_tint[slot][2] = b;
@@ -3545,7 +3481,9 @@ int sf_sv_player_weap_paint(lua_State * L)
 		sprintf(temp,"ERROR IN %s",__FUNCTION__);
 		MessageBox(NULL,temp,NULL,MB_OK);
 	}
+	return 0;
 }
+
 
 
 int sf_sv_player_weap_current(lua_State * L)
@@ -3614,63 +3552,39 @@ bool player_collision[32];
 /*
 SOLID CONTROLS ENTITY TO ENTITY COLLISION
 */
-int sf_sv_player_collision(lua_State * L)
+int sf_sv_player_set_max_health(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Makes it so this player can be passed through by all other players\n"
-			"----------------------------\n"
-			"arg1 -> valid slot id\n"
-			"arg2 -> 1 or 0 ... representing collision on or off\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_player_collision -h\n");
-		return;
-	}
-	unsigned int slot = atoi(orig_Cmd_Argv(1));
-	edict_t* ent = get_ent_from_player_slot(slot);
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
-	int mode = atoi(orig_Cmd_Argv(2));
-	if ( mode != 0 and mode != 1 )
-	{
-		orig_Com_Printf("Collision must be 1 or 0\n");
-	}
-
-	// if he is IN game its fine to edit his solid now.
-	if ( !ent->client->pers.spectator ) {
-		if ( mode == 1 ) {
-			ent->solid = SOLID_BBOX;
-		} else {
-			ent->solid = SOLID_TRIGGER;
-		}
-	}
-	// the spec will solid change when he hops in because of client_spawn sofplus event is called AFTER PutClientInServer
-	// specs and players alike shoudl ahve their setting cahnged
-	if ( mode == 1 ) {
-		player_collision[slot] = true;
-	} else {
-		player_collision[slot] = false;
-	}
-	
-
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
-
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    try {
+        int c = lua_gettop(L);
+        if (c != 2) {
+            orig_Com_Printf("sf_sv_player_set_max_health -h\n");
+            return 0;
+        }
+        unsigned int slot = luaL_checkinteger(L, 1);
+        edict_t* ent = get_ent_from_player_slot(slot);
+        if (!ent) {
+            orig_Com_Printf("Invalid Ent\n");
+            return 0;
+        }
+        int max_health = luaL_checkinteger(L, 2);
+        if (max_health <= 0) {
+            orig_Com_Printf("Max health must be greater than 0\n");
+            return 0;
+        }
+        ent->client->pers.max_health = max_health;
+        ent->health = max_health;
+        return 0;
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+        return 0;
+    }
 }
 
 bool disable_attack[32];
@@ -3710,34 +3624,31 @@ int sf_sv_player_allow_altattack(lua_State * L)
 	return 0;
 }
 
-int sf_sv_player_allow_walk(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Allow/disallow a player to use walk\n"
-			"----------------------------\n"
-			"arg1 -> playerslot\n"
-			"arg2 -> 1 = allow , 0 = dont allow\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_player_allow_walk -h\n");
-		return;
-	}
-	int who = atoi(orig_Cmd_Argv(1));
-	int allow = atoi(orig_Cmd_Argv(2));
-	if ( allow ) {
-		disable_walk[who] = false;
-	} else {
-		disable_walk[who] = true;
-	}
+int sf_sv_player_allow_walk(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int num_args = lua_gettop(L);
+    
+    if (num_args < 2 || !lua_isnumber(L, 1) || !lua_isnumber(L, 2)) {
+        orig_Com_Printf("sf_sv_player_allow_walk -h\n");
+        return 0;
+    }
+    
+    int who = lua_tointeger(L, 1);
+    int allow = lua_tointeger(L, 2);
+    
+    if (allow) {
+        disable_walk[who] = false;
+    } else {
+        disable_walk[who] = true;
+    }
+    
+    return 0;
 }
+
 
 /*
 enum EndCondition
@@ -3752,57 +3663,50 @@ enum EndCondition
 Restart - If animation is same as one playing, dont do anything.
 EndCondition - Numbers higher than HoldFrame repeat but apply to skins forceful
 */
-int sf_sv_player_anim(lua_State * L)
+int sf_sv_player_anim(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Play an animation for an entity\n"
-			"----------------------------\n"
-			"arg1 -> playerslot\n"
-			"arg2 -> animation name\n"
-			"arg3 -> startPosition [float]\n"
-			"arg4 -> interrupt current [bool int]\n"
-			"arg5 -> EndCondition [int]\n"
-			"arg6 -> Resume?[bool int]\n"
-			"arg7 -> reverse, play in reverse[bool int]\n"
-		);
-		return;
-	}
-	if ( c != 7 ) {
-		orig_Com_Printf("sf_sv_player_anim -h\n");
-		return;
-	}
-	unsigned int slot = atoi(orig_Cmd_Argv(1));
-	edict_t* ent = get_ent_from_player_slot(slot);
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
 
-	char * animName = orig_Cmd_Argv(2);
-	float startPos = atof(orig_Cmd_Argv(3));
-	int restart = atoi(orig_Cmd_Argv(4));
-	int loop = atoi(orig_Cmd_Argv(5));
-	int match = atoi(orig_Cmd_Argv(6));
-	int reverse = atoi(orig_Cmd_Argv(7));
-	clientinst = (unsigned int)(ent->ghoulInst);
-	if ( clientinst ) {
-		GhoulGetObject();
-		GhoulID seq = GhoulFindSequence(animName);
-		if ( !seq) {
-			orig_Com_Printf("Cant find sequence\n");
-			return;
-		}
-	 
-		// GhoulID Seq,float Now,float PlayPos,bool Restart,IGhoulInst::EndCondition ec, bool MatchCurrentPos, bool reverseAnim
-		GhoulPlay(seq,*(float*)0x5015CCDC,startPos,restart,loop,match,reverse);
-	}
+    // Check arguments
+    int nargs = lua_gettop(L);
+    if (nargs != 7) {
+        orig_Com_Printf("sf_sv_player_anim -h\n");
+        return 0;
+    }
+
+    unsigned int slot = luaL_checkinteger(L, 1);
+    edict_t* ent = get_ent_from_player_slot(slot);
+    if (!ent) {
+        orig_Com_Printf("Invalid Ent\n");
+        return 0;
+    }
+
+    const char* animName = luaL_checkstring(L, 2);
+    float startPos = luaL_checknumber(L, 3);
+    int restart = lua_toboolean(L, 4);
+    int loop = luaL_checkinteger(L, 5);
+    int match = lua_toboolean(L, 6);
+    int reverse = lua_toboolean(L, 7);
+
+    clientinst = (unsigned int)(ent->ghoulInst);
+    if (clientinst) {
+        GhoulGetObject();
+        GhoulID seq = GhoulFindSequence(animName);
+        if (!seq) {
+            orig_Com_Printf("Cant find sequence\n");
+            return 0;
+        }
+
+        // GhoulID Seq,float Now,float PlayPos,bool Restart,IGhoulInst::EndCondition ec, bool MatchCurrentPos, bool reverseAnim
+        GhoulPlay(seq, *(float*)0x5015CCDC, startPos, restart, loop, match, reverse);
+    }
+
+    return 0;
 }
+
 
 
 int sf_sv_ent_anim(lua_State * L)
@@ -3848,62 +3752,44 @@ int sf_sv_ent_model(lua_State * L)
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Apply a model to an entity\n"
-			"----------------------------\n"
-			"arg1 -> enthandle\n"
-			"arg2 -> dir\n"
-			"arg3 -> modelname\n"
-		);
-		return;
-	}
-	if ( c != 3 ) {
+
+	if (lua_gettop(L) == 0 || !lua_isnumber(L, 1)) {
 		orig_Com_Printf("sf_sv_ent_model -h\n");
-		return;
-	}
-	edict_t* ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
+		return 0;
 	}
 
-	char * dir = orig_Cmd_Argv(2);
-	char * modelname = orig_Cmd_Argv(3);
-	// void SimpleModelInit2(edict_t *ent, modelSpawnData_t *modelData,char *skinname,char *partname)
+	if (lua_isstring(L, 2) && lua_isstring(L, 3)) {
+		edict_t* ent = (edict_t*)lua_tonumber(L, 1);
 
-	// ghoul/sofree/cube_medium
-	modelSpawnData_t mdata =
-	{
-		.dir = dir,//orig_CopyString(dir),
-		.file = modelname,//orig_CopyString(modelname),
-		.surfaceType = SURF_WOOD_DBROWN,
-		.material = MAT_WOOD_DBROWN,
-		.health = 500,
-		.solid = SOLID_BBOX,
-		.materialfile = NULL,
-		.debrisCnt = 0,
-		.debrisScale = DEBRIS_NONE,
-		.objBreakData = NULL,
-	};
+		char* dir = (char*)lua_tostring(L, 2);
+		char* modelname = (char*)lua_tostring(L, 3);
 
-	// modelSpawnData_t * mdata = malloc(sizeof(modelSpawnData_t));
-	// mdata->dir = dir;//orig_CopyString(dir);
-	// mdata->file = modelname;orig_CopyString(modelname);
-	// mdata->surfaceType = SURF_WOOD_DBROWN;
-	// mdata->material = MAT_WOOD_DBROWN;
-	// mdata->health = 500;
-	// mdata->solid = SOLID_TRIGGER;
-	// mdata->materialfile = NULL;
-	// mdata->debrisCnt = 0;
-	// mdata->debrisScale = DEBRIS_NONE;
-	// mdata->objBreakData = NULL;
+		// ghoul/sofree/cube_medium
+		modelSpawnData_t mdata =
+		{
+			.dir = dir,//orig_CopyString(dir),
+			.file = modelname,//orig_CopyString(modelname),
+			.surfaceType = SURF_WOOD_DBROWN,
+			.material = MAT_WOOD_DBROWN,
+			.health = 500,
+			.solid = SOLID_BBOX,
+			.materialfile = NULL,
+			.debrisCnt = 0,
+			.debrisScale = DEBRIS_NONE,
+			.objBreakData = NULL,
+		};
 
-	// sets movetype to MOVETYPE_DAN aka 10
-	// sets ->movetype ->die ->touch ->clipmask ->takedamage ->mass
-	orig_SimpleModelInit2(ent,&mdata,NULL,NULL);
+		// sets movetype to MOVETYPE_DAN aka 10
+		// sets ->movetype ->die ->touch ->clipmask ->takedamage ->mass
+		orig_SimpleModelInit2(ent,&mdata,NULL,NULL);
+	}
+	else {
+		orig_Com_Printf("sf_sv_ent_model -h\n");
+	}
+
+	return 0;
 }
+
 
 /*
 Order of matrix
@@ -3911,86 +3797,85 @@ Scale
 Rotate
 Translate
 */
-int sf_sv_ghoul_scale(lua_State * L)
+int sf_sv_ghoul_scale(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Scale the size of the entity model\n"
-			"NB. Order of ghoul editting matters. Scale affects translation units\n"
-			"Translation affects point of rotation\n"
-			"----------------------------\n"
-			"arg1 -> enthandle\n"
-			"arg2 -> scale [float]\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_ghoul_scale -h\n");
-		return;
-	}
-	edict_t* ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
-	orig_SimpleModelScale(ent,atof(orig_Cmd_Argv(2)));
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+
+    int argc = lua_gettop(L);
+
+    if (argc != 2) {
+        orig_Com_Printf("sf_sv_ghoul_scale -h\n");
+        return 0;
+    }
+
+    edict_t* ent = lua_touserdata(L, 1);
+    if (!ent) {
+        orig_Com_Printf("Invalid Ent\n");
+        return 0;
+    }
+
+    float scale = lua_tonumber(L, 2);
+    orig_SimpleModelScale(ent, scale);
+
+    return 0;
 }
-int sf_sv_ent_bolt(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Bolt another ghoul model to the current ghoul\n"
-			"----------------------------\n"
-			"arg1 -> enthandle\n"
-			"arg2 -> scale [float]\n"
-		);
-		return;
-	}
-	if ( c != 6 ) {
-		orig_Com_Printf("sf_sv_ent_bolt -h\n");
-		return;
-	}
-	edict_t* ent = atoi(orig_Cmd_Argv(1));
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
 
-	char * dir = orig_Cmd_Argv(2);
-	char * file = orig_Cmd_Argv(3);
-	char * bolt_from = orig_Cmd_Argv(4);
-	char * bolt_to = orig_Cmd_Argv(5);
-	float scale = atof(orig_Cmd_Argv(6));
+int sf_sv_ent_bolt(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-	// set clientinst
-	clientinst = (unsigned int)(ent->ghoulInst);
-	if ( clientinst	)
-	{
-		GhoulGetObject();
-		ggObjC * MyGhoulObj = GhoulFindObjectSmall((IGhoulObj*)objinst);
-		ggOinstC* myInstance = orig_FindOInst(MyGhoulObj,(IGhoulInst*)clientinst);
+    int n = lua_gettop(L);
+    if (n == 0 || lua_tostring(L, 1) == "-h") {
+        orig_Com_Printf(
+            "Bolt another ghoul model to the current ghoul\n"
+            "----------------------------\n"
+            "arg1 -> enthandle\n"
+            "arg2 -> dir [string]\n"
+            "arg3 -> file [string]\n"
+            "arg4 -> bolt_from [string]\n"
+            "arg5 -> bolt_to [string]\n"
+            "arg6 -> scale [float]\n"
+        );
+        return 0;
+    }
 
-		// edict_t &monster
-		// char *myBolt -- where to bolt it
-		// char *itemClass -- directory
-		// char *itemSeq -- ghb file or ghl file
-		// char *itemBolt -- its bolt location
-		// ggOinstC *myInstance
-		// char *itemSkinName=NULL -- if it has an alternate skin used
-		// float scale = 1.0
-		orig_AddBoltedItem(ent->client->body,*ent, bolt_from, dir, file, bolt_to, myInstance, NULL, scale);
-	}
+    edict_t* ent = (edict_t*)lua_tointeger(L, 1);
+    if (!ent) {
+        orig_Com_Printf("Invalid Ent\n");
+        return 0;
+    }
+
+    const char* dir = lua_tostring(L, 2);
+    const char* file = lua_tostring(L, 3);
+    const char* bolt_from = lua_tostring(L, 4);
+    const char* bolt_to = lua_tostring(L, 5);
+    float scale = (float)lua_tonumber(L, 6);
+
+    // set clientinst
+    clientinst = (unsigned int)(ent->ghoulInst);
+    if (clientinst) {
+        GhoulGetObject();
+        ggObjC* MyGhoulObj = GhoulFindObjectSmall((IGhoulObj*)objinst);
+        ggOinstC* myInstance = orig_FindOInst(MyGhoulObj, (IGhoulInst*)clientinst);
+
+        // edict_t &monster
+        // char *myBolt -- where to bolt it
+        // char *itemClass -- directory
+        // char *itemSeq -- ghb file or ghl file
+        // char *itemBolt -- its bolt location
+        // ggOinstC *myInstance
+        // char *itemSkinName=NULL -- if it has an alternate skin used
+        // float scale = 1.0
+        orig_AddBoltedItem(ent->client->body, *ent, bolt_from, dir, file, bolt_to, myInstance, NULL, scale);
+    }
+    return 0;
 }
+
 /*
 	p_body.c
 	/ add a flag to the main player - Jake
@@ -4022,45 +3907,51 @@ int sf_sv_ent_bolt(lua_State * L)
 
 int sf_sv_ent_paint(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Color an entity\n"
-			"----------------------------\n"
-			"arg1 -> enthandle\n"
-			"arg2 -> red float 0.0 -> 1.0\n"
-			"arg3 -> green float 0.0 -> 1.0\n"
-			"arg4 -> blue float 0.0 -> 1.0\n"
-			"arg5 -> alpha float 0.0 -> 1.0\n"
-		);
-		return;
-	}
-	if ( c != 5 ) {
-		orig_Com_Printf("sf_sv_ent_paint -h\n");
-		return;
-	}
-	edict_t* ent = atoi(orig_Cmd_Argv(1));
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-	float r = atof(orig_Cmd_Argv(2));
-	float g = atof(orig_Cmd_Argv(3));
-	float b = atof(orig_Cmd_Argv(4));
-	float a = atof(orig_Cmd_Argv(5));
-	
-	if ( !ent ) {
-		orig_Com_Printf("Invalid Ent\n");
-		return;
-	}
-	clientinst=(unsigned int*)ent->ghoulInst;
-	if ( !clientinst ) {
-		orig_Com_Printf("Ent doesn't have a ghoul model\n");
-	}
-	GhoulSetTintOnAll(r,g,b,a);
-	
+    if (lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+        orig_Com_Printf(
+            "Color an entity\n"
+            "----------------------------\n"
+            "arg1 -> enthandle\n"
+            "arg2 -> red float 0.0 -> 1.0\n"
+            "arg3 -> green float 0.0 -> 1.0\n"
+            "arg4 -> blue float 0.0 -> 1.0\n"
+            "arg5 -> alpha float 0.0 -> 1.0\n"
+        );
+        return 0;
+    }
+
+    if (lua_gettop(L) != 5) {
+        orig_Com_Printf("sf_sv_ent_paint -h\n");
+        return 0;
+    }
+
+    edict_t* ent = (edict_t*)lua_touserdata(L, 1);
+    float r = (float)lua_tonumber(L, 2);
+    float g = (float)lua_tonumber(L, 3);
+    float b = (float)lua_tonumber(L, 4);
+    float a = (float)lua_tonumber(L, 5);
+
+    if (!ent) {
+        orig_Com_Printf("Invalid Ent\n");
+        return 0;
+    }
+
+    clientinst = (unsigned int*)(ent->ghoulInst);
+    if (!clientinst) {
+        orig_Com_Printf("Ent doesn't have a ghoul model\n");
+        return 0;
+    }
+
+    GhoulSetTintOnAll(r, g, b, a);
+
+    return 0;
 }
+
 
 /*
 GETS player pos
@@ -4083,80 +3974,81 @@ int sf_sv_player_pos(lua_State * L)
 }
 
 
-int sf_sv_effect_endpos(lua_State * L)
+int sf_sv_effect_endpos(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Call this just before you spawn or exec\n"
-			"Set an end position for a line effect environ_effect entity\n"
-			"eg. sp_sv_effect_endpos #~entval ~org\n"
-			"Will give me ~org_1 ~org_2 ~org_3 to use with data in them\n"
-			"----------------------------\n"
-			"arg1 -> cvarname which holds endpos vector eg. v_1 v_2 v_3 cvar=v\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_effect_endpos -h\n");
-		return;
-	}
-	char * origin = orig_Cmd_Argv(1);
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
 
-	vec3_t vorigin;
-	readCvarAsVector(origin,vorigin);
+    if (lua_gettop(L) < 1 || !lua_isstring(L, 1)) {
+        orig_Com_Printf("Usage: sf_sv_effect_endpos cvarname\n");
+        return 0;
+    }
 
-	// flags
-	*(int*)0x5015C51C = *(int*)0x5015C51C | EFF_POS2;
-	// set global pos2 values
-	// call CFXSender:Exec
-	*(float*)0x5015C524 = vorigin[0];
-	*(float*)0x5015C528 = vorigin[1];
-	*(float*)0x5015C52C = vorigin[2];
+    const char* origin = lua_tostring(L, 1);
 
+    vec3_t vorigin;
+    readCvarAsVector(origin, vorigin);
+
+    // flags
+    *(int*)0x5015C51C = *(int*)0x5015C51C | EFF_POS2;
+    // set global pos2 values
+    // call CFXSender:Exec
+    *(float*)0x5015C524 = vorigin[0];
+    *(float*)0x5015C528 = vorigin[1];
+    *(float*)0x5015C52C = vorigin[2];
+
+    return 0;
 }
+
 
 
 int sf_sv_effect_start(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Run an effect at pos\n"
-			"eg. sp_sv_effect_start environ/tripbeam ~org\n"
-			"----------------------------\n"\
-			"arg1 -> path+filename of effect relative to effects dir\n"
-			"arg2 -> cvarname which holds startpos vector eg. v_1 v_2 v_3 cvar=v\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_effect_start -h\n");
-		return;
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-	char * origin = orig_Cmd_Argv(2);
+    // Check for help flag
+    if (lua_gettop(L) >= 1 && lua_isstring(L, 1) && !strcmp(lua_tostring(L, 1), "-h")) {
+        orig_Com_Printf(
+            "Run an effect at pos\n"
+            "eg. sp_sv_effect_start environ/tripbeam ~org\n"
+            "----------------------------\n"\
+            "arg1 -> path+filename of effect relative to effects dir\n"
+            "arg2 -> cvarname which holds startpos vector eg. v_1 v_2 v_3 cvar=v\n"
+        );
+        return 0;
+    }
 
-	vec3_t vorigin;
-	readCvarAsVector(origin,vorigin);
+    // Check for correct number of arguments
+    if (lua_gettop(L) != 2) {
+        orig_Com_Printf("sf_sv_effect_start -h\n");
+        return 0;
+    }
 
-	// fetching index from configstring.
-	int index = orig_SV_FindIndex(orig_Cmd_Argv(1), CS_EFFECTS, MAX_EFPACKS, 0,"effect");
-	if ( index == 0 ) {
-		orig_Com_Error(ERR_FATAL,"sf_sv_effect_start: the effect file %s is not registered\n",orig_Cmd_Argv(1));
-	}
-	static (__thiscall *fxRunner_exec)(void* self,int effectID, vec3_t pos, multicast_t castType, edict_t *ignoreClient) = 0x500852E0;
-	// fxRunner.exec(index, vorigin);
-	fxRunner_exec((void*)0x5015C518,index,vorigin,MULTICAST_PHS,0);
+    // Get effect filename
+    const char* effectFileName = lua_tostring(L, 1);
+
+    // Get start position from cvar
+    vec3_t vorigin;
+    luaReadCvarAsVector(lua_tostring(L, 2), vorigin);
+
+    // Fetching index from configstring.
+    int index = orig_SV_FindIndex(effectFileName, CS_EFFECTS, MAX_EFPACKS, 0, "effect");
+    if (index == 0) {
+        orig_Com_Error(ERR_FATAL, "sf_sv_effect_start: the effect file %s is not registered\n", effectFileName);
+    }
+
+    // Call fxRunner.exec to start effect at position
+    static (__thiscall *fxRunner_exec)(void* self, int effectID, vec3_t pos, multicast_t castType, edict_t* ignoreClient) = 0x500852E0;
+    fxRunner_exec((void*)0x5015C518, index, vorigin, MULTICAST_PHS, 0);
+
+    return 0;
 }
+
 
 
 int sf_sv_player_effect(lua_State * L)
@@ -4168,228 +4060,168 @@ int sf_sv_player_effect(lua_State * L)
 	//orig_FX_HandleDMMuzzleFlash();
 }
 
-int sf_sv_mem_read_int(lua_State * L)
+int sf_sv_mem_read_int(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Read an integer in memory at offset\n"
-			"----------------------------\n"\
-			"arg1 -> outcvar to store the integer\n"
-			"arg2 -> memory offset to read from\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_mem_read_int -h\n");
-		return;
-	}
-	unsigned int offset = atoi(orig_Cmd_Argv(2));
-	if ( offset ){
-		int value = stget(offset,0);
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-		edict_t * ent = (edict_t*)(offset - 120);
-		cvar_t * out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1),"",0,NULL);
-		setCvarInt(out_cvar,value);
-	}
+    int c = lua_gettop(L);
+
+    if (c != 2) {
+        orig_Com_Printf("sf_sv_mem_read_int -h\n");
+        return 0;
+    }
+
+    unsigned int offset = atoi(lua_tostring(L, 2));
+    if (offset) {
+        int value = stget(offset, 0);
+
+        lua_pushinteger(L, value);
+        return 1;
+    }
+
+    return 0;
 }
+
 int sf_sv_mem_read_short(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Read an short integer in memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> outcvar to store the short integer\n"
-				"arg2 -> memory offset to read from\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_read_short -h\n");
-			return;
-		}
+    unsigned int offset = luaL_checkinteger(L, 1);
+    
+    if (offset == 0) {
+        return luaL_error(L, "Invalid memory offset");
+    }
 
-	unsigned int offset = atoi(orig_Cmd_Argv(2));
-	if ( offset ){
-		unsigned short value = stget(offset,0);
+    unsigned short value = stget(offset, 0);
 
-		cvar_t * out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1),"",0,NULL);
-
-		out_cvar->modified = true;
-		orig_Z_Free(out_cvar->string);
-		char shortstring[64];
-		
-		sprintf(shortstring,"%hd",value);
-		out_cvar->string = orig_CopyString(shortstring);
-
-		out_cvar->value = (float)value;
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+    lua_pushinteger(L, value);
+    return 1;
 }
-int sf_sv_mem_read_char(lua_State * L)
+
+int sf_sv_mem_read_char(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Read a byte in memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> outcvar to store the byte\n"
-				"arg2 -> memory offset to read from\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_read_char -h\n");
-			return;
-		}
-	unsigned int offset = atoi(orig_Cmd_Argv(2));
-	if ( offset ){
-		unsigned char value = stget(offset,0);
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
+    try {
+        const char* outcvar = luaL_checkstring(L, 1);
+        int offset = luaL_checkinteger(L, 2);
 
-		cvar_t * out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1),"",0,NULL);
-		out_cvar->modified = true;
-		orig_Z_Free(out_cvar->string);
+        unsigned char value = stget(offset, 0);
 
-		char charstring[64];
-		sprintf(charstring,"%c",value);
-		out_cvar->string = orig_CopyString(charstring);
-		out_cvar->value = atof(out_cvar->string);
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+        char charstring[64];
+        sprintf(charstring, "%c", value);
+
+        lua_pushstring(L, charstring);
+        lua_setglobal(L, outcvar);
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+    }
+
+    return 0;
 }
 
-int sf_sv_mem_read_float(lua_State * L)
+
+int sf_sv_mem_read_float(lua_State* L) {
+    int numArgs = lua_gettop(L);
+    if (numArgs != 2) {
+        lua_pushstring(L, "sf_sv_mem_read_float: incorrect number of arguments. Usage: sf_sv_mem_read_float(outFloatPtr: number*, offset: integer)");
+        lua_error(L);
+        return 0;
+    }
+    
+    // Get the memory offset from the second argument
+    int offset = lua_tointeger(L, 2);
+    
+    // Read the float value at the memory offset and push it onto the Lua stack
+    float value = *(float*)offset;
+    lua_pushnumber(L, value);
+    
+    // Store the float value at the memory offset in the memory buffer
+    // (this assumes that the memory buffer is writable)
+    // ...
+    
+    // Return the number of values pushed onto the Lua stack (in this case, 1)
+    return 1;
+}
+
+int sf_sv_mem_read_string(lua_State* L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Read a float in memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> outcvar to store the float\n"
-				"arg2 -> memory offset to read from\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_read_float -h\n");
-			return;
-		}
-	int offset = atoi(orig_Cmd_Argv(2));
-	if ( offset ){
-		cvar_t * out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1),"",0,NULL);
-		setCvarFloat(out_cvar,*(float*)(offset));
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+
+    try {
+        int num_args = lua_gettop(L);
+        if (num_args == 0) {
+            orig_Com_Printf("sf_sv_mem_read_string -h\n");
+            return 0;
+        }
+
+        if (lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+            orig_Com_Printf(
+                "Read a string in memory at offset\n"
+                "----------------------------\n"
+                "arg1 -> outcvar to store the string\n"
+                "arg2 -> memory offset to read from\n"
+            );
+            return 0;
+        }
+
+        if (num_args != 2) {
+            orig_Com_Printf("sf_sv_mem_read_string -h\n");
+            return 0;
+        }
+
+        char* offset = (char*)lua_tointeger(L, 2);
+        if (offset) {
+            const char* value = (const char*)offset;
+
+            // push the result onto the Lua stack
+            lua_pushstring(L, value);
+            return 1;
+        }
+    }
+    catch(...) {
+        char temp[64];
+        sprintf(temp,"ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL,temp,NULL,MB_OK);
+    }
+
+    return 0;
 }
-int sf_sv_mem_read_string(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Read a string in memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> outcvar to store the string\n"
-				"arg2 -> memory offset to read from\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_read_string -h\n");
-			return;
-		}
-	char * offset = atoi(orig_Cmd_Argv(2));
-	if ( offset ){
-		cvar_t * out_cvar = orig_Cvar_Get(orig_Cmd_Argv(1),"",0,NULL);
-		out_cvar->modified = true;
-		orig_Z_Free(out_cvar->string);
-
-		
-		out_cvar->string = orig_CopyString(offset);
-		out_cvar->value = atof(offset);
-	}
-
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
-}
-
 
 
 int sf_sv_mem_write_int(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Write an integer to memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> memory offset to write to\n"
-				"arg2 -> integer to write\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_write_int -h\n");
-			return;
-		}
-	char * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		*(int*)offset = atoi(orig_Cmd_Argv(2));
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    try {
+        int n = lua_gettop(L);
+        if (n == 0 || !lua_isnumber(L, 1) || !lua_isnumber(L, 2)) {
+            orig_Com_Printf("sf_sv_mem_write_int <offset> <value>\n");
+            return 0;
+        }
+        int offset = lua_tonumber(L, 1);
+        int value = lua_tonumber(L, 2);
+        *(int*)offset = value;
+    }
+    catch(...) {
+        char temp[64];
+        sprintf(temp,"ERROR IN %s",__FUNCTION__);
+        MessageBox(NULL,temp,NULL,MB_OK);
+    }
+    return 0;
 }
+
 int sf_sv_mem_write_short(lua_State * L)
 {
 	#ifdef SOFREE_DEBUG
@@ -4397,24 +4229,17 @@ int sf_sv_mem_write_short(lua_State * L)
 	printf("\n");
 	#endif
 	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Write a short integer to memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> memory offset to write to\n"
-				"arg2 -> short integer to write\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
+		if ( lua_gettop(L) == 0 ) {
 			orig_Com_Printf("sf_sv_mem_write_short -h\n");
-			return;
+			return 0;
 		}
-	char * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		*(short int*)offset = atoi(orig_Cmd_Argv(2)) & 0xFFFF;
-	}
+		
+		int offset = luaL_checkinteger(L, 1);
+		short int value = luaL_checkinteger(L, 2) & 0xFFFF;
+
+		if (offset) {
+			*(short int*)offset = value;
+		}
 
 	}
 	catch(...) {
@@ -4422,150 +4247,122 @@ int sf_sv_mem_write_short(lua_State * L)
 		sprintf(temp,"ERROR IN %s",__FUNCTION__);
 		MessageBox(NULL,temp,NULL,MB_OK);
 	}
+	
+	return 0;
 }
-int sf_sv_mem_write_char(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Write a byte to memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> memory offset to write to\n"
-				"arg2 -> byte to write\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_write_char -h\n");
-			return;
-		}
 
-	char * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		*(char*)offset = orig_Cmd_Argv(2)[0];
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
-}
-int sf_sv_mem_write_float(lua_State * L)
+int sf_sv_mem_write_char(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Write a float to memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> memory offset to write to\n"
-				"arg2 -> float to write\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_write_float -h\n");
-			return;
-		}
-	char * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		*(float*)offset = atof(orig_Cmd_Argv(2));
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
-}
-int sf_sv_mem_write_string(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Write a string to memory at offset\n"
-				"----------------------------\n"\
-				"arg1 -> memory offset to write to\n"
-				"arg2 -> string to write\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_mem_write_string -h\n");
-			return;
-		}
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
+    try {
+        if (lua_gettop(L) == 0) {
+            orig_Com_Printf("sf_sv_mem_write_char -h\n");
+            return 0;
+        } else if (lua_gettop(L) != 2) {
+            orig_Com_Printf("sf_sv_mem_write_char -h\n");
+            return 0;
+        }
+        
+        char *offset = (char *)lua_tointeger(L, 1);
+        char value = (char)lua_tointeger(L, 2);
+        *offset = value;
+    } catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+    }
 
-	char * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		*(char**)offset = orig_CopyString(orig_Cmd_Argv(2));
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+    return 0;
 }
+
+int sf_sv_mem_write_float(lua_State* L) {
+#ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+#endif
+    try {
+        int c = lua_gettop(L);
+        if (c < 2) {
+            orig_Com_Printf("sf_sv_mem_write_float -h\n");
+            return 0;
+        }
+
+        if (lua_isnumber(L, 1) && lua_isnumber(L, 2)) {
+            char* offset = lua_tonumber(L, 1);
+            *(float*)offset = lua_tonumber(L, 2);
+        }
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+    }
+
+    return 0;
+}
+
+int sf_sv_mem_write_string(lua_State* L)
+{
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+
+    int n = lua_gettop(L);
+
+    if (n == 0 || !lua_isnumber(L, 1) || !lua_isstring(L, 2)) {
+        orig_Com_Printf("sf_sv_mem_write_string -h\n");
+        return 0;
+    }
+
+    char* offset = (char*)lua_tointeger(L, 1);
+    const char* str = lua_tostring(L, 2);
+
+    if (offset) {
+        *(char**)offset = orig_CopyString(str);
+    }
+
+    return 0;
+}
+
 
 //Write_offset
 //jmpTo_offset
-int sf_sv_jmp_at(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-			orig_Com_Printf(
-				"Write a jmp instruction to memory at offset\n"
-				"You have to do the relative math to make this work\n"
-				"(to - from) - 5;\n"
-				"----------------------------\n"\
-				"arg1 -> memory offset to write to , location of 0xe9\n"
-				"arg2 -> jmp destination\n"
-			);
-			return;
-		}
-		if ( c != 2 ) {
-			orig_Com_Printf("sf_sv_jmp_at -h\n");
-			return;
-		}
+int sf_sv_jmp_at(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    try {
+        int n = lua_gettop(L);
+        if (n != 2) {
+            orig_Com_Printf("sf_sv_jmp_at -h\n");
+            return 0;
+        }
 
-	void * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		unsigned int jmpTo_offset = atoi(orig_Cmd_Argv(2));
-		DWORD dwProt = NULL;
-		// Enable writing to original
-		VirtualProtect(offset, 5, PAGE_READWRITE, &dwProt);
-		*(unsigned char *)offset = 0xE9;
-		*(unsigned int*)(offset+1) = jmpTo_offset;
+        DWORD offset = (DWORD)lua_tonumber(L, 1);
+        unsigned int jmpTo_offset = (unsigned int)lua_tonumber(L, 2);
 
-		// Reset original mem flags
-		VirtualProtect(offset, 5, dwProt, new DWORD);
-	}
-	}
-	catch(...) {
-		char temp[64];
-		sprintf(temp,"ERROR IN %s",__FUNCTION__);
-		MessageBox(NULL,temp,NULL,MB_OK);
-	}
+        DWORD dwProt = NULL;
+        // Enable writing to original
+        VirtualProtect((LPVOID)offset, 5, PAGE_READWRITE, &dwProt);
+        *(unsigned char*)offset = 0xE9;
+        *(unsigned int*)(offset + 1) = jmpTo_offset;
+
+        // Reset original mem flags
+        VirtualProtect((LPVOID)offset, 5, dwProt, new DWORD);
+
+        return 0;
+    }
+    catch (...) {
+        char temp[64];
+        sprintf(temp, "ERROR IN %s", __FUNCTION__);
+        MessageBox(NULL, temp, NULL, MB_OK);
+        return 0;
+    }
 }
 
 
@@ -4580,33 +4377,33 @@ int sf_sv_hook_at(lua_State * L)
 	printf("\n");
 	#endif
 	try{
-		int c = orig_Cmd_Argc() - 1;
-		if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
+		int c = lua_gettop(L);
+		if (lua_isstring(L, 1) && !strcmp(lua_tostring(L, 1), "-h")) {
 			orig_Com_Printf(
 				"This doesnt work , dont use this\n"
 			);
-			return;
+			return 0;
 		}
 		if ( c != 2 ) {
 			orig_Com_Printf("sf_sv_hook_at -h\n");
-			return;
+			return 0;
 		}
-	void * offset = atoi(orig_Cmd_Argv(1));
-	if ( offset ){
-		char * cc = orig_Cmd_Argv(4);
-		if ( !strcmp(cc,"cdecl") ) {
-
+		void * offset = (void *)lua_tointeger(L, 1);
+		if (offset) {
+			const char * cc = lua_tostring(L, 4);
+			if (cc && !strcmp(cc,"cdecl")) {
+				// implement hook using cdecl calling convention
+			}
+			//orig_T_Damage = (T_Damage_type) DetourCreate(offset , (LPVOID)&T_Damage, DETOUR_TYPE_JMP,8);
 		}
-		//orig_T_Damage = (T_Damage_type) DetourCreate(offset , (LPVOID)&T_Damage, DETOUR_TYPE_JMP,8);
-	}
 	}
 	catch(...) {
 		char temp[64];
 		sprintf(temp,"ERROR IN %s",__FUNCTION__);
 		MessageBox(NULL,temp,NULL,MB_OK);
 	}
+	return 0;
 }
-
 
 
 int sf_sv_ent_callback(lua_State * L)
@@ -4897,243 +4694,289 @@ void DieCallback(edict_t *killed, edict_t *inflictor, edict_t *attacker, int dam
 	}
 }
 
-int sf_sv_math_sin(lua_State * L)
+int sf_sv_math_sin(lua_State *L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Your average math sin function\n"
-			"----------------------------\n"
-			"arg1 -> cvarinout initially angle, will sin the angle and store\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_math_sin -h\n");
-		return;
-	}
-	int argc = orig_Cmd_Argc();
-	if ( argc == 2 ) {
-		cvar_t * lol = orig_Cvar_Get(orig_Cmd_Argv(1),"0",0,NULL);
-		setCvarFloat(lol,sinf(M_PI*lol->value/180.0f));
-	}else
-	{
-		orig_Com_Printf(P_RED"Please supply 1 argument {cvar}\n");
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int argc = lua_gettop(L);
+    
+    if (argc == 0) {
+        orig_Com_Printf("sf_sv_math_sin -h\n");
+        return 0;
+    }
+    
+    if (argc == 1 && lua_isnumber(L, 1)) {
+        float angle = lua_tonumber(L, 1);
+        float result = sinf(M_PI * angle / 180.0f);
+        lua_pushnumber(L, result);
+        return 1;
+    } else {
+        orig_Com_Printf(P_RED "Please supply 1 argument {number}\n");
+        return 0;
+    }
 }
+
+
 int sf_sv_math_asin(lua_State * L)
 {
 	#ifdef SOFREE_DEBUG
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Your average math asin function\n"
-			"----------------------------\n"
-			"arg1 -> cvarinout initially number, will inverse sin the number and store\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
+	int numArgs = lua_gettop(L);
+	if (numArgs == 0) {
 		orig_Com_Printf("sf_sv_math_asin -h\n");
-		return;
+		return 0;
+	} else if (numArgs > 1) {
+		orig_Com_Printf(P_RED"Please supply 1 argument {number}\n");
+		return 0;
 	}
-	int argc = orig_Cmd_Argc();
-	if ( argc == 2 ) {
-		cvar_t * lol = orig_Cvar_Get(orig_Cmd_Argv(1),"0",0,NULL);
-		setCvarFloat(lol,(180.0f/M_PI)*asinf(lol->value));
-	}else
-	{
-		orig_Com_Printf(P_RED"Please supply 1 argument {cvar}\n");
-	}
+
+	float num = (float)lua_tonumber(L, 1);
+	float result = (180.0f/M_PI)*asinf(num);
+
+	lua_pushnumber(L, result);
+	return 1;
 }
-int sf_sv_math_cos(lua_State * L)
-{
+
+int sf_sv_math_cos(lua_State *L) {
 	#ifdef SOFREE_DEBUG
 	printf(__FUNCTION__);
 	printf("\n");
 	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Your average math cos function\n"
-			"----------------------------\n"
-			"arg1 -> cvarinout initially angle, will cos the angle and store\n"
-		);
-		return;
+	
+	int num_args = lua_gettop(L);
+	
+	if (num_args == 0) {
+		orig_Com_Printf(P_RED"Please supply 1 argument {number}\n");
+		return 0;
 	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_math_cos -h\n");
-		return;
-	}
-	int argc = orig_Cmd_Argc();
-	if ( argc == 2 ) {
-		cvar_t * lol = orig_Cvar_Get(orig_Cmd_Argv(1),"0",0,NULL);
-		setCvarFloat(lol,cosf(M_PI*lol->value/180.0f));
-	}else
-	{
-		orig_Com_Printf(P_RED"Please supply 1 argument {cvar}\n");
+	
+	if (num_args == 1 && lua_isnumber(L, 1)) {
+		float angle = (float)lua_tonumber(L, 1);
+		float result = cosf(M_PI*angle/180.0f);
+		lua_pushnumber(L, result);
+		return 1;
+	} else {
+		orig_Com_Printf(P_RED"Invalid arguments. Usage: sf_sv_math_cos(angle)\n");
+		return 0;
 	}
 }
+
 int sf_sv_math_acos(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Your average math acos function\n"
-			"----------------------------\n"
-			"arg1 -> cvarinout initially number, will inverse cos the number and store\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_math_acos -h\n");
-		return;
-	}
-	int argc = orig_Cmd_Argc();
-	if ( argc == 2 ) {
-		cvar_t * lol = orig_Cvar_Get(orig_Cmd_Argv(1),"0",0,NULL);
-		setCvarFloat(lol,(180.0f/M_PI)*acosf(lol->value));
-	}else
-	{
-		orig_Com_Printf(P_RED"Please supply 1 argument {cvar}\n");
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    int argc = lua_gettop(L);
+
+    if (argc != 1) {
+        orig_Com_Printf("sf_sv_math_acos -h\n");
+        return 0;
+    }
+
+    if (lua_isnumber(L, 1)) {
+        float num = (float)lua_tonumber(L, 1);
+        lua_pushnumber(L, (180.0f / M_PI) * acosf(num));
+        return 1;
+    } else {
+        orig_Com_Printf(P_RED "Please supply 1 argument {number}\n");
+        return 0;
+    }
 }
+
 int sf_sv_math_tan(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Your average math tan function\n"
-			"----------------------------\n"
-			"arg1 -> cvarinout initially angle, will tan the angle and store\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_math_tan -h\n");
-		return;
-	}
-	int argc = orig_Cmd_Argc();
-	if ( argc == 2 ) {
-		cvar_t * lol = orig_Cvar_Get(orig_Cmd_Argv(1),"0",0,NULL);
-		setCvarFloat(lol,tanf(M_PI*lol->value/180.0f));
-	}else
-	{
-		orig_Com_Printf(P_RED"Please supply 1 argument {cvar}\n");
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int argc = lua_gettop(L);
+    
+    if ( argc == 0 ) {
+        lua_pushstring(L, "Your average math tan function\n"
+                            "----------------------------\n"
+                            "arg1 -> angle in degrees\n"
+                            "Returns: tan value of the angle\n");
+        return 1;
+    }
+    
+    if ( argc != 1 ) {
+        lua_pushstring(L, "Please supply 1 argument {angle}\n");
+        return 1;
+    }
+    
+    if ( !lua_isnumber(L, 1) ) {
+        lua_pushstring(L, "Invalid argument type, expected number\n");
+        return 1;
+    }
+    
+    float angle = lua_tonumber(L, 1);
+    float result = tanf(M_PI*angle/180.0f);
+    lua_pushnumber(L, result);
+    return 1;
 }
+
 int sf_sv_math_atan(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Your average math atan function\n"
-			"----------------------------\n"
-			"arg1 -> cvarinout initially number, will inverse tan the number and store\n"
-		);
-		return;
-	}
-	if ( c != 1 ) {
-		orig_Com_Printf("sf_sv_math_atan -h\n");
-		return;
-	}
-	int argc = orig_Cmd_Argc();
-	if ( argc == 2 ) {
-		cvar_t * lol = orig_Cvar_Get(orig_Cmd_Argv(1),"0",0,NULL);
-		setCvarFloat(lol,(180.0f/M_PI)*atanf(lol->value));
-	}else
-	{
-		orig_Com_Printf(P_RED"Please supply 1 argument {cvar}\n");
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    // Check if the first argument is -h for help
+    if (lua_gettop(L) == 1 && lua_isstring(L, 1) && strcmp(lua_tostring(L, 1), "-h") == 0) {
+        orig_Com_Printf(
+            "Your average math atan function\n"
+            "----------------------------\n"
+            "arg1 -> number, will inverse tan the number and return\n"
+        );
+        return 0;
+    }
+    
+    // Check if the number of arguments is correct
+    if (lua_gettop(L) != 1) {
+        orig_Com_Printf("sf_sv_math_atan -h\n");
+        return 0;
+    }
+    
+    // Check if the input is a number
+    if (!lua_isnumber(L, 1)) {
+        orig_Com_Printf(P_RED"Please supply a number as argument\n");
+        return 0;
+    }
+    
+    // Get the input number
+    float num = lua_tonumber(L, 1);
+    
+    // Calculate the inverse tangent of the number
+    float result = (180.0f/M_PI) * atanf(num);
+    
+    // Push the result to the Lua stack
+    lua_pushnumber(L, result);
+    
+    // Return the number of items in the Lua stack
+    return 1;
 }
 
 
-int sf_sv_math_or(lua_State * L)
-{
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Unsigned OR function\n"
-			"----------------------------\n"
-			"arg1 -> inoutcvar value of first number\n"
-			"arg2 -> innumber OR with what?\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_math_or -h\n");
-		return;
-	}
 
-	cvar_t * inout = findCvar(orig_Cmd_Argv(1));
-	if (!inout) {
-		orig_Com_Printf("error in sf_sv_math_or , supplied cvar does not exist\n");
-		return;
-	}
+int sf_sv_math_or(lua_State* L) {
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
 
-	unsigned int num1 = atoi(inout->string);
-	unsigned int num2 = atoi(orig_Cmd_Argv(2));
+    int argc = lua_gettop(L);
 
-	setCvarUnsignedInt(inout,num1 | num2);
+    if (argc == 0) {
+        orig_Com_Printf("sf_sv_math_or -h\n");
+        return 0;
+    }
 
+    if (argc == 1 && lua_isstring(L, 1)) {
+        const char* arg = lua_tostring(L, 1);
+
+        if (!strcmp(arg, "-h")) {
+            orig_Com_Printf(
+                "Unsigned OR function\n"
+                "----------------------------\n"
+                "arg1 -> inoutcvar value of first number\n"
+                "arg2 -> innumber OR with what?\n"
+            );
+            return 0;
+        }
+    }
+
+    if (argc != 2) {
+        orig_Com_Printf(P_RED "Please supply 2 arguments {cvar, number}\n");
+        return 0;
+    }
+
+    if (!lua_isstring(L, 1) || !lua_isnumber(L, 2)) {
+        orig_Com_Printf(P_RED "Please supply 2 arguments {cvar, number}\n");
+        return 0;
+    }
+
+    const char* cvar_name = lua_tostring(L, 1);
+    unsigned int num1 = atoi(lua_tostring(L, 2));
+
+    lua_getglobal(L, cvar_name);
+    if (lua_isnil(L, -1)) {
+        orig_Com_Printf(P_RED "Error in sf_sv_math_or, supplied cvar '%s' does not exist\n", cvar_name);
+        return 0;
+    }
+    if (!lua_istable(L, -1)) {
+        orig_Com_Printf(P_RED "Error in sf_sv_math_or, supplied cvar '%s' is not a table\n", cvar_name);
+        return 0;
+    }
+
+    lua_pushstring(L, "value");
+    lua_gettable(L, -2);
+    if (!lua_isnumber(L, -1)) {
+        orig_Com_Printf(P_RED "Error in sf_sv_math_or, supplied cvar '%s' has an invalid value type\n", cvar_name);
+        return 0;
+    }
+
+    unsigned int num2 = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    unsigned int result = num1 | num2;
+
+    lua_pushstring(L, "value");
+    lua_pushnumber(L, result);
+    lua_settable(L, -3);
+
+    return 0;
 }
+
 
 int sf_sv_math_and(lua_State * L)
 {
-	#ifdef SOFREE_DEBUG
-	printf(__FUNCTION__);
-	printf("\n");
-	#endif
-	int c = orig_Cmd_Argc() - 1;
-	if ( !strcmp(orig_Cmd_Argv(1),"-h" ) ) {
-		orig_Com_Printf(
-			"Unsigned AND function\n"
-			"----------------------------\n"
-			"arg1 -> inoutcvar value of first number\n"
-			"arg2 -> innumber AND with what?\n"
-		);
-		return;
-	}
-	if ( c != 2 ) {
-		orig_Com_Printf("sf_sv_math_and -h\n");
-		return;
-	}
+    #ifdef SOFREE_DEBUG
+    printf(__FUNCTION__);
+    printf("\n");
+    #endif
+    
+    int nargs = lua_gettop(L);
+    if (nargs == 0) {
+        orig_Com_Printf("sf_sv_math_and -h\n");
+        return 0;
+    }
+    else if (nargs == 1 && !strcmp(lua_tostring(L, 1), "-h")) {
+        orig_Com_Printf(
+            "Unsigned AND function\n"
+            "----------------------------\n"
+            "arg1 -> inoutcvar value of first number\n"
+            "arg2 -> innumber AND with what?\n"
+        );
+        return 0;
+    }
+    else if (nargs != 2) {
+        orig_Com_Printf(P_RED "Please supply 2 arguments {inoutcvar, number}\n");
+        return 0;
+    }
 
-	cvar_t * inout = findCvar(orig_Cmd_Argv(1));
-	if (!inout) {
-		orig_Com_Printf("error in sf_sv_math_and , supplied cvar does not exist\n");
-		return;
-	}
+    const char *inoutcvar = lua_tostring(L, 1);
+    const char *numberstr = lua_tostring(L, 2);
 
-	unsigned int num1 = atoi(inout->string);
-	unsigned int num2 = atoi(orig_Cmd_Argv(2));
+    unsigned int num1 = 0, num2 = 0;
+    sscanf(inoutcvar, "%u", &num1);
+    sscanf(numberstr, "%u", &num2);
 
-	setCvarUnsignedInt(inout,num1 & num2);
+    unsigned int result = num1 & num2;
+    char resultstr[20];
+    snprintf(resultstr, sizeof(resultstr), "%u", result);
 
+    lua_pushstring(L, resultstr);
+    return 1;
 }
+
 
 int sf_sv_math_not(lua_State * L)
 {
@@ -5155,14 +4998,16 @@ int sf_sv_math_not(lua_State * L)
 		return;
 	}
 
-	cvar_t * inout = findCvar(orig_Cmd_Argv(1));
-	if (!inout) {
-		orig_Com_Printf("error in sf_sv_math_not , supplied cvar does not exist\n");
-		return;
-	}
+	const char *inoutcvar = lua_tostring(L, 1);
 
-	unsigned int num1 = atoi(inout->string);
+	unsigned int num1 = 0;
+	sscanf(inoutcvar, "%u", &num1);
 
-	setCvarUnsignedInt(inout,~num1);
+	unsigned int result = ~num1;
+	char resultstr[20];
+	snprintf(resultstr, sizeof(resultstr), "%u", result);
+
+	lua_pushstring(L, resultstr);
+	return 1;
 
 }

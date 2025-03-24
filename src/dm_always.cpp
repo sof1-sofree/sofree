@@ -113,13 +113,18 @@ void	always_gamerules_c::checkEvents(void){
 void	always_gamerules_c::respawnUntouchedItem(edict_t *ent) {
 	currentGameMode->respawnUntouchedItem(ent);
 }
+/*
+ Look in CWeaponInfo.cpp for the PickupList, it defines:
+ spawnName,type,spawnParm,respawnTime,defaultCount,defaultMaxCount,index,worldname,pickupstringindex,ammopickupstringindex,itemfullstringindex,flags. For each item.
+ eg. armour spawnName is "item_equip_armor" and has respawn time of 30 seconds.
+*/
+
 void	always_gamerules_c::setRespawn(edict_t *ent, float delay){
 	currentGameMode->setRespawn(ent,delay);
 	if ( _sf_sv_force_item_respawntime->value ) {
 		// orig_Com_Printf("level_time is %f\n",*level_time);
 		ent->nextthink = *level_time + _sf_sv_force_item_respawntime->value;
 	}
-	
 }
 int		always_gamerules_c::getMaxEncumbrance(void){
 	return currentGameMode->getMaxEncumbrance();
