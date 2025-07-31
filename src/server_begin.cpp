@@ -55,22 +55,34 @@ void onServerInitiation(void)
 	
 	
 
-	//game.dll shutdown func
+	//game.dll shutdown func - game.dll->GetGameAPI routed to pmy_GetGameAPI
 	detourSysShutDown();
 
 	/*
 		-----------Sys_GetGameAPI---------------
+		calls onMapInitiation();
+
+		SV_InitGameProgs() -> Sys_GetGameApi()
 	*/
 	DetourRemove(orig_Sys_GetGameApi);
 	orig_Sys_GetGameApi = (Sys_GetGameApi_type) DetourCreate((void*)0x20065F20,(void*)&my_Sys_GetGameApi,DETOUR_TYPE_JMP,5);
 	/*
 		-----------Sys_GetPlayerAPI---------------
+		Used for detouring functions within player.dll, none active atm.
 	*/
 	DetourRemove(orig_Sys_GetPlayerAPI);
 	orig_Sys_GetPlayerAPI = (Sys_GetPlayerAPI_type) DetourCreate((void*)0x20066100,(void*)&my_Sys_GetPlayerAPI,DETOUR_TYPE_JMP,6);
 
 	/*
 		-----------SV_InitGameProgs---------------
+		- A brand new game has been started
+		called by SV_Map() -> SV_InitGame() -> SV_InitGameProgs() 
+		or SV_Loadgame_f() -> SV_InitGame() -> SV_InitGameProgs()
+		We are just setting:
+		game_clients = *(unsigned int*)0x20396EEC;
+		for now.
+
+		This is a function that _CALLS_ Sys_GetGameApi()
 	*/
 	DetourRemove(orig_SV_InitGameProgs);
 	orig_SV_InitGameProgs = (SV_InitGameProgs_type) DetourCreate((void*)0x2005CDB0 , (void*)&my_SV_InitGameProgs,DETOUR_TYPE_JMP,5);
@@ -80,6 +92,8 @@ void onServerInitiation(void)
 	*/
 	/*
 		-----------Qcommon_Init---------------
+		After executable is initialised, program start-up.
+		Used for print version.
 	*/
 	DetourRemove(orig_Qcommon_Init);
 	orig_Qcommon_Init = (Qcommon_Init_type)DetourCreate((void*)0x2001F6F2 , (void*)&my_Qcommon_Init,DETOUR_TYPE_CALL,7);
@@ -108,6 +122,10 @@ void onServerInitiation(void)
 	setCvarString(_sf_sv_version,tmp_chr);
 	// orig_Com_Printf("Welcome to Sofree %s Lua edition\n",tmp_chr);
 
+	/*
+		Heavily uses linked list as in Q2.
+		Initialises all linked lists.
+	*/
 	sound_overrides.next = sound_overrides.prev = &sound_overrides;
 	the_scripts.next = the_scripts.prev = &the_scripts;
 
@@ -297,7 +315,14 @@ void onMapInitExceptFirstRun(void)
 	}
 }
 
+/*
+	In Sys_GetGameApi
+	Instead of calling GetProcAddress("GetGameAPI")
+	We just set eax to my_GetGameAPI
 
+	When hooking GetGameAPI , special hook because relative call on first instruction
+	We just hook Sys_Shutdown in pmy_GetGameAPI
+*/
 void detourSysShutDown(void) {
 	/*
 	Detouring
@@ -306,6 +331,7 @@ void detourSysShutDown(void) {
 	char * blehpatch = 0x20066021;
 	char * pc = blehpatch;
 	VirtualProtect(blehpatch, 5, PAGE_READWRITE, &dwProt);
+	// ADD ESP, 4 ? ( I guess this balances the stack, we could had just NOPPED the push eax.)
 	*(unsigned char*)pc = 0x83;
 	pc++;
 	*(unsigned char*)pc = 0xC4;
@@ -317,13 +343,17 @@ void detourSysShutDown(void) {
 	*(unsigned char*)pc = 0x90;
 	VirtualProtect(blehpatch, 5, dwProt, new DWORD);
 
-
+	/*
+		Instead of calling GetProcAddress("GetGameAPI")
+		We just set eax to my_GetGameAPI
+	*/
 	dwProt = NULL;
 	blehpatch = 0x20066027;
 	pc = blehpatch;
 	// Enable writing to original
 	VirtualProtect(blehpatch, 6, PAGE_READWRITE, &dwProt);
 
+	// MOV EAX, [address]
 	*(unsigned char*)pc = 0xA1;
 	pc++;
 	*(unsigned int*)pc = &pmy_GetGameAPI;

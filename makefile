@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+.ONESHELL:
 # $@ The filename representing the target.
 # $% The filename element of an archive member specification.
 # $< The filename of the first prerequisite.
@@ -31,7 +32,7 @@ INC = \
 CFLAGS = \
 	-std=c++11 -fpermissive -w -DSOFREE_DEBUG
 OFLAGS = \
-	-lpthread -shared -Wl,--enable-stdcall-fixup -static-libgcc -static-libstdc++ -Wno-write-strings
+	-static -pthread -shared -static-libgcc -static-libstdc++ -Wl,--enable-stdcall-fixup -Wno-write-strings
 _OBJS = \
 	sofreeS.o \
 	updater.o \
@@ -67,13 +68,30 @@ _OBJS = \
 OBJS = \
 	$(patsubst %,$(ODIR)/%,$(_OBJS)) # insert ODIR in front of each whitespace seperated word
 
-# Build number file.  Increment if any object file changes.
+# This target now uses .ONESHELL, so the whole recipe runs as one script.
 $(OUT): $(OBJS)
-	@if ! test -f $(BUILD_NUMBER_FILE); then echo 0 > $(BUILD_NUMBER_FILE); fi
-	@echo $$(($$(cat $(BUILD_NUMBER_FILE)) + 1)) > $(BUILD_NUMBER_FILE)
-
-	$(CC) $(OFLAGS) rsrc/sofreeS.def $^ -o$(OUT) -lws2_32 -lwinmm -L "./rsrc/" -llua  $(BUILD_NUMBER_LDFLAGS)
-	@echo "Compiled "$(OUT)" successfully!"
+	# 1. Set a default value if the file doesn't exist.
+	#    Use printf for no newline.
+	if ! test -f $(BUILD_NUMBER_FILE); then
+		printf "0" > $(BUILD_NUMBER_FILE)
+	fi
+	
+	# 2. Read the number into a shell variable.
+	#    Using $(...) command substitution automatically strips trailing newlines.
+	#    This makes the script robust even if the file is broken.
+	build_num=$$(cat $(BUILD_NUMBER_FILE))
+	
+	# 3. Increment the shell variable. Note $$ for make to escape the $.
+	build_num=$$((build_num + 1))
+	
+	# 4. Write the new, incremented number back to the file.
+	printf "%d" $$build_num > $(BUILD_NUMBER_FILE)
+	
+	# 5. Now, run the compiler. It will use the LDFLAGS which correctly
+	#    reads the newly updated file.
+	$(CC) $(OFLAGS) rsrc/sofreeS.def $^ -o$(OUT) -lws2_32 -lwinmm -L "./rsrc/" -llua $(BUILD_NUMBER_LDFLAGS)
+	
+	@echo "Compiled "$(OUT)" successfully with build number $$build_num!"
 
 $(ODIR)/%.o: $(SDIR)/%.cpp
 	$(CC) -c $(INC) -o $@ $< $(CFLAGS)

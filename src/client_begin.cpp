@@ -36,6 +36,9 @@ void applyClientHooks(void)
 
 	
 	// Used by minecraft scoreboardmenu
+	/*
+		Detects Key Presses, force run etc.
+	*/
 	DetourRemove(orig_ClientThink);
 	orig_ClientThink = (ClientThink_type)DetourCreate((LPVOID)0x500F53A0,(LPVOID)&my_ClientThink,DETOUR_TYPE_JMP,6);
 }

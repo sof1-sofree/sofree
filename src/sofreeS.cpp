@@ -179,13 +179,7 @@ int sys_WSAStartup(WORD wVersionRequested,LPWSADATA lpWSAData)
 {
 
 	if ( once_wsa == true ) {
-		#ifdef SOFREE_DEBUG
-		freopen("sofreeS.err", "w", stderr);
-		setvbuf(stderr, NULL, _IONBF, 0);
-
-		freopen("sofreeS.log", "w", stdout);
-		setvbuf(stdout, NULL, _IONBF, 0);
-		#endif
+		
 		onServerInitiation();
 		once_wsa = false;
 	}
@@ -206,11 +200,40 @@ int sys___WSAFDIsSet(SOCKET fd,fd_set *set)
 }
 HMODULE o_sofplus = NULL;
 
+#if 0
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-
 	if ( dwReason == DLL_PROCESS_ATTACH )
 	{
+		o_sofplus = LoadLibrary("spsv.dll");
+		return TRUE;
+	}
+}
+#else
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
+{
+	if ( dwReason == DLL_PROCESS_ATTACH )
+	{
+		#ifdef SOFREE_DEBUG
+			
+			FILE* log_file = freopen("sofreeS.log", "w", stdout);
+			if (log_file == NULL) {
+				// Handle error: stdout redirection failed
+				// You might be in a tough spot here if stdout also failed
+			} else {
+				setvbuf(stdout, NULL, _IONBF, 0);
+			}
+
+			FILE* err_file = freopen("sofreeS.err", "w", stderr);
+			if (err_file == NULL) {
+				// Handle error: stderr redirection failed
+				// You might want to print to stdout or a separate log for this error
+				fprintf(stdout, "ERROR: Failed to redirect stderr to sofreeS.err\n");
+			} else {
+				setvbuf(stderr, NULL, _IONBF, 0);
+			}
+		#endif
+
 		DisableThreadLibraryCalls(hInstance);
 		static bool init = false;
 		if (init==false) {
@@ -225,39 +248,70 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 				strcpy(ac_sofplus,"SoFplus.dll");
 				if( access( ac_sofplus, F_OK ) != -1 ) b_sofplus = true;
 			}
-
+		
 			if ( b_sofplus == true) {
-				// PrintOut(PRINT_GOOD,true,"SoFplus detected\n");
+				#ifdef SOFREE_DEBUG
+				fprintf(stdout,"SoF plus detected\n");
+				#endif
 				o_sofplus = LoadLibrary(ac_sofplus);
 				if ( o_sofplus != NULL ) {
-					// PrintOut(PRINT_GOOD,true,"Successfully loaded sofplus! %08X\n",o_sofplus);
+					#ifdef SOFREE_DEBUG
+					fprintf(stdout,"SoF plus loaded\n");
+					#endif
 					char ac_funcs[26][32] = {"bind","closesocket","connect","getsockname","htonl","htons","inet_addr","inet_ntoa","ioctlsocket","ntohl","ntohs","recv","recvfrom","select","send","sendto","bind","setsockopt","shutdown","socket","gethostbyname","gethostname","WSAGetLastError","WSAStartup","WSACleanup","__WSAFDIsSet"};
 					void **pv_funcs[26] = {(void**)&sp_bind,(void**)&sp_closesocket,(void**)&sp_connect,(void**)&sp_getsockname,(void**)&sp_htonl,(void**)&sp_htons,(void**)&sp_inet_addr,(void**)&sp_inet_ntoa,(void**)&sp_ioctlsocket,(void**)&sp_ntohl,(void**)&sp_ntohs,(void**)&sp_recv,(void**)&sp_recvfrom,(void**)&sp_select,(void**)&sp_send,(void**)&sp_sendto,(void**)&sp_bind,(void**)&sp_setsockopt,(void**)&sp_shutdown,(void**)&sp_socket,(void**)&sp_gethostbyname,(void**)&sp_gethostname,(void**)&sp_WSAGetLastError,(void**)&sp_WSAStartup,(void**)&sp_WSACleanup,(void**)&sp___WSAFDIsSet};
-					for ( int i = 0; i < 26; i++ ) {
-						if ( SoFplusLoadFn(o_sofplus,(void**)pv_funcs[i],&ac_funcs[i][0]) == false )
-							b_sofplus == false;
+					// char ac_funcs[24][32] = {"bind","connect","getsockname","htonl","htons","inet_addr","inet_ntoa","ntohl","ntohs","recv","recvfrom","select","send","sendto","bind","setsockopt","shutdown","socket","gethostbyname","gethostname","WSAGetLastError","WSAStartup","WSACleanup","__WSAFDIsSet"};
+					// void **pv_funcs[24] = {(void**)&sp_bind,(void**)&sp_connect,(void**)&sp_getsockname,(void**)&sp_htonl,(void**)&sp_htons,(void**)&sp_inet_addr,(void**)&sp_inet_ntoa,(void**)&sp_ntohl,(void**)&sp_ntohs,(void**)&sp_recv,(void**)&sp_recvfrom,(void**)&sp_select,(void**)&sp_send,(void**)&sp_sendto,(void**)&sp_bind,(void**)&sp_setsockopt,(void**)&sp_shutdown,(void**)&sp_socket,(void**)&sp_gethostbyname,(void**)&sp_gethostname,(void**)&sp_WSAGetLastError,(void**)&sp_WSAStartup,(void**)&sp_WSACleanup,(void**)&sp___WSAFDIsSet};
+					for ( int i = 0; i < 24; i++ ) {
+
+						if ( SoFplusLoadFn(o_sofplus,pv_funcs[i],ac_funcs[i]) == false ) {
+							#ifdef SOFREE_DEBUG
+							fprintf(stdout, "ERROR: Couldn't Load a sofplus wsock function : %s\n", ac_funcs[i]);
+							#endif
+							b_sofplus = false;
+						}	
 					}
-					
+					// sp_closesocket = &closesocket;
+					// sp_ioctlsocket = &ioctlsocket;
+
+					fprintf(stdout,"SoF plus after\n");
 					if ( b_sofplus == false ){
-						// PrintOut(PRINT_BAD,true,"ERROR: Couldn't Load a sofplus function\n");
+						#ifdef SOFREE_DEBUG
+						fprintf(stdout, "ERROR: Couldn't Load a sofplus function\n");
+						#endif
+						return FALSE;
 					}
 					
 				} else{
-					// PrintOut(PRINT_BAD,true,"Failed loading sofplus\n");
+					#ifdef SOFREE_DEBUG
+					fprintf(stdout, "ERROR: LoadLibrary failed sofplus\n");
+					#endif
+					return FALSE;
 				}
 			} else{
-				// PrintOut(PRINT_BAD,true,"SoFplus not found\n");
+				#ifdef SOFREE_DEBUG
+				fprintf(stdout, "ERROR: Sofplus not found\n");
+				#endif
+				return FALSE;
 			}
-
+			#ifdef SOFREE_DEBUG
+			fprintf(stdout, "DEBUG: Loaded.\n");
+			#endif
 			init=true;
 		}
 	}
 	return TRUE;
 }
-
+#endif
 bool SoFplusLoadFn(HMODULE sofplus,void ** out_fn,char * func)
 {
 	
 	*out_fn = (void*)GetProcAddress(sofplus,func);
-	if (*out_fn == NULL) return false;
+	if (*out_fn == NULL) {
+		fprintf(stdout,"GetProcAddress failed\n");
+		return false;
+	}
+	fprintf(stdout,"GetProcAddress succeeded\n");
+
+	return true;
 }

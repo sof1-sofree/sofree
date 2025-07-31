@@ -22,7 +22,7 @@ bool GhoulInstFromID(short int ID)
 					"call *%3;"//call pr_real_FindClientInst
 					"movl %%eax,%0;"//eax->clientinst
 					:"=m"(clientinst):"m"(ghoulmain),"m"(ID),"m"(orig_FindClientInst):"%ecx");
-	if ( clientinst > 0 )
+	if ( clientinst != NULL )
 		return true;
 	return false;
 }
@@ -50,7 +50,7 @@ bool GhoulGetInst(int slot)
 		:"m"(ghoulmain),"m"(*somearray),"m"(orig_FindClientInst)
 		:"memory","%ecx"
 		);
-		if ( clientinst > 0 )
+		if ( clientinst != NULL )
 			return true;
 		return false;
 	}
@@ -146,7 +146,7 @@ bool GhoulGetObject(void)
 					"call *%2;"//call orig_GetGhoulObject
 					"movl %%eax,%0;"//eax->objinst
 					:"=m"(objinst):"m"(clientinst),"m"(orig_GetGhoulObject):"%ecx");
-	if (objinst > 0 )
+	if (objinst != NULL )
 		return true;
 	return false;
 }

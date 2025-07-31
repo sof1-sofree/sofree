@@ -688,7 +688,7 @@ void my_ED_CallSpawn(edict_t *ent);
 typedef void (*T_Damage_type) (edict_t *targ, edict_t *inflictor, edict_t *attacker, 
 vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate, float absorb);
 extern void T_Damage(edict_t *targ, edict_t *inflictor, edict_t *attacker, 
-vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate=0.0, float absorb=0.0);
+vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate, float absorb);
 
 typedef void (*debug_drawbox_type)(edict_t* self,vec3_t vOrigin, vec3_t vMins, vec3_t vMaxs, int nColor);
 

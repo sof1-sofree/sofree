@@ -290,7 +290,7 @@ dflags		these flags are used to control how T_Damage works
 	DAMAGE_NO_PROTECTION	kills godmode, armor, everything
 */
 void T_Damage(edict_t *targ, edict_t *inflictor, edict_t *attacker, 
-vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate, float absorb)
+vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate=0.0f, float absorb=0.0f)
 {
 
 	if ( _sf_sv_sofree_deathmatch->value == SOFREE_MINECRAFT) {

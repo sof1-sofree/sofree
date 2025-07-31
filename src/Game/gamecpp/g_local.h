@@ -710,7 +710,7 @@ void RadiusBurn(edict_t *source, float radius);//burn up LOTS of guys ;)
 //
 qboolean OnSameTeam (edict_t *ent1, edict_t *ent2);
 qboolean CanDamage (edict_t *targ, edict_t *inflictor);
-void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate = 0.0, float absorb = 0.0);
+void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir, vec3_t point, vec3_t origin, int damage, int knockback, int dflags, int mod, float penetrate, float absorb);
 void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_t *ignore, float radius, int mod, int dflags = 0);
 void T_RadiusDamage2 (edict_t *inflictor, edict_t *attacker, vec3_t damagepoint, float maxdamage, float mindamage, 
 					  float damageradius, edict_t *ignore, int mod, int dflags=0);
