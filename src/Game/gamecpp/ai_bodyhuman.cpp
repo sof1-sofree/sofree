@@ -3,7 +3,7 @@
 #include "ai_private.h"
 #include "callback.h"
 #include "ai_pathfinding.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 #define GIB_HEALTH_LIMIT	-300
 

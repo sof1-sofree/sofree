@@ -1,7 +1,7 @@
 #include "g_local.h"
 #include "ai_private.h"
 #include "m_generic.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 #define MERC_WEAPON_SCALE 1.142857142857 
 #define MERC_OTHER_SCALE 1.142857142857 

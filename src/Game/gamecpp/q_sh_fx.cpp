@@ -1,5 +1,5 @@
 #include "q_shared.h"
-#include "..\qcommon\palette.h"
+#include "../qcommon/palette.h"
 #include "q_sh_fx.h"
 
 // wheee! look at me! I'm _sharing_ !!!!!

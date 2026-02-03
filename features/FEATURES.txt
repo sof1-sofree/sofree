@@ -1,0 +1,22 @@
+# SoFree Features Configuration
+# Lines starting with # are comments
+# Uncommented lines = enabled features  
+# Commented lines (with //) = disabled features
+
+# Core Features
+core_init
+memory_patches
+vaccine
+movement
+gravity
+
+# Gameplay Features
+grenade
+q2_mode
+force_item_respawn
+
+# Graphics Features
+force_sky
+ghoul_tint
+fx
+

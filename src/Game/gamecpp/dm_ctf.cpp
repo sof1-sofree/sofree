@@ -8,7 +8,7 @@
 #include "dm_ctf.h"
 #include "p_body.h"
 #include "../strings/dm_generic.h"
-#include "..\qcommon\configstring.h"
+#include "../qcommon/configstring.h"
 
 const int DF_CTF_NO_HEALTH			= (1<<0);
 const int DF_CTF_NO_ITEMS			= (1<<1);

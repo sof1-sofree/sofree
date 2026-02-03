@@ -6,7 +6,7 @@
 #include "g_obj.h"
 #include "ai_private.h" // hmmm, is this kosher?
 #include "callback.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 extern void debug_drawbox(edict_t* self,vec3_t vOrigin, vec3_t vMins, vec3_t vMaxs, int nColor);
 

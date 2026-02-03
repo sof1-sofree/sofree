@@ -1,157 +1,502 @@
 [
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/sofreeS.o src/sofreeS.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/sofreeS.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofreeS.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/updater.o src/updater.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/updater.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/updater.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/DetourXS/ADE32.o src/DetourXS/ADE32.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/DetourXS/ADE32.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/DetourXS/ADE32.o src/DetourXS/ADE32.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/DetourXS/ADE32.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/DetourXS/detourxs.o src/DetourXS/detourxs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/DetourXS/detourxs.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/DetourXS/detourxs.o src/DetourXS/detourxs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/DetourXS/detourxs.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/crc32.o src/crc32.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/crc32.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/crc32.o src/crc32.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/crc32.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/func_addrs.o src/func_addrs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/func_addrs.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/func_addrs.o src/func_addrs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/func_addrs.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/cvars.o src/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/cvars.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/cvars.o src/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/cvars.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/var_addrs.o src/var_addrs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/var_addrs.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/var_addrs.o src/var_addrs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/var_addrs.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/ghoul.o src/ghoul.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/ghoul.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/ghoul.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/hooks.o src/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/hooks.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/hooks.o src/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/hooks.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/util_funcs.o src/util_funcs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/util_funcs.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/util_funcs.o src/util_funcs.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/util_funcs.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/sp_detours.o src/sp_detours.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/sp_detours.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sp_detours.o src/sp_detours.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sp_detours.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/server_begin.o src/server_begin.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/server_begin.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/server_begin.o src/server_begin.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/server_begin.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/client_begin.o src/client_begin.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/client_begin.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/client_begin.o src/client_begin.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/client_begin.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/menu.o src/menu.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/menu.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/menu.o src/menu.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/menu.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/ondamage.o src/ondamage.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/ondamage.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/ondamage.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/vaccine.o src/vaccine.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/vaccine.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/vaccine.o src/vaccine.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/vaccine.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/deathmatch.o src/deathmatch.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/deathmatch.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/deathmatch.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/dm_always.o src/dm_always.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/dm_always.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/dm_always.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/dm_sofree.o src/dm_sofree.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/dm_sofree.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/dm_sofree.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/dm_standard.o src/dm_standard.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/dm_standard.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/dm_standard.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/dm_ctf.o src/dm_ctf.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/dm_ctf.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/dm_ctf.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/dm_realistic.o src/dm_realistic.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/dm_realistic.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/dm_realistic.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/minecraft.o src/minecraft.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/minecraft.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/minecraft.cpp"
     },
     {
         "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/spawn.o src/spawn.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/spawn.cpp"
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/spawn.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/sofree_strip.o src/sofree_strip.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/sofree_strip.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofree_strip.o src/sofree_strip.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofree_strip.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/matrix4.o src/Game/ghoul/matrix4.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/Game/ghoul/matrix4.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/matrix4.o src/Game/ghoul/matrix4.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/Game/ghoul/matrix4.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/lua_api/entities.o src/lua_api/entities.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/lua_api/entities.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/entities.o src/lua_api/entities.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/entities.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/lua_api/entity_instance.o src/lua_api/entity_instance.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/lua_api/entity_instance.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/entity_instance.o src/lua_api/entity_instance.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/entity_instance.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/lua_api/generic.o src/lua_api/generic.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/lua_api/generic.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/generic.o src/lua_api/generic.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/generic.cpp"
     },
     {
-        "command": "i686-w64-mingw32-g++ -c -Ihdr -o obj/commands.o src/commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
-        "directory": "/home/dinda/git-projects/sofree",
-        "file": "/home/dinda/git-projects/sofree/src/commands.cpp"
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/commands.o src/commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/core_init/hooks.o src/features/core_init/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/core_init/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/memory_patches/hooks.o src/features/memory_patches/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/memory_patches/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/vaccine/hooks.o src/features/vaccine/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/vaccine/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/movement/cvars.o src/features/movement/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/movement/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/movement/hooks.o src/features/movement/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/movement/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/grenade/cvars.o src/features/grenade/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/grenade/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/grenade/hooks.o src/features/grenade/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/grenade/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/q2_mode/cvars.o src/features/q2_mode/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/q2_mode/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/force_sky/cvars.o src/features/force_sky/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/force_sky/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/force_sky/hooks.o src/features/force_sky/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/force_sky/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/ghoul_tint/cvars.o src/features/ghoul_tint/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/ghoul_tint/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/ghoul_tint/hooks.o src/features/ghoul_tint/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/ghoul_tint/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/fx/cvars.o src/features/fx/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/fx/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/fx/hooks.o src/features/fx/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/fx/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/gravity/cvars.o src/features/gravity/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/gravity/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/gravity/hooks.o src/features/gravity/hooks.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/gravity/hooks.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/features/force_item_respawn/cvars.o src/features/force_item_respawn/cvars.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/features/force_item_respawn/cvars.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/vector_commands.o src/lua_api/vector_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/vector_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/math_commands.o src/lua_api/math_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/math_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/print_commands.o src/lua_api/print_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/print_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/console_commands.o src/lua_api/console_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/console_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/config_commands.o src/lua_api/config_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/config_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/memory_commands.o src/lua_api/memory_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/memory_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/draw_commands.o src/lua_api/draw_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/draw_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/ghoul_commands.o src/lua_api/ghoul_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/ghoul_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/effect_commands.o src/lua_api/effect_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/effect_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/image_commands.o src/lua_api/image_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/image_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/script_commands.o src/lua_api/script_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/script_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/spackage_commands.o src/lua_api/spackage_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/spackage_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/sound.o src/sofplus_api/sound.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/sound.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/entity_commands.o src/sofplus_api/entity_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/entity_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/player_commands.o src/sofplus_api/player_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/player_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/vector_commands.o src/sofplus_api/vector_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/vector_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/math_commands.o src/sofplus_api/math_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/math_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/print_commands.o src/sofplus_api/print_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/print_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/console_commands.o src/sofplus_api/console_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/console_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/config_commands.o src/sofplus_api/config_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/config_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/memory_commands.o src/sofplus_api/memory_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/memory_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/draw_commands.o src/sofplus_api/draw_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/draw_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/ghoul_commands.o src/sofplus_api/ghoul_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/ghoul_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/effect_commands.o src/sofplus_api/effect_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/effect_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/image_commands.o src/sofplus_api/image_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/image_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/script_commands.o src/sofplus_api/script_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/script_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/sofplus_api/spackage_commands.o src/sofplus_api/spackage_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/sofplus_api/spackage_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/sound/sound.o src/engine_features/sound/sound.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/sound/sound.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/entities/entities.o src/engine_features/entities/entities.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/entities/entities.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/players/players.o src/engine_features/players/players.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/players/players.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/vector/vector.o src/engine_features/vector/vector.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/vector/vector.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/math/math.o src/engine_features/math/math.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/math/math.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/print/print.o src/engine_features/print/print.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/print/print.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/console/console.o src/engine_features/console/console.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/console/console.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/config/config.o src/engine_features/config/config.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/config/config.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/memory/memory.o src/engine_features/memory/memory.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/memory/memory.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/draw/draw.o src/engine_features/draw/draw.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/draw/draw.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/ghoul/ghoul.o src/engine_features/ghoul/ghoul.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/ghoul/ghoul.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/effect/effect.o src/engine_features/effect/effect.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/effect/effect.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/image/image.o src/engine_features/image/image.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/image/image.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/script/script.o src/engine_features/script/script.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/script/script.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/engine_features/spackage/spackage.o src/engine_features/spackage/spackage.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/engine_features/spackage/spackage.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/game_modes/deathmatch.o src/game_modes/deathmatch.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/game_modes/deathmatch.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/game_modes/dm_always.o src/game_modes/dm_always.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/game_modes/dm_always.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/game_modes/dm_sofree.o src/game_modes/dm_sofree.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/game_modes/dm_sofree.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/game_modes/dm_standard.o src/game_modes/dm_standard.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/game_modes/dm_standard.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/game_modes/dm_ctf.o src/game_modes/dm_ctf.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/game_modes/dm_ctf.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/game_modes/dm_realistic.o src/game_modes/dm_realistic.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/game_modes/dm_realistic.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/ent_spawns/pacman.o src/ent_spawns/pacman.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/ent_spawns/pacman.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/sound.o src/lua_api/sound.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/sound.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/entity_commands.o src/lua_api/entity_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/entity_commands.cpp"
+    },
+    {
+        "command": "i686-w64-mingw32-g++ -c -Ihdr -Isrc -o obj/lua_api/player_commands.o src/lua_api/player_commands.cpp -std=c++11 -fpermissive -w -DSOFREE_DEBUG",
+        "directory": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree",
+        "file": "/home/dinda/git-projects/sof1-sofree/public/sof/sofree/src/lua_api/player_commands.cpp"
     }
 ]

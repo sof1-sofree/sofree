@@ -1,4 +1,8 @@
 #ifdef LUA_ON
+#include <windows.h>
+#include "sofheader.h"
+#include "lua_api/generic.h"
+
 /*
 This is a metatable.
 Useful when creating type 'userdata'

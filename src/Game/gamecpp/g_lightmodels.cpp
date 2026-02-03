@@ -5,7 +5,7 @@
 #include "g_local.h"
 #include "g_obj.h"
 #include "callback.h"
-#include "..\qcommon\configstring.h"
+#include "../qcommon/configstring.h"
 
 #define HANGING_ONTABLE				8
 #define HANGING_NOANIM				16

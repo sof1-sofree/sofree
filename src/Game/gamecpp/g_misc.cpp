@@ -1,8 +1,8 @@
 // g_misc.c
 #include "g_local.h"
 #include "fields.h"
-#include "..\qcommon\configstring.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/configstring.h"
+#include "../qcommon/ef_flags.h"
 
 #define		INVINCIBLE		1
 #define		GLASS			2

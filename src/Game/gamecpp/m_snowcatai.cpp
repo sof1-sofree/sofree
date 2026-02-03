@@ -6,7 +6,7 @@
 #include "m_snowcatai.h"
 #include "g_obj.h"			// for OrientBolton() and modelSpawnData stuff
 #include "callback.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 #define SNOWCAT_INACTIVE		(1<<0)
 

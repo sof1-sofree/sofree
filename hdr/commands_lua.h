@@ -1,3 +1,7 @@
+#pragma once
+
+#ifdef LUA_ON
+
 extern "C" void simpletest(lua_State * L);
 
 void createCommands(void);
@@ -125,125 +129,12 @@ extern "C" int sf_sv_math_atan(lua_State * L); // in: Float(num) out:Float(angle
 extern "C" int sf_sv_math_or(lua_State * L); // in:Int(numA) in:Int(numB) out:Int
 extern "C" int sf_sv_math_and(lua_State * L);// in:Int(numA) in:Int(numB) out:Int 
 extern "C" int sf_sv_math_not(lua_State * L); // in:Int(numA) in:Int(numB) out:Int
-extern "C"
 
-
-void Cmd_Blue_f(void);
-void Cmd_Red_f(void);
-void Cmd_Swap_f(void);
-
-void goRed(int who);
-void goBlue(int who);
-
-void randomBoxCode(void);
-
-void ThinkEventCallback(edict_t * self);
-void TouchEventCallback(edict_t *self, edict_t *other, cplane_t *plane, struct mtexinfo_s *surf);
-void UseEventCallback(edict_t *self, edict_t *other, edict_t *activator);
-void PlUseEventCallback(edict_t *self, edict_t *other, edict_t *activator);
-void PainEventCallback(edict_t *self, edict_t *other, float kick, int damage, vec3_t wherehit);
-void DieCallback(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point);
-
-void Cmd_CalcFreeImageSlots(void);
-void Cmd_CalcFreeEffectSlots(void);
-void Cmd_CalcFreeGhoulSlots(void);
-void Cmd_CalcFreeSoundSlots(void);
-
-
-// effect fields that can be sent
-#define EFF_SCALE			0x01
-#define EFF_NUMELEMS		0x02
-#define EFF_POS2			0x04
-#define EFF_DIR				0x08
-#define EFF_MIN				0x10
-#define EFF_MAX				0x20
-#define EFF_LIFETIME		0x40
-#define EFF_RADIUS			0x80
-							
-#define EFAT_POS			0x01
-#define EFAT_ENT			0x02
-#define EFAT_BOLT			0x04
-#define EFAT_BOLTANDINST	0x08	
-#define EFAT_POSTOWALL		0x20	// pos2 gets frame updates
-#define EFAT_ALTAXIS		0x40	// uses different axis for ghoul stuff
-#define EFAT_HASFLAGS		0x80
-
-
-
-#define MAX_D_SCRIPTS 64
-extern struct d_script_s * dende_scripts[MAX_D_SCRIPTS];
-extern int d_script_pointer;
-extern float player_tint[32][4];
-extern float player_wep_tint[32][4];
-extern unsigned int was_ghosted[32];
-extern bool player_collision[32];
-extern bool new_client[32];
-extern short client_gravity[32];
-
-extern bool disable_attack[32];
-extern  bool disable_altattack[32];
-extern bool disable_walk[32];
-
-extern unsigned int num_sound_overrides;
-typedef struct sound_overrides_s {
-	char orig_sound[256];
-	char new_sound[256];
-	int index;
-	float atten_mod;
-	struct sound_overrides_s * next,*prev;
-} sound_overrides_t;
-extern sound_overrides_t sound_overrides;
-
-extern unsigned int num_scripts;
-typedef struct script_list_s {
-	char script_name[64];
-	void * runner;
-	void * cscript;
-	struct script_list_s * next,*prev;
-} script_list_t;
-extern script_list_t the_scripts;
-
-typedef struct event_think_s {
-	edict_t * ent;
-	char sofplusfunc[64];
-	struct event_think_s * next,*prev;
-} event_think_t;
-extern event_think_s think_events;
-
-typedef struct event_touch_s {
-	edict_t * ent;
-	char sofplusfunc[64];
-	struct event_touch_s * next,*prev;
-} event_touch_t;
-extern event_touch_s touch_events;
-
-typedef struct event_use_s {
-	edict_t * ent;
-	char sofplusfunc[64];
-	struct event_use_s * next,*prev;
-} event_use_t;
-extern event_use_s use_events;
-
-typedef struct event_pluse_s {
-	edict_t * ent;
-	char sofplusfunc[64];
-	struct event_pluse_s * next,*prev;
-} event_pluse_t;
-extern event_pluse_s pluse_events;
-
-typedef struct event_pain_s {
-	edict_t * ent;
-	char sofplusfunc[64];
-	struct event_pain_s * next,*prev;
-} event_pain_t;
-extern event_pain_s pain_events;
-
-typedef struct event_die_s {
-	edict_t * ent;
-	char sofplusfunc[64];
-	struct event_die_s * next,*prev;
-} event_die_t;
-extern event_die_s die_events;
+// Note: The following functions and types are defined in commands.h
+// Only declare Lua-specific functions here to avoid conflicts
+#ifdef LUA_ON
+// Lua-specific declarations only - types come from commands.h via sofheader.h
+#endif
 
 extern int last_created_cscript;
 
@@ -263,35 +154,7 @@ extern int sofreebuild_len;
 
 
 
-extern void * game_clients;
-#define MAX_NET_COMMANDS 1024
-#define MAX_PACKETS 1024
-#define PACKET_MINUS_HEADER 1390 
-#define TOTAL_PSIZE MAX_PACKETS * PACKET_MINUS_HEADER
-typedef struct networkCommand_s {
-	int msgsize;
-} networkCommand_t;
+// Note: Types, structs, and non-Lua-specific externs are defined in commands.h
+// This header only contains Lua function declarations to avoid conflicts
 
-extern networkCommand_t net_commands[16][MAX_NET_COMMANDS];
-extern int num_net_cmds[16];
-extern char unreliableData[16][TOTAL_PSIZE]; //1390 * MAX_PACKETS
-extern unsigned int unreliablePointer[16];
-
-extern void Netchan_Transmit_Unreliable(netchan_t *chan, int length, byte *data);
-
-
-extern char _BUILD_YEAR;
-extern char _BUILD_MONTH;
-extern char _BUILD_DAY;
-extern char _BUILD_NUMBER;
-
-extern sizebuf_t * sv_multicast;
-
-extern bool INSIDE_SPACKAGE_PRINT_ID;
-extern void * spackage_items;
-
-extern float ammofix;
-
-#define	FOFS(x) (int)&(((edict_t *)0)->x)
-
-extern int next_available_ID;
+#endif // LUA_ON

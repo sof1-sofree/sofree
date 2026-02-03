@@ -1,5 +1,5 @@
 #include "q_shared.h"
-#include "..\qcommon\mathlib.h"
+#include "../qcommon/mathlib.h"
 
 /*
 #if id386

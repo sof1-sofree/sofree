@@ -11,7 +11,7 @@
 #include "ai_private.h"
 #include "p_body.h"
 #include "m_generic.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 #ifdef __PLAYERTEST_3DPERSON
 

@@ -4,7 +4,7 @@
 #include "fields.h"
 #include "ai_pathfinding.h"
 #include "p_body.h"
-#include "..\qcommon\configstring.h"
+#include "../qcommon/configstring.h"
 
 #if TIME_ENTS
 	#include <windows.h>

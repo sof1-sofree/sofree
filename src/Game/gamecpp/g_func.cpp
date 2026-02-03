@@ -1,7 +1,7 @@
 #include "g_local.h"
 #include "ai_private.h"
 #include "w_weapons.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 //  func_...
 void SP_func_ambientSet (edict_t *ent);

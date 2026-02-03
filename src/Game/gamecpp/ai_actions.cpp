@@ -1,7 +1,7 @@
 #include "g_local.h"
 #include "ai_private.h"
 #include "ds.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -396,13 +396,13 @@ void action_c::InterpretFlags(int cur_flags, ai_c &which_ai, edict_t &monster)
 			{
 			default:
 			case 0:
-				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall1.wav"), 1.0, ATTN_NORM, 0);
+				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall1.wav"), 1.0, ATTN_NORM, 0, 0);
 				break;
 			case 1:
-				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall2.wav"), 1.0, ATTN_NORM, 0);
+				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall2.wav"), 1.0, ATTN_NORM, 0, 0);
 				break;
 			case 2:
-				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall3.wav"), 1.0, ATTN_NORM, 0);
+				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall3.wav"), 1.0, ATTN_NORM, 0, 0);
 				break;
 			}
 		}
@@ -1597,7 +1597,7 @@ void pain_action::Read()
 {
 	char	loaded[sizeof(pain_action)];
 
-	gi.ReadFromSavegame('AIPA', loaded, sizeof(pain_action));
+        gi.ReadFromSavegame('AIPA', loaded, sizeof(pain_action), NULL);
 	Evaluate((pain_action *)loaded);
 }
 
@@ -2041,7 +2041,7 @@ void death_action::Read()
 {
 	char	loaded[sizeof(death_action)];
 
-	gi.ReadFromSavegame('AIDA', loaded, sizeof(death_action));
+        gi.ReadFromSavegame('AIDA', loaded, sizeof(death_action), NULL);
 	Evaluate((death_action *)loaded);
 }
 
@@ -2113,7 +2113,7 @@ void deathcorpse_action::Read()
 {
 	char	loaded[sizeof(deathcorpse_action)];
 
-	gi.ReadFromSavegame('AIXA', loaded, sizeof(deathcorpse_action));
+        gi.ReadFromSavegame('AIXA', loaded, sizeof(deathcorpse_action), NULL);
 	Evaluate((deathcorpse_action *)loaded);
 }
 
@@ -2233,7 +2233,7 @@ void deatharmor_action::Read()
 {
 	char	loaded[sizeof(deatharmor_action)];
 
-	gi.ReadFromSavegame('AIXA', loaded, sizeof(deatharmor_action));
+        gi.ReadFromSavegame('AIXA', loaded, sizeof(deatharmor_action), NULL);
 	Evaluate((deatharmor_action *)loaded);
 }
 
@@ -2558,7 +2558,7 @@ void jump_action::Read()
 {
 	char	loaded[sizeof(jump_action)];
 
-	gi.ReadFromSavegame('AIJA', loaded, sizeof(jump_action));
+        gi.ReadFromSavegame('AIJA', loaded, sizeof(jump_action), NULL);
 	Evaluate((jump_action *)loaded);
 }
 
@@ -2701,7 +2701,7 @@ void fall_action::Read()
 {
 	char	loaded[sizeof(fall_action)];
 
-	gi.ReadFromSavegame('AIFA', loaded, sizeof(fall_action));
+        gi.ReadFromSavegame('AIFA', loaded, sizeof(fall_action), NULL);
 	Evaluate((fall_action *)loaded);
 }
 
@@ -2766,7 +2766,7 @@ void surrender_action::Read()
 {
 	char	loaded[sizeof(surrender_action)];
 
-	gi.ReadFromSavegame('AISA', loaded, sizeof(surrender_action));
+        gi.ReadFromSavegame('AISA', loaded, sizeof(surrender_action), NULL);
 	Evaluate((surrender_action *)loaded);
 }
 
@@ -2831,7 +2831,7 @@ void capture_action::Read()
 {
 	char	loaded[sizeof(capture_action)];
 
-	gi.ReadFromSavegame('AICA', loaded, sizeof(capture_action));
+        gi.ReadFromSavegame('AICA', loaded, sizeof(capture_action), NULL);
 	Evaluate((capture_action *)loaded);
 }
 
@@ -2883,7 +2883,7 @@ void endscript_action::Read()
 {
 	char	loaded[sizeof(endscript_action)];
 
-	gi.ReadFromSavegame('AIEA', loaded, sizeof(endscript_action));
+        gi.ReadFromSavegame('AIEA', loaded, sizeof(endscript_action), NULL);
 	Evaluate((endscript_action *)loaded);
 }
 
@@ -3048,13 +3048,13 @@ void running_melee_attack_action::InterpretFlags(int cur_flags, ai_c &which_ai, 
 			{
 			default:
 			case 0:
-				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall1.wav"), 1.0, ATTN_NORM, 0);
+				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall1.wav"), 1.0, ATTN_NORM, 0, 0);
 				break;
 			case 1:
-				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall2.wav"), 1.0, ATTN_NORM, 0);
+				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall2.wav"), 1.0, ATTN_NORM, 0, 0);
 				break;
 			case 2:
-				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall3.wav"), 1.0, ATTN_NORM, 0);
+				gi.sound (&monster, CHAN_BODY, gi.soundindex ("impact/gore/fall3.wav"), 1.0, ATTN_NORM, 0, 0);
 				break;
 			}
 		}
@@ -3135,7 +3135,7 @@ void running_melee_attack_action::Read()
 {
 	char	loaded[sizeof(running_melee_attack_action)];
 
-	gi.ReadFromSavegame('AIRA', loaded, sizeof(running_melee_attack_action));
+        gi.ReadFromSavegame('AIRA', loaded, sizeof(running_melee_attack_action), NULL);
 	Evaluate((running_melee_attack_action *)loaded);
 }
 
@@ -3252,7 +3252,7 @@ void dog_walk_action::Read()
 {
 	char	loaded[sizeof(dog_walk_action)];
 
-	gi.ReadFromSavegame('AIDW', loaded, sizeof(dog_walk_action));
+        gi.ReadFromSavegame('AIDW', loaded, sizeof(dog_walk_action), NULL);
 	Evaluate((dog_walk_action *)loaded);
 }
 
@@ -3281,7 +3281,7 @@ void stand_action::Read()
 {
 	char	loaded[sizeof(stand_action)];
 
-	gi.ReadFromSavegame('AISA', loaded, sizeof(stand_action));
+        gi.ReadFromSavegame('AISA', loaded, sizeof(stand_action), NULL);
 	Evaluate((stand_action *)loaded);
 }
 
@@ -3310,7 +3310,7 @@ void walk_action::Read()
 {
 	char	loaded[sizeof(walk_action)];
 
-	gi.ReadFromSavegame('AIWA', loaded, sizeof(walk_action));
+        gi.ReadFromSavegame('AIWA', loaded, sizeof(walk_action), NULL);
 	Evaluate((walk_action *)loaded);
 }
 
@@ -3339,7 +3339,7 @@ void shoot_attack_action::Read()
 {
 	char	loaded[sizeof(shoot_attack_action)];
 
-	gi.ReadFromSavegame('AIAA', loaded, sizeof(shoot_attack_action));
+        gi.ReadFromSavegame('AIAA', loaded, sizeof(shoot_attack_action), NULL);
 	Evaluate((shoot_attack_action *)loaded);
 }
 

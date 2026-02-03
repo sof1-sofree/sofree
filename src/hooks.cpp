@@ -5,6 +5,7 @@
 #include "DetourXS/detourxs.h"
 
 #include "sofreeS.h"
+#include "features.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +18,10 @@
 
 
 void * game_clients = NULL;
+
+void my_SV_UserinfoChanged(void * cl) {
+}
+
 void my_SV_InitGameProgs(void)
 {
 	// this will call ctrls code
@@ -50,46 +55,28 @@ void * my_Sys_GetGameApi(void * imports)
 
 
 	//Apply Hooks the modules require
-	Vaccine::applyHooks();
+	vaccine_applyHooks();
 	applyClientHooks();
 	applyDeathmatchHooks();
 
+	// Apply memory patches
+	memory_patches_applyPatches();
 
+	// Apply grenade hooks (includes grenade impact explode patch)
+	grenade_applyHooks();
+
+	// Netchan_Transmit Hook patch (needs to be here because it references my_Netchan_Transmit)
+	// (to - from) - 5;
 	DWORD dwProt = NULL;
-
-	if ( _sf_sv_grenade_impact_explode->value == 0.0f ) {
-		void * addr = 0x50101fb3;
-		int count = 6;
-		VirtualProtect(addr, count, PAGE_READWRITE, &dwProt);
-		// its a force JMP
-		*(unsigned int*)0x50101fB3 = 50153;
-		*(unsigned char*)0x50101fB7 = 0x00;
-		*(unsigned char*)0x50101fB8 = 0x90;
-		VirtualProtect(addr, count, dwProt, new DWORD);
-	} else {
-		void * addr = 0x50101fb3;
-		int count = 6;
-		VirtualProtect(addr, count, PAGE_READWRITE, &dwProt);
-		// its a force JMP
-		*(unsigned int*)0x50101fB3 = 12747791;
-		*(unsigned char*)0x50101fB7 = 0x00;	
-		*(unsigned char*)0x50101fB8 = 0x00;	
-		VirtualProtect(addr, count, dwProt, new DWORD);
-	}
-
-	// DISABLE GRAVITY SET FROM SV_GRAVITY CVAR
-	// Gravity "mov     [ebx+12h], ax" DELETE
-	void *addr = 0x500F5626;
+	void *addr = (void*)0x20062531;
 	int count = 4;
 	VirtualProtect(addr, count, PAGE_READWRITE, &dwProt);
-	memset(addr,0x90,count);
+	int newaddr = ((int)&my_Netchan_Transmit - ((int)addr-1)) - 5;
+	memcpy(addr,&newaddr ,4);
 	VirtualProtect(addr, count, dwProt, new DWORD);
 
 
-	
-	// Scoreboard dont clear CTF
-	addr = 0x50071FAD;
-	count = 6;
+	/* NOT REQUIRED cos Wrote own PM_AirMove
 	VirtualProtect(addr, count, PAGE_READWRITE, &dwProt);
 	memset(addr,0x90,count);
 	VirtualProtect(addr, count, dwProt, new DWORD);
@@ -175,17 +162,6 @@ void * my_Sys_GetGameApi(void * imports)
 	strcpy(addr,lolmsg);
 	VirtualProtect(addr, count, dwProt, new DWORD);
 
-
-	// (to - from) - 5;
-	// Netchan_Transmit Hook
-	addr = 0x20062531;
-	count = 4;
-	VirtualProtect(addr, count, PAGE_READWRITE, &dwProt);
-	// memset(addr,0x90,count);
-	int newaddr = ((int)&my_Netchan_Transmit - ((int)addr-1)) - 5;
-	memcpy(addr,&newaddr ,4);
-	VirtualProtect(addr, count, dwProt, new DWORD);
-	
 	// SZ_GetSpace Line 901:common.c Com_Printf("SZ_GetSpace: overflow\n") DELETED
 	addr = 0x2001E7F5;
 	count = 5;
@@ -519,10 +495,10 @@ void my_PF_Configstring(int index,char * string)
 	// 	//orig_Com_Printf("string is : %s\n",string);
 	// }
 	
-	if ( strlen(_sf_sv_force_sky->string) && index == CS_SKY ) {
-		string = _sf_sv_force_sky->string;
-		orig_Com_Printf("setting sky to %s\n",string);
-	}
+	#if FEATURE_FORCE_SKY
+	string = force_sky_PF_Configstring(index, string);
+	#endif
+	
 	det_PF_Configstring(index,string);
 
 	}
@@ -2557,6 +2533,144 @@ void my_PM_ClipVelocity (vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 		out[i] = in[i] - change;
 		if (out[i] > -STOP_EPSILON && out[i] < STOP_EPSILON)
 			out[i] = 0;
+	}
+}
+
+void ThinkEventCallback(edict_t * self)
+{
+	try{
+	event_think_s	*z, *next;
+	for (z=think_events.next ; z != &think_events ; z=next)
+	{
+		next = z->next;
+		if (z->ent == self) {
+			char line[256];
+			strcpy(line,z->sofplusfunc);
+			line[strlen(line)-1] = 0x00;
+			sprintf(line,"%s %i\n",line,self);
+			orig_Cbuf_AddText(line);
+		}
+	}
+	}
+	catch(...) {
+		char temp[64];
+		sprintf(temp,"ERROR IN %s",__FUNCTION__);
+		MessageBox(NULL,temp,NULL,MB_OK);
+	}
+}
+
+void TouchEventCallback(edict_t *self, edict_t *other, cplane_t *plane, struct mtexinfo_s *surf)
+{
+	try{
+	event_touch_s	*z, *next;
+	for (z=touch_events.next ; z != &touch_events ; z=next)
+	{
+		next = z->next;
+		if (z->ent == self) {
+			char line[256];
+			strcpy(line,z->sofplusfunc);
+			line[strlen(line)-1] = 0x00;
+			sprintf(line,"%s %i %i\n",line,self,other);
+			orig_Cbuf_AddText(line);
+		}
+	}
+	}
+	catch(...) {
+		char temp[64];
+		sprintf(temp,"ERROR IN %s",__FUNCTION__);
+		MessageBox(NULL,temp,NULL,MB_OK);
+	}
+}
+
+void UseEventCallback(edict_t *self, edict_t *other, edict_t *activator)
+{
+	try{
+	event_use_s	*z, *next;
+	for (z=use_events.next ; z != &use_events ; z=next)
+	{
+		next = z->next;
+		if (z->ent == self) {
+			char line[256];
+			strcpy(line,z->sofplusfunc);
+			line[strlen(line)-1] = 0x00;
+			sprintf(line,"%s %i %i\n",line,self,activator);
+			orig_Cbuf_AddText(line);
+		}
+	}
+	}
+	catch(...) {
+		char temp[64];
+		sprintf(temp,"ERROR IN %s",__FUNCTION__);
+		MessageBox(NULL,temp,NULL,MB_OK);
+	}
+}
+
+void PlUseEventCallback(edict_t *self, edict_t *other, edict_t *activator)
+{
+	try{
+	event_pluse_s	*z, *next;
+	for (z=pluse_events.next ; z != &pluse_events ; z=next)
+	{
+		next = z->next;
+		if (z->ent == self) {
+			char line[256];
+			strcpy(line,z->sofplusfunc);
+			line[strlen(line)-1] = 0x00;
+			sprintf(line,"%s %i %i\n",line,self,activator);
+			orig_Cbuf_AddText(line);
+		}
+	}
+	}
+	catch(...) {
+		char temp[64];
+		sprintf(temp,"ERROR IN %s",__FUNCTION__);
+		MessageBox(NULL,temp,NULL,MB_OK);
+	}
+}
+
+void PainEventCallback(edict_t *self, edict_t *other, float kick, int damage, vec3_t wherehit)
+{
+	try{
+	event_pain_s	*z, *next;
+	for (z=pain_events.next ; z != &pain_events ; z=next)
+	{
+		next = z->next;
+		if (z->ent == self) {
+			char line[256];
+			strcpy(line,z->sofplusfunc);
+			line[strlen(line)-1] = 0x00;
+			sprintf(line,"%s %i %i\n",line,self,other);
+			orig_Cbuf_AddText(line);
+		}
+	}
+	}
+	catch(...) {
+		char temp[64];
+		sprintf(temp,"ERROR IN %s",__FUNCTION__);
+		MessageBox(NULL,temp,NULL,MB_OK);
+	}
+}
+
+void DieCallback(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+{
+	try{
+	event_die_s	*z, *next;
+	for (z=die_events.next ; z != &die_events ; z=next)
+	{
+		next = z->next;
+		if (z->ent == self) {
+			char line[256];
+			strcpy(line,z->sofplusfunc);
+			line[strlen(line)-1] = 0x00;
+			sprintf(line,"%s %i %i %i\n",line,self,inflictor,attacker);
+			orig_Cbuf_AddText(line);
+		}
+	}
+	}
+	catch(...) {
+		char temp[64];
+		sprintf(temp,"ERROR IN %s",__FUNCTION__);
+		MessageBox(NULL,temp,NULL,MB_OK);
 	}
 }
 

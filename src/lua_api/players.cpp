@@ -6,7 +6,7 @@
 #include "lua_api/player_instance.h"
 
 luaL_Reg players_funcs[] = {
-  {"grab", lua_players_grab},
+  {"grab", lua_player_grab},
   {NULL, NULL}		
 };
 /*

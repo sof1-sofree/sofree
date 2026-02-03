@@ -3,8 +3,8 @@
 #include "p_body.h"
 #include "w_weapons.h"
 #include "dm_ctf.h"
-#include "..\qcommon\ef_flags.h"
-#include "..\qcommon\configstring.h"
+#include "../qcommon/ef_flags.h"
+#include "../qcommon/configstring.h"
 
 #define HLTH_ITEM_PICKUP 10000
 

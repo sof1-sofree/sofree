@@ -6,7 +6,7 @@
 #include "dm_private.h"
 #include "w_weapons.h"
 #include "../strings/dm_assassin.h"
-#include "..\qcommon\configstring.h"
+#include "../qcommon/configstring.h"
 
 const int DF_ASSASSIN_NO_HEALTH			= (1<<0);
 const int DF_ASSASSIN_NO_ITEMS			= (1<<1);

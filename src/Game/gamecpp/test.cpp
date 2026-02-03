@@ -1,6 +1,6 @@
 #include "g_local.h"
 #include "callback.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 #include <windows.h>
 
 static bool testSeqEnded;

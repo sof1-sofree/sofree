@@ -1,7 +1,7 @@
 #include "g_local.h"
 #include "q_sh_interface.h"
 #include "fields.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 extern float s_levelStatusBegin;	// declared in g_cmds.cpp
 

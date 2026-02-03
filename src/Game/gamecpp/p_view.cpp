@@ -10,7 +10,7 @@
 #include "fields.h"
 
 #include "g_monster.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 void G_UpdateFrameEffects(edict_t *ent);
 

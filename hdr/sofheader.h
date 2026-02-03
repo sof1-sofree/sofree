@@ -172,7 +172,7 @@ extern void Vec3AddAssign(vec3_t value, vec3_t addTo);
 extern void VectorScale (vec3_t in, vec_t scale, vec3_t out);
 extern void AngleVectors (vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
 
-#include "var_addrs.h"
+#include "global_pointers.h"
 
 #include "cvars.h"
 #include "commands.h"

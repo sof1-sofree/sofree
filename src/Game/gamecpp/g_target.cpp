@@ -1,8 +1,8 @@
 #include "g_local.h"
 #include "fields.h"
 #include "w_weapons.h"
-#include "..\qcommon\configstring.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/configstring.h"
+#include "../qcommon/ef_flags.h"
 
 //  target_...
 void SP_target_temp_entity (edict_t *ent);

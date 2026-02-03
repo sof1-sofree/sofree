@@ -1,7 +1,7 @@
 // g_phys.c
 
 #include "g_local.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 #include "ai_private.h"
 
 #define	STOP_EPSILON	1.0

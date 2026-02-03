@@ -5,7 +5,7 @@
 #include "m_heliai.h"
 #include "g_obj.h"				// for aiming the gun and the heads
 #include "callback.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 //#include "m_heli.h"
  

@@ -1,5 +1,5 @@
 #include "g_local.h"
-#include "..\qcommon\ef_flags.h"
+#include "../qcommon/ef_flags.h"
 
 gameghoul_c game_ghoul;
 

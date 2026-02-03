@@ -86,7 +86,7 @@ eInst_fields ent_inst_fields[] = {
 	{"target",},
 	{"targetname",},
 	{"velocity",}
-}
+};
 
 luaL_Reg ent_inst_funcs[] = {
   {"anim", lua_ent_anim},
